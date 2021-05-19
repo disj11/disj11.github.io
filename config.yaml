@@ -37,3 +37,6 @@ params:
   # Currently, you can just hide it from the footer.
   newsletter:
     enable: false
+
+outputs:
+  home: ["HTML", "RSS", "JSON"]
