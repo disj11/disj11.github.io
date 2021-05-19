@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>data structure on Blog</title><link>https://disj11.github.io/posts/data-structure/</link><description>Recent content in data structure on Blog</description><generator>Hugo -- gohugo.io</generator><language>ko-kr</language><lastBuildDate>Wed, 05 Jun 2019 23:00:00 +0900</lastBuildDate><atom:link href="https://disj11.github.io/posts/data-structure/index.xml" rel="self" type="application/rss+xml"/><item><title>Union-Find (유니온 파인드)</title><link>https://disj11.github.io/posts/data-structure/union-find/</link><pubDate>Wed, 05 Jun 2019 23:00:00 +0900</pubDate><guid>https://disj11.github.io/posts/data-structure/union-find/</guid><description>개요 유니온 파인드는 Disjoint Set (서로소 집합) 또는 Merge Find Set (병렬 찾기 집합) 으로 불리며, 말 그대로 서로소인 집합들을 표현하는 자료구조이다. 즉, 어떤 집합 사이에도 교집합의 원소가 하나도 없고, 모든 집합의 합집합은 전체 집합과 같다는 말이다. 기본적으로 union, find 단 2개의 연산만을 지원한다.
+예시 {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}
+위 집합들은 아무런 연산이 가해지지 않은 제일 초기의 크기 8인 유니온 파인드이고, 포함하고 있는 집합 또한 8개 이다.</description></item><item><title>Inverted index (역색인)</title><link>https://disj11.github.io/posts/data-structure/inverted-index/</link><pubDate>Wed, 24 Apr 2019 16:30:00 +0900</pubDate><guid>https://disj11.github.io/posts/data-structure/inverted-index/</guid><description>개요 Inverted index(역방향 인덱스)는 대용량 텍스트 검색을 위해서 고안된 방법이다. 요즘 많이 사용하는 해시태그 기능을 구현하고 싶다면 역방향 인덱스 방법을 사용할 수 있으며, 대부분의 검색 엔진이 이 방식을 사용한다.
+기존의 검색 방식 WHERE =
+SELECT * FROM DOCUMENT WHERE content = 'search text'
+검색어와 정확히 일치하는 문서만 검색된다. 인덱스가 걸려있을 경우 속도는 빠를 수 있지만, 문서 결과를 거의 얻지 못한다.
+WHERE LIKE
+SELECT * FROM DOCUMENT WHERE content like '%search text%'</description></item></channel></rss>
