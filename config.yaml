@@ -40,3 +40,5 @@ params:
 
 outputs:
   home: ["HTML", "RSS", "JSON"]
+
+enableRobotsTXT: true
