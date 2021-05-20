@@ -1,5 +1,7 @@
 baseURL: https://disj11.github.io
 
+ignoreFiles: [ "themes/toha/content/*" ]
+
 defaultContentLanguage: ko
 languageCode: ko-kr
 title: "Blog"
