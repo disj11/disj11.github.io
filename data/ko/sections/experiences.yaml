@@ -1,0 +1,67 @@
+# section information
+section:
+  name: Experiences
+  id: experiences
+  enable: true
+  weight: 3
+  showOnNavbar: true
+  # Can optionally hide the title in sections
+  # hideTitle: true
+
+# Your experiences
+experiences:
+  - company:
+      name: 디엠씨미디어
+      location: 서울 강남구 학동로401, 5층
+      # company overview
+      overview: 마케팅 자동화 서비스 개발 (https://selper.co.kr)
+    positions:
+      - designation: Software Engineer
+        start: 2020-02
+        # don't provide end date if you are currently working there. It will be replaced by "Present"
+        # end: Dec 2020
+        # give some points about what was your responsibilities at the company.
+        responsibilities:
+          - 크리에이티브 에디터 개발
+          - ELK Stack을 사용한 대량 제품 관리 개발
+          - 쇼피파이 마케팅 어플리케이션 개발
+          - 광고 소재 크롤러 개발
+
+  - company:
+      name: (주)미리디
+      location: 서울 금천구 가산디지털2로 53 한라시그마밸리 1510호
+      overview: 쇼핑몰 유지보수 및 웹 디자인 에디터 개발
+    positions:
+      - designation: Software Engineer
+        start: 2018.02
+        end: 2019.08
+        responsibilities:
+          - 웹 디자인 에디터 개발 (https://www.miricanvas.com/)
+          - 디자인 관리 페이지 개발
+          - 팀 기능 개발
+          - RBAC를 위한 테이블 설계
+          - 이니시스 결제 프로토타입 개발 (빌링 결제, 일반 결제)
+          - 관리자 페이지 개발 (고객 관리, 고객 디자인 관리 등)
+
+      - designation: Software Engineer
+        start: 2016.11
+        end: 2018.02
+        responsibilities:
+          - 쇼핑몰 유지보수 (https://www.bizhows.com/)
+          - 신상품 추가, 상품 옵션/가격 등 유지보수
+          - 각종 오류 및 버그 처리
+          - 관리자 페이지 기능 개선 및 편의 기능 추가 개발
+          - 자동 주문 시스템 개발
+
+  - company:
+      name: 마이컴소프트
+      location: Nowhere
+      overview: 기업형 맞춤 소프트웨어를 개발
+    positions:
+      - designation: Software Engineer
+        start: 2016.11
+        end: 2018.01
+        responsibilities:
+          - 히타치금속한국 주식회사 플레이트 수발주 시스템 개발
+          - SK 엠엔서비스 주식회사 손익관리 시스템 개발
+          - 한국심리상담연구소 통합 관리 시스템 개발

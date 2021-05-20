@@ -1,0 +1,34 @@
+# section information
+section:
+  name: Education
+  id: education
+  template: sections/education.html # Use "sections/education-alt.html for alternate template.
+  enable: true
+  weight: 4
+  showOnNavbar: true
+  # Can optionally hide the title in sections
+  # hideTitle: true
+
+degrees:
+  - name: 컴퓨터과학과 (편입)
+    icon: fa-microscope
+    timeframe: 2016.03 ~ 2018.08
+    institution:
+      name: 한국방송통신대학교
+      url: "https://www.knou.ac.kr"
+    grade: #(optional)
+      scale: CGPA
+      achieved: 3.2
+      outOf: 4.5
+  - name: 인터넷정보과
+    icon: fa-graduation-cap
+    timeframe: 2011.03 ~ 2015.02
+    institution:
+      name: 동양공업전문대학
+      url: "https://www.dongyang.ac.k"
+    grade: #(optional)
+      scale: CGPA
+      achieved: 4.3
+      outOf: 4.5
+    extracurricularActivities:
+    - 전산정보학부 학술대회 수상 (장학금)

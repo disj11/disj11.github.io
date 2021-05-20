@@ -2,6 +2,9 @@ baseURL: https://disj11.github.io
 
 ignoreFiles: [ "themes/toha/content/*" ]
 
+googleAnalytics: UA-138294663-1
+disqusShortname: "disj11"
+
 defaultContentLanguage: ko
 languageCode: ko-kr
 title: "Blog"
@@ -27,7 +30,7 @@ enableEmoji: true
 # Site parameters
 params:
   # GitHub repo URL of your site
-  gitRepo: https://github.com/disj11/disj11.github.io
+  # gitRepo: https://github.com/disj11/disj11.github.io
 
   # specify whether you want to write some blog posts or not
   enableBlogPost: true

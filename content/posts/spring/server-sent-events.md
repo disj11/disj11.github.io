@@ -22,7 +22,7 @@ menu:
 
 ## 브라우저 지원
 
-SSE는 HTML5 표준 기술로 명시되어있으며, 대부분의 브라우저에서 지원하지만, Microsoft의 IE 및 Edge 브라우저에서는 사용 불가능하다. 하지만 SSE는 일반적인 HTML 연결을 사용하므로 다음 라이브러리를 이용하면 IE와 Edge에서도 사용 가능하다
+SSE는 HTML5 표준 기술로 명시되어있으며, 대부분의 브라우저에서 지원한다.
 
 [브라우저 호환성](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#browser_compatibility)
 

@@ -1,0 +1,37 @@
+# section information
+section:
+  name: Skills
+  id: skills
+  enable: true
+  weight: 2
+  showOnNavbar: true
+  # Can optionally hide the title in sections
+  # hideTitle: true
+
+# Your Skills.
+# Give a summary of you each skill in the summary section.
+skills:
+  - name: Spring Boot
+    logo: /images/sections/skills/spring.svg
+    summary: "진행한 프로젝트의 Backend 대부분을 Spring Boot를 사용하였습니다."
+    url: "https://spring.io/"
+
+  - name: React
+    logo: /images/sections/skills/react.svg
+    summary: "프론트 페이지 구축을 위해 React를 사용해본 경험이 있습니다."
+    url: "https://ko.reactjs.org/"
+
+  - name: Typscript
+    logo: /images/sections/skills/typescript.svg
+    summary: "Javascript 보다 Typescript를 사용하여 개발하는 것을 선호합니다."
+    url: "https://www.typescriptlang.org/"
+
+  - name: Git
+    logo: /images/sections/skills/git.png
+    summary: "Git을 통하여 형상관리를 할 수 있습니다."
+    url: "https://git-scm.com/"
+
+  - name: Docker
+    logo: /images/sections/skills/docker.svg
+    summary: "도커 컴포즈를 사용하여 ELK Stack을 구축한 경험이 있습니다."
+    url: "https://www.docker.com/"

@@ -1,7 +1,0 @@
-# section information
-section:
-  name: 최근 게시물
-  id: recent-posts
-  enable: true
-  weight: 5
-  showOnNavbar: false
