@@ -3,6 +3,14 @@ tykim
 
 == 프로젝트 실행
 
+.submodule init
+[source,bash]
+----
+git submodule init
+git submodule update
+----
+
+.start
 [source,bash]
 ----
 hugo server -t toha -w
