@@ -1,8 +1,8 @@
 ---
-title: Effective JAVA
+title: effective java
 menu:
   sidebar:
-    name: Effective JAVA
+    name: effective java
     identifier: effective-java
     weight: 20
 ---

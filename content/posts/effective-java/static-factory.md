@@ -3,10 +3,10 @@ title: 정적 팩터리 메서드
 date: 2021-06-23T21:00:00+09:00
 menu:
   sidebar:
-   name: 정적 팩터리 메서드
-   identifier: static-factory-method
-   parent: effective-java
-   weight: 10
+    name: 정적 팩터리 메서드
+    identifier: static-factory-method
+    parent: effective-java
+    weight: 10
 ---
 
 ## 생성자 대신 정적 팩터리 메서드를 고려

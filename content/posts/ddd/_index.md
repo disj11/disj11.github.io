@@ -1,8 +1,8 @@
 ---
-title: DDD
+title: ddd
 menu:
   sidebar:
-    name: DDD
+    name: ddd
     identifier: ddd
     weight: 20
 ---

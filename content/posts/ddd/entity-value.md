@@ -3,10 +3,10 @@ title: 엔티티와 밸류
 date: 2021-06-23T20:00:00+09:00
 menu:
   sidebar:
-   name: 엔티티와 밸류
-   identifier: ddd-entity-value
-   parent: ddd
-   weight: 10
+    name: 엔티티와 밸류
+    identifier: ddd-entity-value
+    parent: ddd
+    weight: 10
 ---
 
 ## 엔티티와 밸류

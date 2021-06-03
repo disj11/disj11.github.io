@@ -3,10 +3,10 @@ title: 도메인 모델
 date: 2021-06-23T19:00:00+09:00
 menu:
   sidebar:
-   name: 도메인 모델
-   identifier: ddd-start
-   parent: ddd
-   weight: 10
+    name: 도메인 모델
+    identifier: ddd-start
+    parent: ddd
+    weight: 10
 ---
 
 ## 도메인
