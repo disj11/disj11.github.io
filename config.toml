@@ -4,6 +4,8 @@ defaultContentLanguage = "ko"
 theme = "hello-friend"
 paginate = 5
 
+googleAnalytics = 'G-XD9VVSGMKV'
+
 [params]
   contentTypeName = "posts"
   defaultTheme = "dark"
