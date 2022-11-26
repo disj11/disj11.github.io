@@ -26,6 +26,6 @@ paginate = 5
     dateFormatSingle = "2006-01-02"
     dateFormatList = "2006-01-02"
 
-#    [languages.ko.params.logo]
-#      logoText = "Life Log"
-#      logoHomeLink = "/"
+    [languages.ko.params.logo]
+      logoText = "Life Log"
+      logoHomeLink = "/"
