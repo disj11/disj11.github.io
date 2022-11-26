@@ -1,0 +1,31 @@
+baseurl = "https://disj11.github.io"
+languageCode = "ko-kr"
+defaultContentLanguage = "ko"
+theme = "hello-friend"
+paginate = 5
+
+[params]
+  contentTypeName = "posts"
+  defaultTheme = "dark"
+  showMenuItems = 2
+  showReadingTime = false
+
+[languages]
+  [languages.ko]
+    title = "Life Log"
+    subtitle = ""
+    keywords = "개발 블로그,개발블로그"
+    copyright = ""
+    menuMore = "더보기"
+    writtenBy = "작성자"
+    readMore = "더 읽어보기"
+    readOtherPosts = "다른 게시물 읽기"
+    newerPosts = "최신 게시물"
+    olderPosts = "이전 게시물"
+    minuteReadingTime = "예상 읽기 시간"
+    dateFormatSingle = "2006-01-02"
+    dateFormatList = "2006-01-02"
+
+#    [languages.ko.params.logo]
+#      logoText = "Life Log"
+#      logoHomeLink = "/"
