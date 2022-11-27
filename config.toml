@@ -3,7 +3,9 @@ languageCode = "ko-kr"
 defaultContentLanguage = "ko"
 theme = "hello-friend"
 paginate = 5
-
+summaryLength = 70
+hasCJKLanguage = true
+enableRobotsTXT = true
 googleAnalytics = 'G-XD9VVSGMKV'
 
 [params]
