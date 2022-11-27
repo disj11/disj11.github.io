@@ -1,0 +1,260 @@
+<!doctype html><html lang=ko><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-XD9VVSGMKV"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XD9VVSGMKV",{anonymize_ip:!1})}</script><title>Introduction to SOLID Design Principles ::
+Life Log</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="개요 # SOLID 란 Robert C.Martin 이 명명한 객체 지향 프로그래밍의 다섯 가지 설계 원칙이다. SOLID 는 다음을 의미한다.
+S - Single-responsibility Principle (SRP: 단일 책임 원칙) O - Open-closed Principle (OCP: 개방-폐쇄 원칙) L - Liskov Substitution Principle (LSP: 리스코프 치환 원칙) I - Interface Segregation Principle (ISP: 인터페이스 분리 원칙) D - Dependency Inversion Principle (DIP: 의존 관계 역전 원칙) 이번 포스팅에서는 이 다섯 가지 원칙에 대해서 알아본다."><meta name=keywords content="개발 블로그,개발블로그"><meta name=robots content="noodp"><link rel=canonical href=https://disj11.github.io/posts/introduction-to-solid-design-principles/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://disj11.github.io/style.css><link rel=apple-touch-icon-precomposed sizes=144x144 href=https://disj11.github.io/img/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=https://disj11.github.io/img/favicon.png><link href=/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><meta name=twitter:card content="summary"><meta name=twitter:title content="Introduction to SOLID Design Principles"><meta name=twitter:description content="개요 # SOLID 란 Robert C.Martin 이 명명한 객체 지향 프로그래밍의 다섯 가지 설계 원칙이다. SOLID 는 다음을 의미한다.
+S - Single-responsibility Principle (SRP: 단일 책임 원칙) O - Open-closed Principle (OCP: 개방-폐쇄 원칙) L - Liskov Substitution Principle (LSP: 리스코프 치환 원칙) I - Interface Segregation Principle (ISP: 인터페이스 분리 원칙) D - Dependency Inversion Principle (DIP: 의존 관계 역전 원칙) 이번 포스팅에서는 이 다섯 가지 원칙에 대해서 알아본다."><meta property="og:title" content="Introduction to SOLID Design Principles"><meta property="og:description" content="개요 # SOLID 란 Robert C.Martin 이 명명한 객체 지향 프로그래밍의 다섯 가지 설계 원칙이다. SOLID 는 다음을 의미한다.
+S - Single-responsibility Principle (SRP: 단일 책임 원칙) O - Open-closed Principle (OCP: 개방-폐쇄 원칙) L - Liskov Substitution Principle (LSP: 리스코프 치환 원칙) I - Interface Segregation Principle (ISP: 인터페이스 분리 원칙) D - Dependency Inversion Principle (DIP: 의존 관계 역전 원칙) 이번 포스팅에서는 이 다섯 가지 원칙에 대해서 알아본다."><meta property="og:type" content="article"><meta property="og:url" content="https://disj11.github.io/posts/introduction-to-solid-design-principles/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-11-03T21:21:49+09:00"><meta property="article:modified_time" content="2021-11-03T21:21:49+09:00"><meta property="og:site_name" content="Life Log"></head><body class=dark-theme><div class=container><header class=header><span class=header__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>Life Log</span>
+<span class=logo__cursor></span></a>
+<span class=header__right><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/tags>Tags</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/tags>Tags</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><article class=post><h1 class=post-title>Introduction to SOLID Design Principles</h1><div class=post-meta><time class=post-date>2021-11-03</time></div><div class=post-content><h2 id=개요>개요
+<a href=#%ea%b0%9c%ec%9a%94 class=h-anchor aria-hidden=true>#</a></h2><p>SOLID 란 Robert C.Martin 이 명명한 객체 지향 프로그래밍의 다섯 가지 설계 원칙이다. SOLID 는 다음을 의미한다.</p><ul><li><strong>S</strong> - Single-responsibility Principle (SRP: 단일 책임 원칙)</li><li><strong>O</strong> - Open-closed Principle (OCP: 개방-폐쇄 원칙)</li><li><strong>L</strong> - Liskov Substitution Principle (LSP: 리스코프 치환 원칙)</li><li><strong>I</strong> - Interface Segregation Principle (ISP: 인터페이스 분리 원칙)</li><li><strong>D</strong> - Dependency Inversion Principle (DIP: 의존 관계 역전 원칙)</li></ul><p>이번 포스팅에서는 이 다섯 가지 원칙에 대해서 알아본다.</p><h2 id=단일-책임-원칙>단일 책임 원칙
+<a href=#%eb%8b%a8%ec%9d%bc-%ec%b1%85%ec%9e%84-%ec%9b%90%ec%b9%99 class=h-anchor aria-hidden=true>#</a></h2><p>하나의 클래스는 한 가지 책임만 가져야 하며, 클래스를 변경해야 하는 이유는 단 하나여야 한다는 원칙이다. 이 원칙을 지키면 어떤 점이 좋을까?</p><ol><li><strong>테스팅</strong> - 하나의 책임만을 가졌으므로 훨씬 더 적은 테스트 케이스로 테스트를 만들 수 있다.</li><li><strong>낮은 결합도</strong> - 하나의 클래스가 갖는 기능이 적을수록 종속성이 줄어 든다. 이는 클래스가 변경되었을 때 외부의 영향을 신경쓸 필요가 줄어든다는 것을 의미한다.</li></ol><p>예제를 통해 단일 책임 원칙을 지키는 코드를 알아보자.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Book</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> String name<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> String author<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> String text<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>//constructor, getters and setters
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이름과 저자, 텍스트를 갖는 간단한 Book 클래스이다. 여기에 텍스트 속성과 관련된 몇 가지 메서드를 추가해 보자.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Book</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> String name<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> String author<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> String text<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>//constructor, getters and setters
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Book 클래스의 속성과 직접적인 연관을 갖는 메서드
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> String <span style=color:#a6e22e>replaceWordInText</span><span style=color:#f92672>(</span>String word<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> text<span style=color:#f92672>.</span><span style=color:#a6e22e>replaceAll</span><span style=color:#f92672>(</span>word<span style=color:#f92672>,</span> text<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>boolean</span> <span style=color:#a6e22e>isWordInText</span><span style=color:#f92672>(</span>String word<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> text<span style=color:#f92672>.</span><span style=color:#a6e22e>contains</span><span style=color:#f92672>(</span>word<span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이제 책을 읽기 위해 <code>printTextToConsole()</code> 메서드를 추가하려고 한다. 다음과 같이 <code>Book</code> 클래스에 메서드를 추가하면 될까?</p><p><strong>Bad:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Book</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>//...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printTextToConsole</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 텍스트 서식 지정 및 출력
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이는 앞에서 설명한 단일 책임 원칙을 위반한다. 단일 책임 원칙을 지키기 위해서는 텍스트 출력에 대한 별도 클래스를 생성해야 한다.</p><p><strong>Good:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BookPrinter</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printTextToConsole</span><span style=color:#f92672>(</span>String text<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 텍스트 서식 지정 및 출력
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printTextToAnotherMedium</span><span style=color:#f92672>(</span>String text<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 다른 미디어로 텍스트를 보내기 위한 코드...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>콘솔로 텍스트를 출력하는 기능을 만들었다. 콘솔이 아닌 다른 미디어로 텍스트를 출력하는 기능을 추가할 수도 있을 것이다. 미디어가 이메일이 됐든, 로그가 됐든, 어느 것이든 상관없이 이제 텍스트 출력이라는 문제에만 전념할 수 있는 클래스가 만들어졌다.</p><h2 id=개방-폐쇄-원칙>개방-폐쇄 원칙
+<a href=#%ea%b0%9c%eb%b0%a9-%ed%8f%90%ec%87%84-%ec%9b%90%ec%b9%99 class=h-anchor aria-hidden=true>#</a></h2><p>클래스는 확장에는 열려있지만, 수정에는 닫혀있어야 한다는 원칙이다. 조금 더 쉽게 풀면, 기존의 코드를 수정하지 않고도 새로운 기능을 추가할 수 있어야 한다는 것이다. 이 원칙을 지키면 잠재적인 새로운 버그를 방지하는 데 도움이 된다.</p><p><strong>Bad:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Vehicle</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> Type type<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>move</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>Type<span style=color:#f92672>.</span><span style=color:#a6e22e>AIR_PLANE</span><span style=color:#f92672>.</span><span style=color:#a6e22e>equals</span><span style=color:#f92672>(</span>type<span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;하늘을 날다&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span> <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>Type<span style=color:#f92672>.</span><span style=color:#a6e22e>CAR</span><span style=color:#f92672>.</span><span style=color:#a6e22e>equals</span><span style=color:#f92672>(</span>type<span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;도로를 달린다&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span> <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>Type<span style=color:#f92672>.</span><span style=color:#a6e22e>SUBWAY</span><span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;철도를 달린다&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이 코드는 탈 것의 종류가 추가될 때마다 기존의 코드를 수정해야 한다. 개방-폐쇄 원칙을 지킨 코드는 다음과 같다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>Vehicle</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>move</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>AirPlane</span> <span style=color:#66d9ef>implements</span> Vehicle <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>move</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;하늘을 날다&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Car</span> <span style=color:#66d9ef>implements</span> Vehicle <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>move</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;도로를 달린다&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Subway</span> <span style=color:#66d9ef>implements</span> Vehicle <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>move</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;철도를 달린다&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이 코드는 새로운 탈 것이 추가되더라도 기존의 코드 변경 없이 새로운 클래스를 생성하면 된다.</p><h2 id=리스코프-치환-원칙>리스코프 치환 원칙
+<a href=#%eb%a6%ac%ec%8a%a4%ec%bd%94%ed%94%84-%ec%b9%98%ed%99%98-%ec%9b%90%ec%b9%99 class=h-anchor aria-hidden=true>#</a></h2><p>S가 T의 하위형 타입이라면 T 타입의 객체는 어떠한 속성의 수정 없이 타입 S로 교체할 수 있어야 한다는 원칙이다. 리스코프 치환 원칙 위반의 예로 가장 많이 사용하는 것은 직사각형 클래스로부터 정사각형 클래스를 파생하는 것이다.</p><p><strong>Bad:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Rectangle</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> <span style=color:#66d9ef>int</span> width<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> <span style=color:#66d9ef>int</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setWidth</span><span style=color:#f92672>(</span><span style=color:#66d9ef>int</span> width<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>width</span> <span style=color:#f92672>=</span> width<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setHeight</span><span style=color:#f92672>(</span><span style=color:#66d9ef>int</span> height<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>height</span> <span style=color:#f92672>=</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>getArea</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> width <span style=color:#f92672>*</span> heght<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Square</span> <span style=color:#66d9ef>extends</span> Rectangle <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setWidth</span><span style=color:#f92672>(</span><span style=color:#66d9ef>int</span> width<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>width</span> <span style=color:#f92672>=</span> width<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>hegiht</span> <span style=color:#f92672>=</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setHeight</span><span style=color:#f92672>(</span><span style=color:#66d9ef>int</span> height<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>height</span> <span style=color:#f92672>=</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>width</span> <span style=color:#f92672>=</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>정사각형은 가로와 세로가 항상 같아야 하기 때문에 가로와 세로를 독립적으로 변경할 수 없다. 그렇다고 해서 이 코드의 <code>Square</code> 와 같이 메서드를 오버라이딩 하게 되면, 가로와 세로를 독립적으로 변경할 수 있는 직사각형 할당자의 조건을 위반하게 된다. 이 코드를 클라이언트에서 다음과 같이 사용했다고 해보자.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printArea</span><span style=color:#f92672>(</span>List<span style=color:#f92672>&lt;</span>Rectangle<span style=color:#f92672>&gt;</span> rectangles<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#f92672>(</span>Rectangle rectangle <span style=color:#f92672>:</span> rectangles<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        rectangle<span style=color:#f92672>.</span><span style=color:#a6e22e>setWidth</span><span style=color:#f92672>(</span><span style=color:#ae81ff>4</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>        rectangle<span style=color:#f92672>.</span><span style=color:#a6e22e>setHeight</span><span style=color:#f92672>(</span><span style=color:#ae81ff>5</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>rectangle<span style=color:#f92672>.</span><span style=color:#a6e22e>getArea</span><span style=color:#f92672>());</span>    
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이 메서드는 20 이 출력 될까? 만약 매개 변수로 받은 클래스의 타입이 <code>Square</code> 라면 25 가 출력될 것이다. 리스코프 치환 원칙을 지키는 코드는 다음과 같다.</p><p><strong>Good:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>Shape</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>getArea</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Rectangle</span> <span style=color:#66d9ef>implements</span> Shape <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>int</span> width<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>int</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// setter
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>getArea</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> width <span style=color:#f92672>*</span> height<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Square</span> <span style=color:#66d9ef>implements</span> Shape <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>int</span> length<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// setter
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>getArea</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> length <span style=color:#f92672>*</span> length<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><h2 id=인터페이스-분리-원칙>인터페이스 분리 원칙
+<a href=#%ec%9d%b8%ed%84%b0%ed%8e%98%ec%9d%b4%ec%8a%a4-%eb%b6%84%eb%a6%ac-%ec%9b%90%ec%b9%99 class=h-anchor aria-hidden=true>#</a></h2><p>많은 기능을 가진 인터페이스를 더 작게 분할해야 한다는 원칙이다. 다음의 예시를 보자.</p><p><strong>Bad:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>Printer</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>print</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fax</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>scan</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>AllInOnePrinter</span> <span style=color:#66d9ef>implements</span> Printer <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>print</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fax</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>scan</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>EconomicPrinter</span> <span style=color:#66d9ef>implements</span> Printer <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>print</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fax</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> UnsupportedOperationException<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Fax not supported.&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>scan</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> UnsupportedOperationException<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Scan not supported.&#34;</span><span style=color:#f92672>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>인터페이스 분리 원칙을 따른 코드는 다음과 같다.</p><p><strong>Good:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>Printer</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>print</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>Fax</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fax</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>Scanner</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>scan</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>AllInOnePrinter</span> <span style=color:#66d9ef>implements</span> Printer<span style=color:#f92672>,</span> Fax<span style=color:#f92672>,</span> Scanner <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  print<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#f92672>}</span>  
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  fax<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  scan<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>EconomicPrinter</span> <span style=color:#66d9ef>implements</span> Printer <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  print<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><h2 id=의존-관계-역전-원칙>의존 관계 역전 원칙
+<a href=#%ec%9d%98%ec%a1%b4-%ea%b4%80%ea%b3%84-%ec%97%ad%ec%a0%84-%ec%9b%90%ec%b9%99 class=h-anchor aria-hidden=true>#</a></h2><p>이 원칙은 소프트웨어 모듈을 분리 시 지켜야 하는 두 가지 사항을 명시한다.</p><ol><li>상위 모듈은 하위 모듈에 의존해서는 안된다. 상위 모듈과 하위 모듈 모두 추상화에 의존해야 한다.</li><li>추상화는 세부 사항에 의존해서는 안된다. 세부 사항은 추상화에 의존해야 한다.</li></ol><p>설명 만으로는 이해하기가 힘들 수 있지만, 우리가 자주 사용하는 의존성 주입도 이 원칙을 따르는 방법 중 하나이다. 다음 예시를 보자.</p><p><strong>Bad:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MailService</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>final</span> RealMailSender mailSender<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>MailService</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>mailSender</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> RealMailSender<span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>send</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        mailSender<span style=color:#f92672>.</span><span style=color:#a6e22e>send</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>이 코드는 <code>new</code> 키워드로 생성된 <code>RealMailSender</code> 로 인해 <code>MailService</code> 와 <code>RealMailSender</code> 간의 강한 결합을 발생시킨다. 이는 테스트를 어렵게 만들 뿐 아니라 <code>RealMailSender</code> 클래스를 다른 메일 발송 클래스로 전환하는 것도 어렵게 만든다. 의존 관계 역전 원칙을 지키는 코드를 살펴보자.</p><p><strong>Good:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>MailSender</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>send</span><span style=color:#f92672>();</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>RealMailSender</span> <span style=color:#66d9ef>implements</span> MailSender <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>send</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 실제 메일을 발송한다.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ConsoleMailSender</span> <span style=color:#66d9ef>implements</span> MailSender <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Override</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>send</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 메일 내용을 콘솔에만 출력한다.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MailService</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>final</span> MailSender mailSender<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>MailService</span><span style=color:#f92672>(</span>MailSender mailSender<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>mailSender</span> <span style=color:#f92672>=</span> mailSender<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>의존 관계 역전 원칙을 잘 지키는 코드이다. 의존성 주입을 통해 실제 구현체와의 의존성을 분리하였다. 만약 테스트 환경이라면 실제로 메일이 발송되어서는 안되기 때문에 <code>ConsoleMailSender</code> 를 사용하면 될 것이다. 운영 환경이라면 <code>RealMailSender</code> 를 사용하면 된다.</p><h2 id=마무리>마무리
+<a href=#%eb%a7%88%eb%ac%b4%eb%a6%ac class=h-anchor aria-hidden=true>#</a></h2><p>객체 지향 설계의 SOLID 원칙에 대해 살펴보았다. 객체 지향 설계의 &lsquo;원칙&rsquo; 이라는 말이 붙었을 정도이다. 간단한 프로그램을 만들더라도 항상 SOLID 원칙을 준수할 수 있도록 습관을 들이는 것이 좋을 것이다.</p></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>다른 게시물 읽기</span><hr></div><div class=pagination__buttons><span class="button next"><a href=https://disj11.github.io/http-client-in-java/><span class=button__text>Http Client in Java</span>
+<span class=button__icon>→</span></a></span></div></div></article></div><footer class=footer><div class=footer__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>Life Log</span>
+<span class=logo__cursor></span></a><div class=copyright><span>© 2022 Powered by
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
+<span>Theme created by
+<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span></div></div></footer><script type=text/javascript src=/bundle.min.js></script></div></body></html>
