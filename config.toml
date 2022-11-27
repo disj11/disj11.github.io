@@ -24,10 +24,15 @@ googleAnalytics = 'G-XD9VVSGMKV'
     readOtherPosts = "다른 게시물 읽기"
     newerPosts = "최신 게시물"
     olderPosts = "이전 게시물"
-    minuteReadingTime = "예상 읽기 시간"
+    minuteReadingTime = "min read"
     dateFormatSingle = "2006-01-02"
     dateFormatList = "2006-01-02"
 
     [languages.ko.params.logo]
       logoText = "Life Log"
       logoHomeLink = "/"
+    [languages.ko.menu]
+      [[languages.ko.menu.main]]
+        identifier = "tags"
+        name = "Tags"
+        url = "/tags"
