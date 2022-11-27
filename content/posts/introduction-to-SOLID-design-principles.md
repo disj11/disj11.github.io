@@ -1,7 +1,8 @@
 ---
 title: "Introduction to SOLID Design Principles"
 date: 2021-11-03T21:21:49+09:00
-tag: ["development"]
+url: /introduction-to-solid-design-principles/
+tags: ["development"]
 ---
 
 ## 개요
