@@ -2,7 +2,7 @@
 title: "An Introduction to Oauth2"
 date: 2021-10-22T10:08:30+09:00
 url: /an-introduction-to-oauth2/
-tags: ["oauth2"]
+tags: ["development"]
 ---
 
 ## 소개
