@@ -5,15 +5,15 @@ Life Log</title><meta charset=utf-8><meta name=viewport content="width=device-wi
 <script>function initAutoComplete(){const e=document.createElement("div");e.id="autocomplete";const t=document.createElement("li");t.appendChild(e),document.querySelector("nav.menu > ul")?.prepend(t)}window.onload=()=>{initAutoComplete();const e=algoliasearch("XKH7GYIHTP","aae1864001169a9e40ae7a0f1e802d67"),{autocomplete:t,getAlgoliaResults:n}=window["@algolia/autocomplete-js"];t({container:"#autocomplete",placeholder:"Search for posts",getSources({query:t}){return[{sourceId:"posts",getItems(){return n({searchClient:e,queries:[{indexName:"disj11.github.io",query:t,params:{hitsPerPage:5,attributesToSnippet:["title:10","content:35"],snippetEllipsisText:"…"}}]})},templates:{header({html:e}){return e`
                                     <span class="aa-SourceHeaderTitle">Posts</span>
                                     <div class="aa-SourceHeaderLine"/>
-                                `},item({item:e,components:t,html:n}){return n`
-                                    <a class="aa-ItemLink" href="${e.href}">
+                                `},item({item:e,components:n,html:s}){return s`
+                                    <a class="aa-ItemLink" href="${e.href}?search=${t}">
                                         <div class="aa-ItemContent">
                                             <div class="aa-ItemContentBody">
                                                 <div class="aa-ItemContentTitle">
-                                                    ${t.Highlight({hit:e,attribute:"title"})}
+                                                    ${n.Highlight({hit:e,attribute:"title"})}
                                                 </div>
                                                 <div class="aa-ItemContentDescription">
-                                                    ${t.Snippet({hit:e,attribute:"content"})}
+                                                    ${n.Snippet({hit:e,attribute:"content"})}
                                                 </div>
                                             </div>
                                         </div>
