@@ -38,12 +38,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
 
-      - name: Generate .env file
+      - name: Generate Environment Variables File
         run: |
-          echo "ALGOLIA_ADMIN_KEY=${ALGOLIA_ADMIN_KEY}" >> .env
-          echo "ALGOLIA_APP_ID=${ALGOLIA_APP_ID}" >> .env
-          echo "ALGOLIA_INDEX_FILE=${ALGOLIA_INDEX_FILE}" >> .env
-          echo "ALGOLIA_INDEX_NAME=${ALGOLIA_INDEX_NAME}" >> .env
+          echo "ALGOLIA_ADMIN_KEY=$ALGOLIA_ADMIN_KEY" >> .env
+          echo "ALGOLIA_APP_ID=$ALGOLIA_APP_ID" >> .env
+          echo "ALGOLIA_INDEX_FILE=$ALGOLIA_INDEX_FILE" >> .env
+          echo "ALGOLIA_INDEX_NAME=$ALGOLIA_INDEX_NAME" >> .env
         env:
           ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
