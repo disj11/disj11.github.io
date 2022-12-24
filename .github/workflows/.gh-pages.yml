@@ -40,10 +40,10 @@ jobs:
 
       - name: Algolia Indexing
         env:
-          ALGOLIA_ADMIN_KEY: ${secrets.ALGOLIA_ADMIN_KEY}
-          ALGOLIA_APP_ID: ${secrets.ALGOLIA_APP_ID}
-          ALGOLIA_INDEX_FILE: ${secrets.ALGOLIA_INDEX_FILE}
-          ALGOLIA_INDEX_NAME: ${secrets.ALGOLIA_INDEX_NAME}
+          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_INDEX_FILE: ${{ secrets.ALGOLIA_INDEX_FILE }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
         run: |
           npm install
           npm run algolia
