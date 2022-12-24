@@ -1,4 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable-dynamic-subset.css");
+@import "color.css";
 
 body {
     font-family: "Pretendard Variable", sans-serif;
@@ -7,3 +8,32 @@ body {
 .posts {
     width: 100%;
 }
+
+/*autocomplete*/
+
+
+/*
+.aa-Form {
+    background: inherit !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.aa-Form:focus-within {
+    box-shadow: none !important;
+}
+
+.aa-Input {
+    color: var(--color) !important;
+}
+
+.aa-Label svg, .aa-LoadingIndicator svg {
+    color: var(--color) !important;
+}
+
+.aa-Panel {
+  background: var(--background) !important;
+}
+
+.aa-Autocomplete, .aa-DetachedFormContainer, .aa-Panel {
+  color: var(--color) !important;
+}*/
