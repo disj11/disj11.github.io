@@ -43,7 +43,8 @@ body.dark-theme {
 }
 
 body.dark-theme,
-body.light-theme {
+body.light-theme,
+:root {
     --aa-search-input-height: 44px !important !important;
     --aa-input-icon-size: 20px !important;
     --aa-base-unit: 16 !important;
