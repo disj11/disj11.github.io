@@ -56,23 +56,21 @@
                             },
                             item({item, components, html}) {
                                 return html`
-                                    <div class="aa-ItemWrapper">
-                                        <a class="aa-ItemLink" href="${item.href}">
-                                            <div class="aa-ItemContent">
-                                                <div class="aa-ItemContentBody">
-                                                    <div class="aa-ItemContentTitle">
-                                                        ${components.Highlight({
-                                                            hit: item,
-                                                            attribute: "title"
-                                                        })}
-                                                    </div>
-                                                    <div class="aa-ItemContentDescription">
-                                                        ${components.Snippet({hit: item, attribute: "content"})}
-                                                    </div>
+                                    <a class="aa-ItemLink" href="${item.href}">
+                                        <div class="aa-ItemContent">
+                                            <div class="aa-ItemContentBody">
+                                                <div class="aa-ItemContentTitle">
+                                                    ${components.Highlight({
+                                                        hit: item,
+                                                        attribute: "title"
+                                                    })}
+                                                </div>
+                                                <div class="aa-ItemContentDescription">
+                                                    ${components.Snippet({hit: item, attribute: "content"})}
                                                 </div>
                                             </div>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                 `;
                             },
                             noResults() {
