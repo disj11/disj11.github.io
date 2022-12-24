@@ -18,6 +18,10 @@ jobs:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
+      - uses: actions/setup-node@3
+        with:
+          node-version: 16
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -35,7 +39,6 @@ jobs:
           publish_dir: ./public
 
       - name: Algolia Indexing
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-        run: npm install & npm run algolia
+        run: |
+          npm install
+          npm run algolia
