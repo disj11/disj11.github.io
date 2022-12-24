@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/@algolia/autocomplete-theme-classic@1.7.1/dist/theme.css");
+
 body.light-theme, :root {
     --custom-background: 255, 255, 255;
     --custom-background-secondary: 234, 234, 234;
