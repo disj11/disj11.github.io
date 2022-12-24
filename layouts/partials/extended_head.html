@@ -1,0 +1,87 @@
+<link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-theme-classic"
+/>
+<script
+        src="https://cdn.jsdelivr.net/npm/algoliasearch@4.14.2/dist/algoliasearch-lite.umd.js"
+        integrity="sha256-dImjLPUsG/6p3+i7gVKBiDM8EemJAhQ0VvkRK2pVsQY="
+        crossorigin="anonymous"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
+<script>
+    function initAutoComplete() {
+        const autocomplate = document.createElement("div");
+        autocomplate.id = "autocomplete";
+        const li = document.createElement("li");
+        li.appendChild(autocomplate);
+        document.querySelector("nav.menu > ul")?.prepend(li);
+    }
+
+    window.onload = () => {
+        initAutoComplete();
+        const searchClient = algoliasearch(
+            "XKH7GYIHTP",
+            "aae1864001169a9e40ae7a0f1e802d67",
+        );
+        const {autocomplete, getAlgoliaResults} = window["@algolia/autocomplete-js"];
+        autocomplete({
+            container: "#autocomplete",
+            placeholder: "Search for posts",
+            getSources({query}) {
+                return [
+                    {
+                        sourceId: "posts",
+                        getItems() {
+                            return getAlgoliaResults({
+                                searchClient,
+                                queries: [
+                                    {
+                                        indexName: "disj11.github.io",
+                                        query,
+                                        params: {
+                                            hitsPerPage: 5,
+                                            attributesToSnippet: ['title:10', 'content:35'],
+                                            snippetEllipsisText: '…',
+                                        },
+                                    },
+                                ],
+                            });
+                        },
+                        templates: {
+                            header({html}) {
+                                return html`
+                                    <span class="aa-SourceHeaderTitle">Posts</span>
+                                    <div class="aa-SourceHeaderLine"/>
+                                `;
+                            },
+                            item({item, components, html}) {
+                                return html`
+                                    <div class="aa-ItemWrapper">
+                                        <a class="aa-ItemLink" href="${item.href}">
+                                            <div class="aa-ItemContent">
+                                                <div class="aa-ItemContentBody">
+                                                    <div class="aa-ItemContentTitle">
+                                                        ${components.Highlight({
+                                                            hit: item,
+                                                            attribute: "title"
+                                                        })}
+                                                    </div>
+                                                    <div class="aa-ItemContentDescription">
+                                                        ${components.Snippet({hit: item, attribute: "content"})}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                `;
+                            },
+                            noResults() {
+                                return "No posts for this query."
+                            }
+                        },
+                    },
+                ];
+            },
+        });
+    }
+</script>

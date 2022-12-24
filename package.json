@@ -1,0 +1,23 @@
+{
+  "name": "disj11.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "algolia": "atomic-algolia",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/disj11/disj11.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/disj11/disj11.github.io/issues"
+  },
+  "homepage": "https://github.com/disj11/disj11.github.io#readme",
+  "dependencies": {
+    "atomic-algolia": "^0.3.19"
+  }
+}
