@@ -7,7 +7,7 @@ tags: [kotlin]
 
 When we use data classes in Kotlin, there are a few things to keep in mind.   
 Kotlin data classes automatically create a `copy()`  function. If a property of a class must maintain an invariant, this function may not behave as expected. For example, we have the following code.
-```
+```kotlin
 data class Point private constructor(
     val value: Int,
 ) {
@@ -23,7 +23,7 @@ data class Point private constructor(
 ```
 Is the `value` property of the `Point` class instance always positive? The answer is "No".   
 We can set a negative value using the `copy()` function.
-```
+```kotlin
 val point = Point.of(10)
 
 // The copy() function allows us to set an invalid value.
@@ -31,7 +31,7 @@ val invalidPoint = point.copy(value = -10)
 
 ```
 To avoid these problems, we should write code like the following
-```
+```kotlin
 class Point private constructor(
     val value: Int,
 ) {
