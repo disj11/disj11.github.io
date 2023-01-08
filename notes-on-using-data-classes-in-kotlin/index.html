@@ -26,42 +26,42 @@ data class Point private constructor( val value: Int, ) { companion object { fun
                                     </a>
                                 `},noResults(){return"No posts for this query."}}}]}})}</script></head><body class=dark-theme><div class=container><header class=header><span class=header__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>Life Log</span>
 <span class=logo__cursor></span></a>
-<span class=header__right><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/tags>Tags</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/tags>Tags</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><article class=post><h1 class=post-title>Notes on Using Data Classes in Kotlin</h1><div class=post-meta><time class=post-date>2023-01-08</time></div><span class=post-tags><a href=https://disj11.github.io/tags/kotlin/>#kotlin</a>&nbsp;</span><div class=post-content><p>When we use data classes in Kotlin, there are a few things to keep in mind.<br>Kotlin data classes automatically create a <code>copy()</code> function. If a property of a class must maintain an invariant, this function may not behave as expected. For example, we have the following code.</p><pre tabindex=0><code>data class Point private constructor(
-    val value: Int,
-) {
-    companion object {
-        fun of(value: Int) = if (value &lt; 0) {
-            throw IllegalArgumentException(&#34;The value argument should always be set to a positive value, but the current value is $value&#34;)
-        } else {
-            Point(value)
-        }
-    }
-}
-</code></pre><p>Is the <code>value</code> property of the <code>Point</code> class instance always positive? The answer is &ldquo;No&rdquo;.<br>We can set a negative value using the <code>copy()</code> function.</p><pre tabindex=0><code>val point = Point.of(10)
-
-// The copy() function allows us to set an invalid value.
-val invalidPoint = point.copy(value = -10)
-</code></pre><p>To avoid these problems, we should write code like the following</p><pre tabindex=0><code>class Point private constructor(
-    val value: Int,
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        other as Point
-
-        if (value != other.value) return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return value
-    }
-
-    override fun toString(): String {
-        return &#34;Point(value=$value)&#34;
-    }
-}
-</code></pre><p>As we learned in this post, it is important to always consider the <code>copy()</code> function when using data classes in Kotlin.</p><p>If you are wondering about the <code>copy()</code> function, you can find a reference <a href=https://kotlinlang.org/docs/data-classes.html>here</a>.</p></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>다른 게시물 읽기</span><hr></div><div class=pagination__buttons><span class="button next"><a href=https://disj11.github.io/introduction-to-solid-design-principles/><span class=button__text>Introduction to SOLID Design Principles</span>
+<span class=header__right><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/tags>Tags</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/tags>Tags</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><article class=post><h1 class=post-title>Notes on Using Data Classes in Kotlin</h1><div class=post-meta><time class=post-date>2023-01-08</time></div><span class=post-tags><a href=https://disj11.github.io/tags/kotlin/>#kotlin</a>&nbsp;</span><div class=post-content><p>When we use data classes in Kotlin, there are a few things to keep in mind.<br>Kotlin data classes automatically create a <code>copy()</code> function. If a property of a class must maintain an invariant, this function may not behave as expected. For example, we have the following code.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-kotlin data-lang=kotlin><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Point</span> <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>constructor</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>val</span> value: Int,
+</span></span><span style=display:flex><span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>companion</span> <span style=color:#66d9ef>object</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>fun</span> <span style=color:#a6e22e>of</span>(<span style=color:#66d9ef>value</span>: Int) = <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>value</span> &lt; <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>throw</span> IllegalArgumentException(<span style=color:#e6db74>&#34;The value argument should always be set to a positive value, but the current value is </span><span style=color:#e6db74>$value</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>        } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>            Point(<span style=color:#66d9ef>value</span>)
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Is the <code>value</code> property of the <code>Point</code> class instance always positive? The answer is &ldquo;No&rdquo;.<br>We can set a negative value using the <code>copy()</code> function.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-kotlin data-lang=kotlin><span style=display:flex><span><span style=color:#66d9ef>val</span> point = <span style=color:#a6e22e>Point</span>.of(<span style=color:#ae81ff>10</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// The copy() function allows us to set an invalid value.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>val</span> invalidPoint = point.copy(<span style=color:#66d9ef>value</span> = -<span style=color:#ae81ff>10</span>)
+</span></span></code></pre></div><p>To avoid these problems, we should write code like the following</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-kotlin data-lang=kotlin><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Point</span> <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>constructor</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>val</span> value: Int,
+</span></span><span style=display:flex><span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>override</span> <span style=color:#66d9ef>fun</span> <span style=color:#a6e22e>equals</span>(other: Any?): Boolean {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>this</span> <span style=color:#f92672>===</span> other) <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (javaClass <span style=color:#f92672>!=</span> other<span style=color:#f92672>?.</span>javaClass) <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>        other <span style=color:#66d9ef>as</span> Point
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>value</span> <span style=color:#f92672>!=</span> other.<span style=color:#66d9ef>value</span>) <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>override</span> <span style=color:#66d9ef>fun</span> <span style=color:#a6e22e>hashCode</span>(): Int {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>value</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>override</span> <span style=color:#66d9ef>fun</span> <span style=color:#a6e22e>toString</span>(): String {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;Point(value=</span><span style=color:#e6db74>$value</span><span style=color:#e6db74>)&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>As we learned in this post, it is important to always consider the <code>copy()</code> function when using data classes in Kotlin.</p><p>If you are wondering about the <code>copy()</code> function, you can find a reference <a href=https://kotlinlang.org/docs/data-classes.html>here</a>.</p></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>다른 게시물 읽기</span><hr></div><div class=pagination__buttons><span class="button next"><a href=https://disj11.github.io/introduction-to-solid-design-principles/><span class=button__text>Introduction to SOLID Design Principles</span>
 <span class=button__icon>→</span></a></span></div></div></article></div><footer class=footer><div class=footer__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>Life Log</span>
 <span class=logo__cursor></span></a><div class=copyright><span>© 2023 Powered by
 <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
