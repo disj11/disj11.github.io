@@ -5,8 +5,8 @@ url: "/notes-on-using-data-classes-in-kotlin/"
 tags: [kotlin]
 ---
 
-When we use data classes in Kotlin, there are a few things to keep in mind.   
-Kotlin data classes automatically create a `copy()`  function. If a property of a class must maintain an invariant, this function may not behave as expected. For example, we have the following code.
+When using data classes in Kotlin, it is important to keep a few things in mind. Data classes automatically create a `copy()` function, which can be used to create a new instance of the class with modified property values. However, if a property of the class must maintain an invariant, this function may not behave as expected.   
+For example, consider the following `Point` class:
 ```kotlin
 data class Point private constructor(
     val value: Int,
@@ -21,8 +21,7 @@ data class Point private constructor(
 }
 
 ```
-Is the `value` property of the `Point` class instance always positive? The answer is "No".   
-We can set a negative value using the `copy()` function.
+The `value` property of the `Point` class is intended to be positive. However, the `copy()` function allows us to set an invalid value:
 ```kotlin
 val point = Point.of(10)
 
@@ -30,7 +29,7 @@ val point = Point.of(10)
 val invalidPoint = point.copy(value = -10)
 
 ```
-To avoid these problems, we should write code like the following
+To prevent this from happening, we can define the `Point` class as follows:
 ```kotlin
 class Point private constructor(
     val value: Int,
@@ -53,6 +52,6 @@ class Point private constructor(
     }
 }
 ```
-As we learned in this post, it is important to always consider the `copy()` function when using data classes in Kotlin.
+As we have learned in this post, it is important to always consider the `copy()` function when using data classes in Kotlin.
 
-If you are wondering about the `copy()` function, you can find a reference [here](https://kotlinlang.org/docs/data-classes.html).   
+If you have any questions about the data classes, you can find more information [here](https://kotlinlang.org/docs/data-classes.html).
