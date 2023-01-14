@@ -1,5 +1,6 @@
 ---
 title: "Introduction to SOLID Design Principles"
+description: "객체 지향 프로그래밍의 다섯 가지 설계 원칙인 SOLID 에 대하여 간단한 예제를 통해 알아본다."
 date: 2021-11-03T21:21:49+09:00
 url: /introduction-to-solid-design-principles/
 tags: ["development"]

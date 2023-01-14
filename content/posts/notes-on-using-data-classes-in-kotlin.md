@@ -1,5 +1,6 @@
 ---
 title: "Notes on Using Data Classes in Kotlin"
+description: "Consider the copy() function When using data classes in Kotlin"
 date: 2023-01-08T14:39:00+09:00
 url: "/notes-on-using-data-classes-in-kotlin/"
 tags: [kotlin]

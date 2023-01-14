@@ -1,5 +1,6 @@
 ---
 title: "Nullable Receiver in Extension Functions of Kotlin"
+description: "The receiver object in extension functions allows null value."
 date: 2023-01-08T21:22:27+09:00
 url: "/nullable-receiver-in-extension-functions-of-kotlin/"
 tags: [kotlin]

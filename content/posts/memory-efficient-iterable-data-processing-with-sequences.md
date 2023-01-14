@@ -1,5 +1,6 @@
 ---
 title: "Kotlin: Memory Efficient Iterable Data Processing with Sequences"
+description: "Let's find out how do they differ in behavior between Iterable and Sequence in Kotlin."
 date: 2023-01-10T23:59:43+09:00
 url: "/memory-efficient-iterable-data-processing-with-sequences/"
 tags: [kotlin]
