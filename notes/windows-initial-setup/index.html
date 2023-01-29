@@ -1,0 +1,154 @@
+<!doctype html><html lang=ko><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-XD9VVSGMKV"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XD9VVSGMKV",{anonymize_ip:!1})}</script><title>::
+Life Log</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Windows 초기 설정 # Windows 최초 설치 후 설정 정리 날개셋 한글 입력기 설치 # 세벌식 유저이므로 날개셋 한글 입력기를 다운받는다. vim 유저이므로 ESC 누를 시 영문으로 전환하는 기능"><meta name=keywords content="개발 블로그,개발블로그"><meta name=robots content="noodp"><link rel=canonical href=https://disj11.github.io/notes/windows-initial-setup/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://disj11.github.io/style.css><link rel=apple-touch-icon-precomposed sizes=144x144 href=https://disj11.github.io/img/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=https://disj11.github.io/img/favicon.png><link href=/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><meta name=twitter:card content="summary"><meta name=twitter:title content><meta name=twitter:description content="Windows 초기 설정 # Windows 최초 설치 후 설정 정리 날개셋 한글 입력기 설치 # 세벌식 유저이므로 날개셋 한글 입력기를 다운받는다. vim 유저이므로 ESC 누를 시 영문으로 전환하는 기능"><meta property="og:title" content><meta property="og:description" content="Windows 초기 설정 # Windows 최초 설치 후 설정 정리 날개셋 한글 입력기 설치 # 세벌식 유저이므로 날개셋 한글 입력기를 다운받는다. vim 유저이므로 ESC 누를 시 영문으로 전환하는 기능"><meta property="og:type" content="article"><meta property="og:url" content="https://disj11.github.io/notes/windows-initial-setup/"><meta property="article:section" content="notes"><meta property="og:site_name" content="Life Log"><script src=https://cdn.jsdelivr.net/npm/algoliasearch@4.14.2/dist/algoliasearch-lite.umd.js integrity="sha256-dImjLPUsG/6p3+i7gVKBiDM8EemJAhQ0VvkRK2pVsQY=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js></script>
+<script>function initAutoComplete(){const e=document.createElement("div");e.id="autocomplete";const t=document.createElement("li");t.appendChild(e),document.querySelector("nav.menu > ul")?.prepend(t)}window.onload=()=>{initAutoComplete();const e=algoliasearch("XKH7GYIHTP","aae1864001169a9e40ae7a0f1e802d67"),{autocomplete:t,getAlgoliaResults:n}=window["@algolia/autocomplete-js"];t({container:"#autocomplete",placeholder:"Search for posts",getSources({query:t}){return[{sourceId:"posts",getItems(){return n({searchClient:e,queries:[{indexName:"disj11.github.io",query:t,params:{hitsPerPage:5,attributesToSnippet:["title:10","content:35"],snippetEllipsisText:"…"}}]})},templates:{header({html:e}){return e`
+                                    <span class="aa-SourceHeaderTitle">Posts</span>
+                                    <div class="aa-SourceHeaderLine"/>
+                                `},item({item:e,components:n,html:s}){return s`
+                                    <a class="aa-ItemLink" href="${e.href}?search=${t}">
+                                        <div class="aa-ItemContent">
+                                            <div class="aa-ItemContentBody">
+                                                <div class="aa-ItemContentTitle">
+                                                    ${n.Highlight({hit:e,attribute:"title"})}
+                                                </div>
+                                                <div class="aa-ItemContentDescription">
+                                                    ${n.Snippet({hit:e,attribute:"content"})}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                `},noResults(){return"No posts for this query."}}}]}})}</script></head><body class=dark-theme><div class=container><header class=header><span class=header__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>Life Log</span>
+<span class=logo__cursor></span></a>
+<span class=header__right><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/tags>Tags</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/tags>Tags</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><article class=post><h1 class=post-title></h1><div class=post-meta></div><div class=post-content><h1 id=windows-초기-설정>Windows 초기 설정
+<a href=#windows-%ec%b4%88%ea%b8%b0-%ec%84%a4%ec%a0%95 class=h-anchor aria-hidden=true>#</a></h1><p>Windows 최초 설치 후 설정 정리</p><h2 id=날개셋-한글-입력기-설치>날개셋 한글 입력기 설치
+<a href=#%eb%82%a0%ea%b0%9c%ec%85%8b-%ed%95%9c%ea%b8%80-%ec%9e%85%eb%a0%a5%ea%b8%b0-%ec%84%a4%ec%b9%98 class=h-anchor aria-hidden=true>#</a></h2><p>세벌식 유저이므로 <a href=http://moogi.new21.org/ngs_download.htm>날개셋 한글 입력기</a>를 다운받는다.</p><p>vim 유저이므로 ESC 누를 시 영문으로 전환하는 기능을 설정한다. 설정 방법은 아래 이미지를 참고한다.</p><p><img src=esc-key-mappings.png alt="ESC key mappings"></p><h2 id=powertoys>PowerToys
+<a href=#powertoys class=h-anchor aria-hidden=true>#</a></h2><p>Microsoft Store 에서 Microsoft PowerToys 를 찾아 설치한다.</p><h2 id=scoop>Scoop
+<a href=#scoop class=h-anchor aria-hidden=true>#</a></h2><p><a href=https://scoop.sh/>scoop</a> 을 다운 받는다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>Set-ExecutionPolicy RemoteSigned -Scope CurrentUser <span style=color:#75715e># Optional: Needed to run a remote script the first time</span>
+</span></span><span style=display:flex><span>irm get.scoop.sh | iex
+</span></span></code></pre></div><h2 id=git>Git
+<a href=#git class=h-anchor aria-hidden=true>#</a></h2><p>Git 을 다운 받는다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>scoop install git
+</span></span></code></pre></div><h2 id=vim>VIM
+<a href=#vim class=h-anchor aria-hidden=true>#</a></h2><p><a href=https://www.vim.org/download.php>gvim</a> 을 다운받는다.</p><p>설치 시 Create .bat files 를 체크한다. 이 옵션을 체크하면 명령 프롬프트에서 vim 명령 사용이 가능해진다.</p><p><img src=vim-create-bat-files.png alt="Vim Install Setup"></p><p><a href=https://github.com/junegunn/vim-plug>vim-plug</a> 를 설치한다. powershell 을 실행하여 다음 명령어를 입력한다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>iwr -useb https<span style=color:#960050;background-color:#1e0010>:</span>//raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |`
+</span></span><span style=display:flex><span>    ni $HOME/vimfiles/autoload/plug.vim -Force
+</span></span></code></pre></div><p>_vimrc 파일을 작성한다. <code>C:\Users\사용자계정</code> 위치에 _vimrc 파일을 생성한 뒤 다음 내용을 입력한다.</p><pre tabindex=0><code>let mapleader=&#34; &#34;
+
+set encoding=UTF-8
+
+set number
+set showcmd
+set incsearch
+set ignorecase
+set scrolloff=5
+set clipboard=unnamed
+
+set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+
+map &lt;Home&gt; ^
+map &lt;End&gt; $
+nnoremap &lt;leader&gt;ca ggVG
+
+&#34; vim-plug
+call plug#begin()
+    Plug &#39;ryanoasis/vim-devicons&#39;
+    Plug &#39;joshdick/onedark.vim&#39;
+    Plug &#39;vim-airline/vim-airline&#39;
+    Plug &#39;vim-airline/vim-airline-themes&#39;
+
+    Plug &#39;terryma/vim-multiple-cursors&#39;
+    Plug &#39;preservim/nerdtree&#39;
+    Plug &#39;easymotion/vim-easymotion&#39;
+    Plug &#39;tpope/vim-commentary&#39;
+    Plug &#39;tpope/vim-surround&#39;
+call plug#end()
+
+syntax on
+colorscheme onedark
+let g:airline_theme=&#39;onedark&#39;
+
+let NERDTreeMapOpenVSplit=&#39;v&#39;
+let NERDTreeMapPreviewVSplit=&#39;gv&#39;
+let NERDTreeMapOpenSplit=&#39;s&#39;
+let NERDTreeMapPreviewSplit=&#39;gs&#39;
+
+nnoremap &lt;leader&gt;nt :NERDTreeToggle&lt;CR&gt;
+nnoremap &lt;leader&gt;nc :NERDTreeFind&lt;CR&gt;
+nnoremap &lt;leader&gt;nf :NERDTreeFocus&lt;CR&gt;
+
+nmap &lt;leader&gt;/ &lt;Plug&gt;(easymotion-bd-fn)
+nmap &lt;leader&gt;; &lt;Plug&gt;(easymotion-next)
+nmap &lt;leader&gt;, &lt;Plug&gt;(easymotion-prev)
+
+if has(&#39;gui_running&#39;)
+    set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h13
+endif
+
+&#34; intellij
+if has(&#39;ide&#39;)
+    set ideajoin
+
+    nmap &lt;leader&gt;* &lt;Action&gt;(FindUsages)
+    nmap &lt;leader&gt;o &lt;Action&gt;(GotoFile)
+    nmap &lt;leader&gt;f &lt;Action&gt;(FindInPath)
+    nmap &lt;leader&gt;t &lt;Action&gt;(HideAllWindows)
+
+    nmap &lt;leader&gt;up &lt;Action&gt;(Vcs.UpdateProject)
+    nmap gd &lt;Action&gt;(GotoDeclaration)
+    nmap gD &lt;Action&gt;(GotoImplementation)
+    nmap ]m &lt;Action&gt;(MethodDown)
+    nmap [m &lt;Action&gt;(MethodUp)
+
+    &#34; navigation
+    nmap &lt;leader&gt;nr &lt;Action&gt;(RecentFiles)
+    nmap &lt;leader&gt;nl &lt;Action&gt;(RecentLocations)
+
+    &#34; code
+    nmap &lt;leader&gt;cd &lt;Action&gt;(Debug)
+    nmap &lt;leader&gt;cr &lt;Action&gt;(Run)
+    nmap == &lt;Action&gt;(ReformatCode)
+    nmap &lt;leader&gt;co &lt;Action&gt;(OptimizeImports)
+
+    nmap &lt;leader&gt;gg &lt;Action&gt;(Generate)
+    nmap &lt;leader&gt;gc &lt;Action&gt;(GenerateConstructor)
+    nmap &lt;leader&gt;go &lt;Action&gt;(OverrideMethods)
+    nmap &lt;leader&gt;gi &lt;Action&gt;(ImplementMethods)
+    nmap &lt;leader&gt;cn &lt;Action&gt;(NewElementSamePlace)
+
+    &#34; show
+    nmap &lt;leader&gt;sd &lt;Action&gt;(QuickJavaDoc)
+    nmap &lt;leader&gt;sp &lt;Action&gt;(ParameterInfo)
+    nmap &lt;leader&gt;ss &lt;Action&gt;(FileStructurePopup)
+
+    &#34; refactor
+    vmap &lt;leader&gt;rm &lt;Action&gt;(ExtractMethod)
+    nmap &lt;leader&gt;rn &lt;Action&gt;(RenameElement)
+
+    &#34; vim-multiple-cursors
+    nmap &lt;C-n&gt; &lt;Plug&gt;NextWholeOccurrence
+    xmap &lt;C-n&gt; &lt;Plug&gt;NextWholeOccurrence
+    nmap g&lt;C-n&gt; &lt;Plug&gt;NextOccurrence
+    xmap g&lt;C-n&gt; &lt;Plug&gt;NextOccurrence
+    nmap &lt;C-x&gt; &lt;Plug&gt;SkipOccurrence
+    xmap &lt;C-x&gt; &lt;Plug&gt;SkipOccurrence
+    nmap &lt;C-p&gt; &lt;Plug&gt;RemoveOccurrence
+    xmap &lt;C-p&gt; &lt;Plug&gt;RemoveOccurrence
+    nmap &lt;S-C-n&gt; &lt;Plug&gt;AllWholeOccurrences
+    xmap &lt;S-C-n&gt; &lt;Plug&gt;AllWholeOccurrences
+    nmap g&lt;S-C-n&gt; &lt;Plug&gt;AllOccurrences
+    xmap g&lt;S-C-n&gt; &lt;Plug&gt;AllOccurrences
+endif
+</code></pre><p>vim 플러그인을 설치한다. powershell 을 <strong>관리자 권한</strong>으로 실행한다. <code>vim</code> 명령을 입력 후 vim 으로 진입한다. <code>:PlugInstall</code> 명령어를 통해 플러그인을 설치한다.</p><p><a href=https://www.nerdfonts.com/font-downloads>Nerd Fonts</a> 에서 JetBrainsMono Nerd Font 를 설치한다. 압축 해제하면 여러 개의 파일이 나오는데, JetBrains Mono Regular Nerd Font Complete Mono Windows Compatible 만 설치해도 된다.</p><h2 id=sdkman>SDKMAN
+<a href=#sdkman class=h-anchor aria-hidden=true>#</a></h2><p>자바 버전 관리를 편하게 하기 위해 <a href=https://sdkman.io/>sdkman</a> 을 설치한다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>scoop bucket add palindrom615 https<span style=color:#960050;background-color:#1e0010>:</span>//github.com/palindrom615/scoop-bucket
+</span></span><span style=display:flex><span>scoop install sdkman
+</span></span></code></pre></div><h2 id=jdk>JDK
+<a href=#jdk class=h-anchor aria-hidden=true>#</a></h2><p>sdkman 을 사용하여 설치하고 싶은 자바를 선택하여 설치한다. <code>sdk list java</code> 명령어로 자바 버전을 확인할 수 있다.</p><h2 id=intellij>IntelliJ
+<a href=#intellij class=h-anchor aria-hidden=true>#</a></h2><p><a href=https://www.jetbrains.com/toolbox-app/>JetBrains Toolbox App</a> 을 설치한다. 이후 ToolBox App 에서 Intellij IDEA Ultimate 를 설치한다.</p><p>IntelliJ 설치가 완료되면 <a href=https://plugins.jetbrains.com/plugin/164-ideavim>IdeaVim</a> 과 <a href=https://plugins.jetbrains.com/plugin/13360-ideavim-easymotion>IdeaVim-EasyMotion</a> 플러그인을 추가한다. 필요한 플러그인이 있다면, 추가적으로 설치한다. (<a href=https://plugins.jetbrains.com/plugin/14080-kotest>Kotest</a> 플러그인 등)</p><p>이후 vim 과 동일한 키 설정을 사용하기 하기 위해 <code>.ideavimrc</code> 에 다음 내용을 추가한다.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>source ~/_vimrc 
+</span></span></code></pre></div><p>개발 시 JDK 가 필요하다면 SDK 에 JDK 설치 경로를 추가한다. SDKMAN 으로 설치한 JDK 는 <code>~/.sdkman</code> 위치에서 찾을 수 있다.</p></div></article></div><footer class=footer><div class=footer__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>Life Log</span>
+<span class=logo__cursor></span></a><div class=copyright><span>© 2023 Powered by
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
+<span>Theme created by
+<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span></div></div></footer><script type=text/javascript src=/bundle.min.js></script></div></body></html>
