@@ -191,3 +191,13 @@ source ~/_vimrc
 ```
 
 개발 시 JDK 가 필요하다면 SDK 에 JDK 설치 경로를 추가한다. SDKMAN 으로 설치한 JDK 는 `~/.sdkman` 위치에서 찾을 수 있다.
+
+## Etc.
+
+### Hugo
+
+개인 블로그 개발 환경을 위해 hugo 설치
+
+```powershell
+scoop install hugo-extended
+```
