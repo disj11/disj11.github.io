@@ -1,3 +1,10 @@
+---
+title: "Windows 설치 후 초기 설정"
+description: "Windows 설치 후 초기 설정해야 하는 것들을 기록"
+date: 2023-01-30T09:10:13+09:00
+url: /windows-initial-setup/
+---
+
 # Windows 초기 설정
 
 Windows 최초 설치 후 설정 정리
@@ -8,7 +15,7 @@ Windows 최초 설치 후 설정 정리
 
 vim 유저이므로 ESC 누를 시 영문으로 전환하는 기능을 설정한다. 설정 방법은 아래 이미지를 참고한다.
 
-![ESC key mappings](esc-key-mappings.png)
+![ESC key mappings](/images/notes/esc-key-mappings.png)
 
 ## PowerToys
 
@@ -37,7 +44,7 @@ scoop install git
 
 설치 시 Create .bat files 를 체크한다. 이 옵션을 체크하면 명령 프롬프트에서 vim 명령 사용이 가능해진다.
 
-![Vim Install Setup](vim-create-bat-files.png)
+![Vim Install Setup](/images/notes/vim-create-bat-files.png)
 
 [vim-plug](https://github.com/junegunn/vim-plug) 를 설치한다. powershell 을 실행하여 다음 명령어를 입력한다.
 
