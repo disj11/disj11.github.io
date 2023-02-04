@@ -2,7 +2,6 @@
 title: "Understanding Isolation Level in Database Management"
 description: "데이터베이스의 격리 수준(Isolation Level)에 대하여"
 date: 2021-09-28T20:30:02+09:00
-url: "/understanding-isolation-level-in-database-management/"
 tags: [database]
 ---
 

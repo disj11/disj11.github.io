@@ -2,7 +2,6 @@
 title: "Number Formatter in Java"
 description: "간단한 예제를 통해 DecimalFormat 의 사용법을 알아보자."
 date: 2021-11-01T20:00:12+09:00
-url: /number-formatter-in-java/
 tags: ["java"]
 ---
 

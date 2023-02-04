@@ -2,7 +2,6 @@
 title: "Date Time Formatter in Java"
 description: "Java 8 에서 추가된 DateTimeFormatter 클래스 사용법에 관한 간단한 정리"
 date: 2021-09-29T19:33:31+09:00
-url: /date-time-formatter-in-java/
 tags: ["java"]
 ---
 

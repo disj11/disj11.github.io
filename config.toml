@@ -11,7 +11,7 @@ googleAnalytics = 'G-XD9VVSGMKV'
 [params]
   contentTypeName = "posts"
   defaultTheme = "dark"
-  showMenuItems = 2
+  showMenuItems = 3
   showReadingTime = false
 
 [languages]
@@ -38,6 +38,19 @@ googleAnalytics = 'G-XD9VVSGMKV'
         identifier = "tags"
         name = "Tags"
         url = "/tags"
+      [[languages.ko.menu.main]]
+        identifier = "books"
+        name = "Books"
+        url = "/books"
+      [[languages.ko.menu.main]]
+        identifier = "notes"
+        name = "Notes"
+        url = "/notes"
+
+[permalinks]
+  posts = '/:filename/'
+  notes = '/:sections/:filename/'
+  books = '/:sections/:filename/'
 
 [outputFormats.Algolia]
   baseName = "algolia"

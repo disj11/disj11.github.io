@@ -2,7 +2,6 @@
 title: "Http Client in Java"
 description: "Java 11 에서 채택된 Http Client API 에 대하여"
 date: 2021-11-02T18:11:57+09:00
-url: /http-client-in-java/
 tags: ["java"]
 ---
 

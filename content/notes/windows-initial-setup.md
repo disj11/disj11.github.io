@@ -1,8 +1,8 @@
 ---
-title: "Windows 설치 후 초기 설정"
+title: "Windows Initial Setup"
 description: "Windows 설치 후 초기 설정해야 하는 것들을 기록"
 date: 2023-01-30T09:10:13+09:00
-url: /windows-initial-setup/
+tags: ["settings"]
 ---
 
 # Windows 초기 설정
