@@ -39,10 +39,6 @@ googleAnalytics = 'G-XD9VVSGMKV'
         name = "Tags"
         url = "/tags"
       [[languages.ko.menu.main]]
-        identifier = "books"
-        name = "Books"
-        url = "/books"
-      [[languages.ko.menu.main]]
         identifier = "notes"
         name = "Notes"
         url = "/notes"
