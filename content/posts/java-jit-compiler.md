@@ -103,6 +103,7 @@ intx Tier3MinInvocationThreshold               = 100
 ## 참고 자료
 
 * [https://www.baeldung.com/graal-java-jit-compiler](https://www.baeldung.com/graal-java-jit-compiler)
+* [https://www.lmax.com/blog/staff-blogs/2016/03/05/observing-jvm-warm-effects/](https://www.lmax.com/blog/staff-blogs/2016/03/05/observing-jvm-warm-effects/)
 * [https://www.baeldung.com/jvm-tiered-compilation](https://www.baeldung.com/jvm-tiered-compilation)
 * [https://www.oreilly.com/library/view/java-performance-the/9781449363512/ch04.html](https://www.oreilly.com/library/view/java-performance-the/9781449363512/ch04.html)
 * [https://hg.openjdk.org/jdk8/jdk8/hotspot/file/104743074675/src/share/vm/runtime/advancedThresholdPolicy.hpp](https://hg.openjdk.org/jdk8/jdk8/hotspot/file/104743074675/src/share/vm/runtime/advancedThresholdPolicy.hpp)
