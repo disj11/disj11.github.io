@@ -33,9 +33,9 @@ C1으로 컴파일된 메서드의 호출수가 증가하면 C2를 사용하여 
 
 ```shell
 $ java -XX:+PrintFlagsFinal -version | grep Threshold | grep Tier
-'''
+```
 
-'''shell
+```shell
 openjdk version "17.0.7" 2023-04-18
 OpenJDK Runtime Environment Temurin-17.0.7+7 (build 17.0.7+7)
 OpenJDK 64-Bit Server VM Temurin-17.0.7+7 (build 17.0.7+7, mixed mode, sharing)
