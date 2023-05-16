@@ -8,11 +8,8 @@ tags: [development]
 
 ## JIT Compiler 란?
 
-자바 코드의 실행을 위해서는 먼저 바이트 코드로 컴파일이 필요하다. 컴파일 된 바이트 코드는 주로 `jar` 이나 `war` 로 아카이브하여 활용된다.
-빌드된 파일을 실행하기 위해서는 JVM 이 필요하며, JVM 에서는 바이트 코드를 해석하는 과정(interpret)이 필요하다.
-컴파일 - interpret 과정을 거쳐 실행하는 자바 프로그램은, 컴파일 과정에서 바로 기계어를 만들어 런타임 환경에서 즉시 실행하는 C 같은 언어에 비해 많이 느리다.
-이러한 성능 차이를 해결하기 위해 JVM 에서는 JIT (Just In Time) Compiler 를 도입하고 있다.
-JIT 컴파일러는 javac 컴파일러보다 훨씬 더 최적화 된 고품질의 기계어를 생성한다.
+자바 코드의 실행을 위해서는 바이트 코드로 컴파일이 필요하다. 바이트 코드는 다시 JVM 의 인터프리터를 통해 기계어로 해석되는 과정을 거쳐 실행된다.
+이런 이유로 컴파일 시 바로 기계어를 만들어 인터프리터를 통해 해석되는 과정없이 바로 실행되는 C 같은 언어에 비해 많이 느리다. 이러한 성능 차이를 해결하기 위해 JVM 에서는 JIT (Just In Time) Compiler 를 도입하였다.
 
 ## JIT Compiler 에 대한 자세한 내용
 
@@ -23,7 +20,7 @@ C1은 더 빠르게 실행되고 조금 덜 최적화 된 코드를 생성하도
 
 JVM은 호출되는 메서드를 추적하고 자주 호출되는 메서드를 C1을 사용하여 컴파일한다.
 C1으로 컴파일된 메서드의 호출수가 증가하면 C2를 사용하여 한번 더 컴파일한다.
-이해를 위해 간단하게 적었지만 세부적인 Compilation Levels 은 다음과 같다: 
+이해를 위해 간단하게 적었지만 세부적인 Compilation Levels 은 다음과 같다:
 
 * Level 0 – Interpreted Code
 * Level 1 – Simple C1 Compiled Code
@@ -35,7 +32,10 @@ C1으로 컴파일된 메서드의 호출수가 증가하면 C2를 사용하여 
 언제 C1, C2 를 사용하여 컴파일이 일어나는지 궁금하다면 다음 명령어를 통해 임계값을 확인할 수 있다:
 
 ```shell
-$ java -XX:+PrintFlagsFinal -version | grep Threshold | grep Tier
+java -XX:+PrintFlagsFinal -version | grep Threshold | grep Tier
+```
+
+```shell
 openjdk version "17.0.7" 2023-04-18
 OpenJDK Runtime Environment Temurin-17.0.7+7 (build 17.0.7+7)
 OpenJDK 64-Bit Server VM Temurin-17.0.7+7 (build 17.0.7+7, mixed mode, sharing)
@@ -50,7 +50,6 @@ OpenJDK 64-Bit Server VM Temurin-17.0.7+7 (build 17.0.7+7, mixed mode, sharing)
      intx Tier4CompileThreshold                    = 15000                                     {product} {default}
      intx Tier4InvocationThreshold                 = 5000                                      {product} {default}
      intx Tier4MinInvocationThreshold              = 600                                       {product} {default}
-
 ```
 
 `Tier3InvocationThreshold` 와 `Tier3BackEdgeThreshold`, `Tier3CompileThreshold` 를 살펴보자.
