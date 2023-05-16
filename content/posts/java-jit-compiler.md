@@ -8,7 +8,7 @@ tags: [development]
 
 ## JIT Compiler 란?
 
-자바 코드의 실행을 위해서는 1차적으로 바이트 코드로 컴파일이 필요하다. 컴파일 된 바이트 코드는 주로 `jar` 이나 `war` 로 아카이브하여 활용된다.
+자바 코드의 실행을 위해서는 먼저 바이트 코드로 컴파일이 필요하다. 컴파일 된 바이트 코드는 주로 `jar` 이나 `war` 로 아카이브하여 활용된다.
 빌드된 파일을 실행하기 위해서는 JVM 이 필요하며, JVM 에서는 바이트 코드를 해석하는 과정(interpret)이 필요하다.
 컴파일 - interpret 과정을 거쳐 실행하는 자바 프로그램은, 컴파일 과정에서 바로 기계어를 만들어 런타임 환경에서 즉시 실행하는 C 같은 언어에 비해 많이 느리다.
 이러한 성능 차이를 해결하기 위해 JVM 에서는 JIT (Just In Time) Compiler 를 도입하고 있다.
@@ -23,7 +23,7 @@ C1은 더 빠르게 실행되고 조금 덜 최적화 된 코드를 생성하도
 
 JVM은 호출되는 메서드를 추적하고 자주 호출되는 메서드를 C1을 사용하여 컴파일한다.
 C1으로 컴파일된 메서드의 호출수가 증가하면 C2를 사용하여 한번 더 컴파일한다.
-간단하게 적었지만 세부적인 Compilation Levels 은 다음과 같다: 
+이해를 위해 간단하게 적었지만 세부적인 Compilation Levels 은 다음과 같다: 
 
 * Level 0 – Interpreted Code
 * Level 1 – Simple C1 Compiled Code
@@ -32,7 +32,7 @@ C1으로 컴파일된 메서드의 호출수가 증가하면 C2를 사용하여 
 * Level 4 – C2 Compiled Code
 
 각 레벨에 대해 더 자세한 내용을 확인하고 싶다면 [Compilation Levels](https://www.baeldung.com/jvm-tiered-compilation#compilation-levels)을 참고한다.
-얼마나 자주 메서드를 호출해야 C1, C2 를 사용하여 컴파일이 되는지 궁금하다면 다음 명령어를 통해 임계값을 확인할 수 있다:
+언제 C1, C2 를 사용하여 컴파일이 일어나는지 궁금하다면 다음 명령어를 통해 임계값을 확인할 수 있다:
 
 ```shell
 $ java -XX:+PrintFlagsFinal -version | grep Threshold | grep Tier
@@ -92,13 +92,52 @@ intx Tier3MinInvocationThreshold               = 100
 
 ```
 100 + (20 * 100) > 2000
----    ---------   ----
-1      2           3
+---   ----------   ----
+1     2            3
 ```
 
 * 1: 메서드 호출 횟수
 * 2: back-edge
 * 3: Tier3CompileThreshold
+
+실제로 최적화가 일어나는지 확인해보고 싶다면 아래의 VM Options 를 추가하여 확인할 수 있다:
+
+```
+-XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation
+```
+
+옵션을 추가하고 프로그램을 실행하면 `hotspot_pid<pid>.log` 형식의 파일이 생성된다. 샘플 코드를 통해 실제로 최적화가 일어나는지 확인해보자:
+
+```kotlin
+package com.kotlin
+
+fun main() {
+    val list = listOf("a", "ab", "abc", "abcd", "abcde")
+    repeat(500) { i ->
+        findMaxLengthString(list)
+        if (i % 100 == 0) {
+            Thread.sleep(100)
+        }
+    }
+}
+
+fun findMaxLengthString(list: List<String>) = list.maxBy { it.length }
+
+```
+
+위 프로그램을 실행하면 `hotspot_pid<pid>.log` 파일이 생긴다. 파일을 열어보면 다음과 같이 level 3 컴파일을 위해 c1 queue 에 메서드가 적재된 것을 확인할 수 있다.
+
+```xml
+<task_queued compile_id='217' method='com.kotlin.JitTestKt findMaxLengthString (Ljava/util/List;)Ljava/lang/String;' bytes='131' count='256' backedge_count='765' iicount='256' level='3' stamp='0.681' comment='tiered' hot_count='256'/>
+```
+
+조금 더 살펴보면 다음과 같이 level 3 로 코드 최적화가 된 것을 확인할 수 있다.
+
+```xml
+<nmethod compile_id='217' compiler='c1' level='3' entry='0x0000014087a5af80' size='6600' address='0x0000014087a5ac90' relocation_offset='344' insts_offset='752' stub_offset='5072' scopes_data_offset='5368' scopes_pcs_offset='5880' dependencies_offset='6520' nul_chk_table_offset='6528' oops_offset='5304' metadata_offset='5320' method='com.kotlin.JitTestKt findMaxLengthString (Ljava/util/List;)Ljava/lang/String;' bytes='131' count='301' backedge_count='903' iicount='301' stamp='0.683'/>
+```
+
+`count` 와 `backedge_count` 를 통해 메서드가 몇 번 호출되었는지와 백엣지 수를 확인할 수도 있다.
 
 ## 참고 자료
 
