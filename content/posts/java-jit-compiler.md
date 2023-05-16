@@ -108,40 +108,94 @@ intx Tier3MinInvocationThreshold               = 100
 옵션을 추가하고 프로그램을 실행하면 `hotspot_pid<pid>.log` 형식의 파일이 생성된다. 샘플 코드를 통해 실제로 최적화가 일어나는지 확인해보자:
 
 ```kotlin
-package com.kotlin
-
 fun main() {
-    val list = listOf("a", "ab", "abc", "abcd", "abcde")
-    repeat(500) { i ->
-        findMaxLengthString(list)
+    val arr = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    (1..3000).forEach { i ->
+        findMax(arr)
         if (i % 100 == 0) {
+            // 너무 빨리 종료되면 level 4 컴파일이 안될 수도 있어서
             Thread.sleep(100)
         }
     }
 }
 
-fun findMaxLengthString(list: List<String>) = list.maxBy { it.length }
-
+fun findMax(arr: IntArray): Int {
+    var max = arr[0]
+    for (i in 1 until arr.size) {
+        if (max < arr[i]) {
+            max = arr[i]
+        }
+    }
+    return max
+}
 ```
 
 위 프로그램을 실행하면 `hotspot_pid<pid>.log` 파일이 생긴다. 파일을 열어보면 다음과 같이 level 3 컴파일을 위해 c1 queue 에 메서드가 적재된 것을 확인할 수 있다.
 
 ```xml
-<task_queued compile_id='217' method='com.kotlin.JitTestKt findMaxLengthString (Ljava/util/List;)Ljava/lang/String;' bytes='131' count='256' backedge_count='765' iicount='256' level='3' stamp='0.681' comment='tiered' hot_count='256'/>
+<task_queued compile_id='205' method='com.kotlin.JitTestKt findMax ([I)I' bytes='39' count='228' backedge_count='2048' iicount='228' level='3' stamp='0.438' comment='tiered' hot_count='228'/>
 ```
 
-조금 더 살펴보면 다음과 같이 level 3 로 코드 최적화가 된 것을 확인할 수 있다.
+`count` 와 `backedge_count` 를 통해 메서드가 몇 번 호출되었는지와 백엣지 수를 확인할 수 있다.
+조금 더 아래 로그를 살펴보면 다음과 같이 level 3 로 코드 최적화가 된 것을 확인할 수 있다.
 
 ```xml
-<nmethod compile_id='217' compiler='c1' level='3' entry='0x0000014087a5af80' size='6600' address='0x0000014087a5ac90' relocation_offset='344' insts_offset='752' stub_offset='5072' scopes_data_offset='5368' scopes_pcs_offset='5880' dependencies_offset='6520' nul_chk_table_offset='6528' oops_offset='5304' metadata_offset='5320' method='com.kotlin.JitTestKt findMaxLengthString (Ljava/util/List;)Ljava/lang/String;' bytes='131' count='301' backedge_count='903' iicount='301' stamp='0.683'/>
+<nmethod compile_id='205' compiler='c1' level='3' entry='0x00000208cb1883a0' size='2560' address='0x00000208cb188190' relocation_offset='344' insts_offset='528' stub_offset='1872' scopes_data_offset='2040' scopes_pcs_offset='2216' dependencies_offset='2520' nul_chk_table_offset='2528' oops_offset='1992' metadata_offset='2008' method='com.kotlin.JitTestKt findMax ([I)I' bytes='39' count='228' backedge_count='2048' iicount='228' stamp='0.438'/>
 ```
 
-`count` 와 `backedge_count` 를 통해 메서드가 몇 번 호출되었는지와 백엣지 수를 확인할 수도 있다.
+마찬가지로 level 4 로 코드가 최적화 된 것도 로그를 통해 확인할 수 있다.
+
+```xml
+<task_queued compile_id='207' method='com.kotlin.JitTestKt findMax ([I)I' bytes='39' count='2048' backedge_count='18432' iicount='2048' stamp='2.914' comment='tiered' hot_count='2048'/>
+```
+
+```xml
+<nmethod compile_id='207' compiler='c2' level='4' entry='0x00000208d2c30820' size='1232' address='0x00000208d2c30690' relocation_offset='344' insts_offset='400' stub_offset='880' scopes_data_offset='936' scopes_pcs_offset='1056' dependencies_offset='1184' handler_table_offset='1192' nul_chk_table_offset='1216' oops_offset='920' metadata_offset='928' method='com.kotlin.JitTestKt findMax ([I)I' bytes='39' count='2100' backedge_count='18900' iicount='2100' stamp='2.917'/>
+```
+
+JIT Compiler 가 정말 성능을 향상시켜주는지 알고 싶다면 `-Xint ` 옵션으로 Jit Compiler 사용을 중지하고 테스트 해 볼 수 있다.
+앞에서 살펴본 코드를 조금 변경하여 총 3번 실행해보았다.
+
+```kotlin
+fun main() {
+    val arr = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val startTimeMills = System.currentTimeMillis()
+    (1..1_0000_0000).forEach { i ->
+        findMax(arr)
+    }
+    println("실행시간: ${System.currentTimeMillis() - startTimeMills}ms")
+}
+
+fun findMax(arr: IntArray): Int {
+    var max = arr[0]
+    for (i in 1 until arr.size) {
+        if (max < arr[i]) {
+            max = arr[i]
+        }
+    }
+    return max
+}
+```
+
+JIT Compiler 를 활성화한 경우:
+```
+실행시간: 1595ms
+실행시간: 875ms
+실행시간: 1252ms
+```
+
+JIT Compiler 를 비활성화 한 경우:
+```
+실행시간: 28558ms
+실행시간: 32401ms
+실행시간: 24760ms
+```
+
 
 ## 참고 자료
 
-* [https://www.baeldung.com/graal-java-jit-compiler](https://www.baeldung.com/graal-java-jit-compiler)
 * [https://www.baeldung.com/jvm-tiered-compilation](https://www.baeldung.com/jvm-tiered-compilation)
+* [https://www.baeldung.com/graal-java-jit-compiler](https://www.baeldung.com/graal-java-jit-compiler)
 * [https://www.lmax.com/blog/staff-blogs/2016/03/05/observing-jvm-warm-effects/](https://www.lmax.com/blog/staff-blogs/2016/03/05/observing-jvm-warm-effects/)
 * [https://www.oreilly.com/library/view/java-performance-the/9781449363512/ch04.html](https://www.oreilly.com/library/view/java-performance-the/9781449363512/ch04.html)
 * [https://hg.openjdk.org/jdk8/jdk8/hotspot/file/104743074675/src/share/vm/runtime/advancedThresholdPolicy.hpp](https://hg.openjdk.org/jdk8/jdk8/hotspot/file/104743074675/src/share/vm/runtime/advancedThresholdPolicy.hpp)
