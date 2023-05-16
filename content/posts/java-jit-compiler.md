@@ -113,7 +113,7 @@ fun main() {
     (1..3000).forEach { i ->
         findMax(arr)
         if (i % 100 == 0) {
-            // 너무 빨리 종료되면 level 4 컴파일이 안될 수도 있어서
+            // 너무 빨리 종료되면 c2 컴파일이 안될 수도 있어서
             Thread.sleep(100)
         }
     }
