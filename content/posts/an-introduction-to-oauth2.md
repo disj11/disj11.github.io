@@ -1,5 +1,5 @@
 ---
-title: "An Introduction to Oauth2"
+title: "Oauth2 에 대해서 알아보자"
 description: "OAuth 2.0 의 클라이언트 구현에 도움이 될 만한 정보를 위주로 OAuth 2.0 에 대하여 알아보자."
 date: 2021-10-22T10:08:30+09:00
 tags: ["development"]

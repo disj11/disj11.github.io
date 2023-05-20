@@ -1,5 +1,5 @@
 ---
-title: "Cohesion in Software Engineering"
+title: "응집도를 측정할 수 있는 방법"
 description: "응집도란 무엇인지, 응집도를 측정할 수 있는 방법이 무엇인지에 대해 알아본다."
 date: 2023-03-12T11:41:11+09:00
 url: "/cohesion-in-software-engineering/"
