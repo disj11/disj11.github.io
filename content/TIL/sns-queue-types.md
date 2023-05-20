@@ -2,7 +2,7 @@
 title: "Sns Queue Types"
 description: ""
 date: 2023-05-06T12:55:31+09:00
-tags: [AWS, SQS]
+tags: [TIL, AWS, SQS]
 ---
 
 SQS 의 Queue type 에는 `Standard` 와 `FIFO` 가 있다.
@@ -16,3 +16,7 @@ Best-Effort Ordering 은 경우에 따라 메시지의 순서가 보장되지 �
 FIFO 는 Exactly-Once Processing, First-In-First-Out Delivery 로 작동한다.
 메시지는 정확히 한 번 처리되며 메시지를 보내고 받는 순서가 보장된다.
 이벤트 순서가 중요한 어플리케이션에 주로 사용한다.
+
+참고 사이트:
+
+* https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-types.html

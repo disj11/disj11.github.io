@@ -2,7 +2,7 @@
 title: "Shuffle Operation in Glue"
 description: ""
 date: 2023-05-10T18:58:24+09:00
-tags: [AWS, Glue]
+tags: [TIL, AWS, Glue]
 ---
 
 Glue workflow 사용중 3시간 정도 걸리는 Glue Job 이 발견되었다.
