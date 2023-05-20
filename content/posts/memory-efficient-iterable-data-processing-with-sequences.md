@@ -1,11 +1,11 @@
 ---
-title: "Kotlin: Memory Efficient Iterable Data Processing with Sequences"
-description: "Let's find out how do they differ in behavior between Iterable and Sequence in Kotlin."
+title: "Kotlin: 시퀀스를 활용한 메모리 효율적인 데이터 처리 방법"
+description: "Kotlin에서 Iterable과 Sequence 간의 동작이 어떻게 다른지 알아보자."
 date: 2023-01-10T23:59:43+09:00
 tags: [kotlin]
 ---
 
-Kotlin provides extension functions for the Iterable interface, such as the `filter` function. Here is an example of using the `filter` function:
+Kotlin은 filter 함수와 같은 Iterable 인터페이스를 위한 확장 함수를 제공한다. filter 함수를 사용하는 예제는 다음과 같다:
 
 ```kotlin
 fun averageNonBlankLength(strings: List<String>): Double =
@@ -15,10 +15,13 @@ fun averageNonBlankLength(strings: List<String>): Double =
         .sum() / strings.size.toDouble()
 ```
 
-It's worth noting that the `filter` and `map` functions in Kotlin return new `List`s, unlike their counterparts `Stream.filter` and `Stream.map` in Java, which return a `Stream`. In this example, two new intermediate lists are created in memory as the result of calling `filter`  and `map`  on the original list. However, this overhead may not be significant depending on the size of the original list and the complexity of the operations.
+한 가지 주목할 점은 Kotlin의 `filter` 및 `map` 함수는 `Stream`을 반환하는 Java의 `Stream.filter` 및 `Stream.map`과 달리 새로운 `List`를 반환한다는 점이다.
+이 예제에서는 원본 리스트에서 `filter` 및 `map`을 호출한 결과로 메모리에 두 개의 새로운 리스트가 생성된다.
+그러나 원본 리스트의 크기와 작업의 복잡성에 따라 이 오버헤드는 중요하지 않을 수 있다.
 
-If the size of the original list or complexity of the operation chain is high and memory usage is a concern, you might consider using `sequence`  type instread of `List` . you can convert a list to a sequence via `asSequence()`  function which will create a lazy sequence and perform operations on it. Another option is to use the `sequenceOf(list)`  function which will create a sequence from the list.   
-Here's an example of using the `sequence`  type to perform the same operation as the previous example:
+원본 리스트의 크기가 크거나 작업 체인의 복잡성이 커서 메모리 사용량이 우려되는 경우, `List` 대신 `Sequence` 타입을 사용할 수 있다.
+`asSequence()` 함수를 사용하여 리스트를 시퀀스로 변환하거나 `sequenceOf(list)` 함수를 사용하여 리스트에서 시퀀스를 생성할 수 있다.
+아래 예제는 이전 예제와 동일한 작업을 수행하는 데 sequence 유형을 사용하는 방법을 보여준다:
 
 ```kotlin
 fun averageNonBlankLength(strings: List<String>): Double =
@@ -28,15 +31,16 @@ fun averageNonBlankLength(strings: List<String>): Double =
         .sum() / strings.size.toDouble()
 ```
 
-In this example, the `asSequence()`  function is used to convert the original `List`  of strings to a `Sequence`  of strings. Then, the `filter`  and `map`  functions are used to perform the same operations as before, but instead of creating intermediate `List`s, a `Sequence`  is returned from each function call.   
-It's worth noting that using a sequence allows for lazy evaluation, meaning that the elements of the sequence are only evaluated as they are needed, this can help to reduce the memory usage. Using a sequence can be beneficial when memory efficiency is a concern, particularly in
-situations where the size of the result set of data is not known ahead of time or when the operations are complex and intermediate results are unnecessary to be stored in memory.
+이 예제에서는 `asSequence()` 함수를 사용하여 `List`를 `Sequence`로 변환한다.
+그런 다음 `filter` 및 `map` 함수를 사용하여 이전과 동일한 작업을 수행하지만 중간 `List`를 생성하는 대신 각 함수 호출에서 `Sequence`가 반환된다.
 
-This is how the list processing goes:   
+시퀀스를 사용하면 lazy evaluation로 동작하므로 필요없는 계산을 하지 않는다. 이는 메모리 사용량을 줄이는 데 도움이 될 수 있다.
+시퀀스는 결과 데이터 집합의 크기를 미리 알 수 없는 상황이나, 작업이 복잡하고 중간 결과를 메모리에 저장할 필요가 없는 상황 등 메모리 효율성이 중요한 경우에 유용하다.
+
+List 처리는 다음과 같이 진행된다:
 ![list-processing.png](https://kotlinlang.org/docs/images/list-processing.png)
 
-The sequence processing goes like this:   
+Sequence 의 처리는 다음과 같이 진행된다:
 ![sequence-processing.png](https://kotlinlang.org/docs/images/sequence-processing.png)
 
-If you would like to learn more about the `sequence` type in Kotlin, you can refer to the [official documentation](https://kotlinlang.org/docs/sequences.html)   
-   
+`Sequence` 유형에 대해 더 알고 싶다면 [공식 문서](https://kotlinlang.org/docs/sequences.html) 를 참고하자.
