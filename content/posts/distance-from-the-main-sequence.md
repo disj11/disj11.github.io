@@ -1,5 +1,5 @@
 ---
-title: "메인 시퀀스로부터의 거리를 사용한 아케텍처 구조 평가"
+title: "메인 시퀀스로부터의 거리를 사용한 아키텍처 구조 평가"
 description: "메인 시퀀스로부터의 거리(distance from the main sequence)는 아키텍처 구조를 평가하는 몇 가지 메트릭중의 하나이다."
 date: 2023-03-12T14:09:09+09:00
 url: "/distance-from-the-main-sequence/"
