@@ -121,7 +121,9 @@ if has('ide')
     nmap <leader>f <Action>(FindInPath)
     nmap <leader>t <Action>(HideAllWindows)
 
-    nmap <leader>up <Action>(Vcs.UpdateProject)
+    nmap <leader>gp <Action>(Vcs.UpdateProject)
+    nmap <leader>gb <Action>(Git.Branches)
+
     nmap gd <Action>(GotoDeclaration)
     nmap gD <Action>(GotoImplementation)
     nmap ]m <Action>(MethodDown)
