@@ -115,6 +115,7 @@ endif
 " intellij
 if has('ide')
     set ideajoin
+    set quickscope
 
     nmap <leader>* <Action>(FindUsages)
     nmap <leader>o <Action>(GotoFile)
@@ -191,7 +192,13 @@ sdkman 을 사용하여 설치하고 싶은 자바를 선택하여 설치한다.
 
 [JetBrains Toolbox App](https://www.jetbrains.com/toolbox-app/) 을 설치한다. 이후 ToolBox App 에서 Intellij IDEA Ultimate 를 설치한다.
 
-IntelliJ 설치가 완료되면 [IdeaVim](https://plugins.jetbrains.com/plugin/164-ideavim) 과 [IdeaVim-EasyMotion](https://plugins.jetbrains.com/plugin/13360-ideavim-easymotion) 플러그인을 추가한다. 필요한 플러그인이 있다면, 추가적으로 설치한다.  ([Kotest](https://plugins.jetbrains.com/plugin/14080-kotest) 플러그인 등)
+IntelliJ 설치가 완료되면 아래의 플러그인을 설치한다.
+
+* [IdeaVim](https://plugins.jetbrains.com/plugin/164-ideavim)
+* [IdeaVim-EasyMotion](https://plugins.jetbrains.com/plugin/13360-ideavim-easymotion)
+* [IdeaVim-Quickscope](https://plugins.jetbrains.com/plugin/19417-ideavim-quickscope)
+
+이외에 필요한 플러그인이 있다면, 추가적으로 설치한다.  ([Kotest](https://plugins.jetbrains.com/plugin/14080-kotest) 플러그인 등)
 
 이후 vim 과 동일한 키 설정을 사용하기 하기 위해 `.ideavimrc` 에 다음 내용을 추가한다.
 
