@@ -1,3 +1,0 @@
----
-title: "Today I Learned"
----

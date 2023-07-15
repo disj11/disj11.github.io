@@ -47,10 +47,6 @@ googleAnalytics = 'G-XD9VVSGMKV'
         identifier = "notes"
         name = "Notes"
         url = "/notes"
-      [[languages.ko.menu.main]]
-        identifier = "TIL"
-        name = "TIL"
-        url = "/TIL"
 
 [permalinks]
   posts = '/:filename/'
