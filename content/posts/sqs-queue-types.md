@@ -1,5 +1,5 @@
 ---
-title: "Sns Queue Types"
+title: "Sqs Queue Types"
 description: ""
 date: 2023-05-06T12:55:31+09:00
 tags: [TIL, AWS, SQS]
