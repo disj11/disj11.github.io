@@ -136,7 +136,7 @@ if has('ide')
 
     " code
     nmap <leader>cd <Action>(Debug)
-    nmap <leader>cr <Action>(Run)
+    nmap <leader>cr <Action>(RunAnything)
     nmap == <Action>(ReformatCode)
     nmap <leader>co <Action>(OptimizeImports)
 
