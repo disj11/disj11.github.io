@@ -192,7 +192,7 @@ JIT Compiler 를 비활성화 한 경우:
 ```
 
 **NOTE:** 
-spring boot 애플리케이션을 IntelliJ 에서 실행하면 `-XX:TieredStopAtLevel=1` 를 자동으로 추가한다. 이로 인해 level 1 으로만 컴파일 되는 문제가 있다. ([Jetbrains Issue](https://youtrack.jetbrains.com/issue/IDEA-297872))
+spring boot 애플리케이션을 IntelliJ 에서 실행하면 `-XX:TieredStopAtLevel=1` 이 자동으로 추가된다. 이로 인해 level 1 으로만 컴파일 되는 문제가 있다. ([Jetbrains Issue](https://youtrack.jetbrains.com/issue/IDEA-297872))
 정확한 확인을 위해서는 Run/Degub Configurations -> Modify options -> Disabled launch Optimization 옵션을 체크하여 실행해야한다.
 
 ## 참고 자료
