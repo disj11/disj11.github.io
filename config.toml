@@ -20,7 +20,7 @@ googleAnalytics = 'G-XD9VVSGMKV'
   showReadingTime = false
 
 [languages]
-  [languages.ko]
+  [languages.ko.params]
     title = "Life Log"
     subtitle = ""
     keywords = "개발 블로그,개발블로그"
