@@ -1,7 +1,7 @@
 ---
 title: "S3 Sink Connector Scheduled Rotation"
 description: ""
-date: 2024-01-10T18:42:15+09:00
+date: 2024-01-10T16:42:15+09:00
 url: "/s3-sink-connector-scheduled-rotation/"
 tags: [kafka]
 ---
@@ -11,8 +11,6 @@ S3 Sink Connector 에는 로테이션 일정을 설정할 수 있는 두 가지 
 이 두 속성이 어떻게 다른지 알아보자.
 
 ## rotate.schedule.interval.ms
-
-파일 커밋을 주기적으로 호출할 시간을 설정한다. 이 속성을 사용하면 설정된 간격마다 파일 커밋이 호출된다.
 
 각 파일의 타임스탬프는 첫 번째 레코드가 파일에 기록되는 **시스템 시간** 부터 시작된다.
 파일의 타임스탬프부터 설정한 시간이 지난 이후에 레코드가 처리되면 파일이 flush 되고 S3에 업로드되며,
@@ -29,7 +27,7 @@ S3 Sink Connector 에는 로테이션 일정을 설정할 수 있는 두 가지 
 | 1706713202000   | 1706713202000 | 102    | consume topic |
 | 1706713203000   | n/a           | n/a    | flush 시작      |
 
-중요한 점으로 `rotate.schedule.interval.ms` 속성을 사용하면 Exactly-once delivery 을 보장하지 않는다.
+중요한 점은 `rotate.schedule.interval.ms` 속성을 사용하면 Exactly-once delivery 을 보장하지 않는는 것이다.
 `rotate.schedule.interval.ms` 가 3000 이라고 가정하고 아래의 표를 보자.
 
 | Wall clock time | Message time  | Offset | Description       |
@@ -43,9 +41,8 @@ S3 Sink Connector 에는 로테이션 일정을 설정할 수 있는 두 가지 
 | 1706713203011   | 1706713203011 | 9003   | consume topic     |
 | 1706713203012   | 1706713203012 | 9004   | consume topic     |
 
-이 경우 9001 - 9002 레코드는 두 개의 파일에 기록된다.
-S3가 업로드되는 동안 데이터를 수신하면 업로드가 완료될 때까지 오프셋을 커밋할 수 없기 때문이다.
-커넥터 재시작과 같이 동일한 동작을 유발할 수 있는 다른 조건도 존재 할 수 있다.
+이 경우 9001 - 9002 레코드는 연속되는 두 개의 파일에 모두 기록된다.
+이런 경우 외에도 커넥터 재시작과 같이 동일한 동작을 유발할 수 있는 다른 조건도 존재 할 수 있다.
 
 ## rotate.interval.ms
 
