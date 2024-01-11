@@ -34,6 +34,7 @@ googleAnalytics = 'G-XD9VVSGMKV'
     minuteReadingTime = "min read"
     dateFormatSingle = "2006-01-02"
     dateFormatList = "2006-01-02"
+    lastModDisplay = "Modified:"
 
     [languages.ko.params.logo]
       logoText = "Life Log"
