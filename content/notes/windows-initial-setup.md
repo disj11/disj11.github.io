@@ -59,13 +59,14 @@ _vimrc 파일을 작성한다. `C:\Users\사용자계정` 위치에 _vimrc 파�
 let mapleader=" "
 
 set encoding=UTF-8
+set rtp+=/opt/homebrew/opt/fzf
 
 set number
 set showcmd
 set incsearch
 set ignorecase
 set scrolloff=5
-set clipboard=unnamed
+set clipboard^=unnamed,unnamedplus
 
 set smartindent
 set expandtab
@@ -95,18 +96,20 @@ syntax on
 colorscheme onedark
 let g:airline_theme='onedark'
 
-let NERDTreeMapOpenVSplit='v'
-let NERDTreeMapPreviewVSplit='gv'
-let NERDTreeMapOpenSplit='s'
-let NERDTreeMapPreviewSplit='gs'
+let NERDTreeMapOpenVSplit='s'
+let NERDTreeMapPreviewVSplit='gs'
+let NERDTreeMapOpenSplit='S'
+let NERDTreeMapPreviewSplit='gS'
 
 nnoremap <leader>nt :NERDTreeToggle<CR>
 nnoremap <leader>nc :NERDTreeFind<CR>
 nnoremap <leader>nf :NERDTreeFocus<CR>
+nnoremap <leader>- :split<CR>
+nnoremap <leader>\| :vsplit<CR>
 
-nmap <leader>/ <Plug>(easymotion-bd-fn)
-nmap <leader>; <Plug>(easymotion-next)
-nmap <leader>, <Plug>(easymotion-prev)
+nmap / <Plug>(easymotion-bd-fn)
+nmap ; <Plug>(easymotion-next)
+nmap , <Plug>(easymotion-prev)
 
 if has('gui_running')
     set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h13
@@ -115,16 +118,16 @@ endif
 " intellij
 if has('ide')
     set ideajoin
-    set quickscope
+    set quickscope 
 
     nmap <leader>* <Action>(FindUsages)
     nmap <leader>o <Action>(GotoFile)
-    nmap <leader>f <Action>(FindInPath)
+    nmap <leader>/ <Action>(FindInPath)
     nmap <leader>t <Action>(HideAllWindows)
+    nmap <leader>` <Action>(NextProjectWindow)
 
-    nmap <leader>gp <Action>(Vcs.UpdateProject)
+    nmap <leader>gu <Action>(Vcs.UpdateProject)
     nmap <leader>gb <Action>(Git.Branches)
-
     nmap gd <Action>(GotoDeclaration)
     nmap gD <Action>(GotoImplementation)
     nmap ]m <Action>(MethodDown)
