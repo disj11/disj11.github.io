@@ -75,15 +75,23 @@ let NERDTreeMapPreviewVSplit=&#39;gs&#39;
 let NERDTreeMapOpenSplit=&#39;S&#39;
 let NERDTreeMapPreviewSplit=&#39;gS&#39;
 
-nnoremap &lt;leader&gt;nt :NERDTreeToggle&lt;CR&gt;
-nnoremap &lt;leader&gt;nc :NERDTreeFind&lt;CR&gt;
-nnoremap &lt;leader&gt;nf :NERDTreeFocus&lt;CR&gt;
-nnoremap &lt;leader&gt;- :split&lt;CR&gt;
-nnoremap &lt;leader&gt;\| :vsplit&lt;CR&gt;
+nnoremap &lt;leader&gt;e :NERDTreeToggle&lt;CR&gt;
+nnoremap &lt;leader&gt;E :NERDTreeFind&lt;CR&gt;
 
-nmap / &lt;Plug&gt;(easymotion-bd-fn)
-nmap ; &lt;Plug&gt;(easymotion-next)
-nmap , &lt;Plug&gt;(easymotion-prev)
+nmap &lt;leader&gt;- :split&lt;CR&gt;
+nmap &lt;leader&gt;\| :vsplit&lt;CR&gt;
+nmap &lt;leader&gt;qq :qall&lt;CR&gt;
+
+nmap &lt;leader&gt;/ &lt;Plug&gt;(easymotion-bd-f2)
+nmap &lt;leader&gt;j &lt;Plug&gt;(easymotion-j)
+nmap &lt;leader&gt;k &lt;Plug&gt;(easymotion-k)
+nmap &lt;leader&gt;n &lt;Plug&gt;(easymotion-next)
+nmap &lt;leader&gt;N &lt;Plug&gt;(easymotion-prev)
+
+nmap gsa ysiw
+nmap gsd ds
+nmap gsc cs
+vmap gsa S
 
 if has(&#39;gui_running&#39;)
     set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h13
@@ -94,43 +102,29 @@ if has(&#39;ide&#39;)
     set ideajoin
     set quickscope 
 
+    nmap &lt;leader&gt;uw &lt;Action&gt;(HideAllWindows)
+    nmap &lt;leader&gt;ft &lt;Action&gt;(ActivateTerminalToolWindow)
     nmap &lt;leader&gt;* &lt;Action&gt;(FindUsages)
-    nmap &lt;leader&gt;o &lt;Action&gt;(GotoFile)
-    nmap &lt;leader&gt;/ &lt;Action&gt;(FindInPath)
-    nmap &lt;leader&gt;t &lt;Action&gt;(HideAllWindows)
-    nmap &lt;leader&gt;` &lt;Action&gt;(NextProjectWindow)
 
-    nmap &lt;leader&gt;gu &lt;Action&gt;(Vcs.UpdateProject)
-    nmap &lt;leader&gt;gb &lt;Action&gt;(Git.Branches)
+    nmap &lt;leader&gt;gg &lt;Action&gt;(Git.Branches)
     nmap gd &lt;Action&gt;(GotoDeclaration)
-    nmap gD &lt;Action&gt;(GotoImplementation)
+    nmap gI &lt;Action&gt;(GotoImplementation)
+
     nmap ]m &lt;Action&gt;(MethodDown)
     nmap [m &lt;Action&gt;(MethodUp)
+    nmap ]e &lt;Action&gt;(GotoNextError)
+    nmap ]E &lt;Action&gt;(GotoPreviousError)
 
     &#34; navigation
-    nmap &lt;leader&gt;nr &lt;Action&gt;(RecentFiles)
-    nmap &lt;leader&gt;nl &lt;Action&gt;(RecentLocations)
+    nmap &lt;leader&gt;&lt;leader&gt; &lt;Action&gt;(SearchEverywhere)
+    nmap &lt;leader&gt;be &lt;Action&gt;(RecentFiles)
+    nmap &lt;leader&gt;ff &lt;Action&gt;(GotoFile)
+    nmap &lt;leader&gt;fg &lt;Action&gt;(FindInPath)
 
     &#34; code
-    nmap &lt;leader&gt;cd &lt;Action&gt;(Debug)
-    nmap &lt;leader&gt;cr &lt;Action&gt;(RunAnything)
-    nmap == &lt;Action&gt;(ReformatCode)
-    nmap &lt;leader&gt;co &lt;Action&gt;(OptimizeImports)
-
-    nmap &lt;leader&gt;gg &lt;Action&gt;(Generate)
-    nmap &lt;leader&gt;gc &lt;Action&gt;(GenerateConstructor)
-    nmap &lt;leader&gt;go &lt;Action&gt;(OverrideMethods)
-    nmap &lt;leader&gt;gi &lt;Action&gt;(ImplementMethods)
-    nmap &lt;leader&gt;cn &lt;Action&gt;(NewElementSamePlace)
-
-    &#34; show
-    nmap &lt;leader&gt;sd &lt;Action&gt;(QuickJavaDoc)
-    nmap &lt;leader&gt;sp &lt;Action&gt;(ParameterInfo)
-    nmap &lt;leader&gt;ss &lt;Action&gt;(FileStructurePopup)
-
-    &#34; refactor
-    vmap &lt;leader&gt;rm &lt;Action&gt;(ExtractMethod)
-    nmap &lt;leader&gt;rn &lt;Action&gt;(RenameElement)
+    nmap &lt;leader&gt;cf &lt;Action&gt;(ReformatCode)
+    nmap &lt;leader&gt;ca &lt;Action&gt;(Generate)
+    nmap &lt;leader&gt;cr &lt;Action&gt;(RenameElement)
 
     &#34; vim-multiple-cursors
     nmap &lt;C-n&gt; &lt;Plug&gt;NextWholeOccurrence
