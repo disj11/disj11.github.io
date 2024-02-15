@@ -142,7 +142,6 @@ if has('ide')
     nmap ]E <Action>(GotoPreviousError)
 
     " navigation
-    nmap <leader><leader> <Action>(SearchEverywhere)
     nmap <leader>be <Action>(RecentFiles)
     nmap <leader>ff <Action>(GotoFile)
     nmap <leader>fg <Action>(FindInPath)
