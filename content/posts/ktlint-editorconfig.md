@@ -28,7 +28,7 @@ intellij 를 사용하는 경우 [ktlint 플러그인](https://plugins.jetbrains
 
 ![.editorconfig](/images/ktlint-editorconfig.png)
 
-만약 위 이미지에 표기되는 규칙을 disable 하고 싶다면 `.editorconfig` 에 아래와 같이 설정하면 된다.
+만약 위 이미지에 표기되는 규칙을 비활성화 하고 싶다면 `.editorconfig` 에 아래와 같이 설정하면 된다.
 
 ```
 [*.{kt,kts}]
