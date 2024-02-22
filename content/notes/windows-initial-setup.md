@@ -108,15 +108,15 @@ nmap <leader>- :split<CR>
 nmap <leader>\| :vsplit<CR>
 nmap <leader>qq :qall<CR>
 
-nmap <leader>/ <Plug>(easymotion-bd-f2)
-nmap <leader>j <Plug>(easymotion-j)
-nmap <leader>k <Plug>(easymotion-k)
+nmap <leader>/ <Plug>(easymotion-bd-fn)
 nmap <leader>n <Plug>(easymotion-next)
 nmap <leader>N <Plug>(easymotion-prev)
+nmap <leader>j <Plug>(easymotion-j)
+nmap <leader>k <Plug>(easymotion-k)
 
 nmap gsa ysiw
 nmap gsd ds
-nmap gsc cs
+nmap gsr cs
 vmap gsa S
 
 if has('gui_running')
@@ -141,17 +141,18 @@ if has('ide')
     nmap ]e <Action>(GotoNextError)
     nmap ]E <Action>(GotoPreviousError)
 
-    " navigation
+    nmap <leader>sd <Action>(QuickJavaDoc)
+
     nmap <leader>be <Action>(RecentFiles)
     nmap <leader>ff <Action>(GotoFile)
-    nmap <leader>fg <Action>(FindInPath)
+    nmap <leader>fn <Action>(NewFile)
 
-    " code
+    nmap <leader>sg <Action>(FindInPath)
+
     nmap <leader>cf <Action>(ReformatCode)
     nmap <leader>ca <Action>(Generate)
     nmap <leader>cr <Action>(RenameElement)
 
-    " vim-multiple-cursors
     nmap <C-n> <Plug>NextWholeOccurrence
     xmap <C-n> <Plug>NextWholeOccurrence
     nmap g<C-n> <Plug>NextOccurrence
