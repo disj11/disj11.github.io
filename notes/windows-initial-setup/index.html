@@ -82,15 +82,15 @@ nmap &lt;leader&gt;- :split&lt;CR&gt;
 nmap &lt;leader&gt;\| :vsplit&lt;CR&gt;
 nmap &lt;leader&gt;qq :qall&lt;CR&gt;
 
-nmap &lt;leader&gt;/ &lt;Plug&gt;(easymotion-bd-f2)
-nmap &lt;leader&gt;j &lt;Plug&gt;(easymotion-j)
-nmap &lt;leader&gt;k &lt;Plug&gt;(easymotion-k)
+nmap &lt;leader&gt;/ &lt;Plug&gt;(easymotion-bd-fn)
 nmap &lt;leader&gt;n &lt;Plug&gt;(easymotion-next)
 nmap &lt;leader&gt;N &lt;Plug&gt;(easymotion-prev)
+nmap &lt;leader&gt;j &lt;Plug&gt;(easymotion-j)
+nmap &lt;leader&gt;k &lt;Plug&gt;(easymotion-k)
 
 nmap gsa ysiw
 nmap gsd ds
-nmap gsc cs
+nmap gsr cs
 vmap gsa S
 
 if has(&#39;gui_running&#39;)
@@ -115,17 +115,18 @@ if has(&#39;ide&#39;)
     nmap ]e &lt;Action&gt;(GotoNextError)
     nmap ]E &lt;Action&gt;(GotoPreviousError)
 
-    &#34; navigation
+    nmap &lt;leader&gt;sd &lt;Action&gt;(QuickJavaDoc)
+
     nmap &lt;leader&gt;be &lt;Action&gt;(RecentFiles)
     nmap &lt;leader&gt;ff &lt;Action&gt;(GotoFile)
-    nmap &lt;leader&gt;fg &lt;Action&gt;(FindInPath)
+    nmap &lt;leader&gt;fn &lt;Action&gt;(NewFile)
 
-    &#34; code
+    nmap &lt;leader&gt;sg &lt;Action&gt;(FindInPath)
+
     nmap &lt;leader&gt;cf &lt;Action&gt;(ReformatCode)
     nmap &lt;leader&gt;ca &lt;Action&gt;(Generate)
     nmap &lt;leader&gt;cr &lt;Action&gt;(RenameElement)
 
-    &#34; vim-multiple-cursors
     nmap &lt;C-n&gt; &lt;Plug&gt;NextWholeOccurrence
     xmap &lt;C-n&gt; &lt;Plug&gt;NextWholeOccurrence
     nmap g&lt;C-n&gt; &lt;Plug&gt;NextOccurrence
