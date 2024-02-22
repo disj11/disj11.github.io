@@ -101,15 +101,23 @@ let NERDTreeMapPreviewVSplit='gs'
 let NERDTreeMapOpenSplit='S'
 let NERDTreeMapPreviewSplit='gS'
 
-nnoremap <leader>nt :NERDTreeToggle<CR>
-nnoremap <leader>nc :NERDTreeFind<CR>
-nnoremap <leader>nf :NERDTreeFocus<CR>
-nnoremap <leader>- :split<CR>
-nnoremap <leader>\| :vsplit<CR>
+nnoremap <leader>e :NERDTreeToggle<CR>
+nnoremap <leader>E :NERDTreeFind<CR>
 
-nmap / <Plug>(easymotion-bd-fn)
-nmap ; <Plug>(easymotion-next)
-nmap , <Plug>(easymotion-prev)
+nmap <leader>- :split<CR>
+nmap <leader>\| :vsplit<CR>
+nmap <leader>qq :qall<CR>
+
+nmap <leader>/ <Plug>(easymotion-bd-f2)
+nmap <leader>j <Plug>(easymotion-j)
+nmap <leader>k <Plug>(easymotion-k)
+nmap <leader>n <Plug>(easymotion-next)
+nmap <leader>N <Plug>(easymotion-prev)
+
+nmap gsa ysiw
+nmap gsd ds
+nmap gsc cs
+vmap gsa S
 
 if has('gui_running')
     set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h13
@@ -120,43 +128,28 @@ if has('ide')
     set ideajoin
     set quickscope 
 
+    nmap <leader>uw <Action>(HideAllWindows)
+    nmap <leader>ft <Action>(ActivateTerminalToolWindow)
     nmap <leader>* <Action>(FindUsages)
-    nmap <leader>o <Action>(GotoFile)
-    nmap <leader>/ <Action>(FindInPath)
-    nmap <leader>t <Action>(HideAllWindows)
-    nmap <leader>` <Action>(NextProjectWindow)
 
-    nmap <leader>gu <Action>(Vcs.UpdateProject)
-    nmap <leader>gb <Action>(Git.Branches)
+    nmap <leader>gg <Action>(Git.Branches)
     nmap gd <Action>(GotoDeclaration)
-    nmap gD <Action>(GotoImplementation)
+    nmap gI <Action>(GotoImplementation)
+
     nmap ]m <Action>(MethodDown)
     nmap [m <Action>(MethodUp)
+    nmap ]e <Action>(GotoNextError)
+    nmap ]E <Action>(GotoPreviousError)
 
     " navigation
-    nmap <leader>nr <Action>(RecentFiles)
-    nmap <leader>nl <Action>(RecentLocations)
+    nmap <leader>be <Action>(RecentFiles)
+    nmap <leader>ff <Action>(GotoFile)
+    nmap <leader>fg <Action>(FindInPath)
 
     " code
-    nmap <leader>cd <Action>(Debug)
-    nmap <leader>cr <Action>(RunAnything)
-    nmap == <Action>(ReformatCode)
-    nmap <leader>co <Action>(OptimizeImports)
-
-    nmap <leader>gg <Action>(Generate)
-    nmap <leader>gc <Action>(GenerateConstructor)
-    nmap <leader>go <Action>(OverrideMethods)
-    nmap <leader>gi <Action>(ImplementMethods)
-    nmap <leader>cn <Action>(NewElementSamePlace)
-
-    " show
-    nmap <leader>sd <Action>(QuickJavaDoc)
-    nmap <leader>sp <Action>(ParameterInfo)
-    nmap <leader>ss <Action>(FileStructurePopup)
-
-    " refactor
-    vmap <leader>rm <Action>(ExtractMethod)
-    nmap <leader>rn <Action>(RenameElement)
+    nmap <leader>cf <Action>(ReformatCode)
+    nmap <leader>ca <Action>(Generate)
+    nmap <leader>cr <Action>(RenameElement)
 
     " vim-multiple-cursors
     nmap <C-n> <Plug>NextWholeOccurrence
