@@ -35,3 +35,5 @@ intellij 를 사용하는 경우 [ktlint 플러그인](https://plugins.jetbrains
 ktlint_standard_no-multi-spaces = disabled
 ```
 
+참고: [KtLint configuration](https://pinterest.github.io/ktlint/1.1.1/rules/configuration-ktlint/)
+
