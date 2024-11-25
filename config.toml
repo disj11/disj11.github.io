@@ -6,7 +6,7 @@ paginate = 30
 summaryLength = 70
 hasCJKLanguage = true
 enableRobotsTXT = true
-GoogleAnalytics = 'G-XD9VVSGMKV'
+googleAnalytics = 'G-XD9VVSGMKV'
 
 [markup]
   [markup.goldmark]
