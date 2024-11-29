@@ -19,7 +19,7 @@ JPA 에서 ID 에 `val` 을 사용해도 `save` 이후 ID 가 잘 설정된다.
 class Member(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
+    val id: Long? = null,
 
     @Column(
         name = "name",
@@ -40,7 +40,7 @@ interface MemberRepository : JpaRepository<Member, Long>
 *사용처*
 
 ```kotlin
-val member = Member(name = "홍길동") // member.id = 0
+val member = Member(name = "홍길동") // member.id = null
 val savedMember = memberRepository.save(member) // savedMember.id = 1
 println(member.id) // member.id = 1
 ```
