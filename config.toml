@@ -2,11 +2,13 @@ baseurl = "https://disj11.github.io"
 languageCode = "ko-kr"
 defaultContentLanguage = "ko"
 theme = "hello-friend"
-paginate = 30
 summaryLength = 70
 hasCJKLanguage = true
 enableRobotsTXT = true
 googleAnalytics = 'G-XD9VVSGMKV'
+
+[pagination]
+  pagerSize = 30
 
 [markup]
   [markup.goldmark]
