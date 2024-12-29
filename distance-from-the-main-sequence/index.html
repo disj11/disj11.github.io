@@ -24,8 +24,8 @@
 </time><span class=post-moddate>(Modified:
 2024-12-29)</span></div><span class=post-tags><a href=https://disj11.github.io/tags/software-engineering/>#software engineering</a>&nbsp;</span><div class=post-content><p>메인 시퀀스로부터의 거리(Distance from the Main Sequence)는 아키텍처 구조를 평가하는 여러 메트릭 중 하나입니다. 이는 <strong>불안정도(instability)</strong> 와 <strong>추상도(abstractness)</strong> 를 이용해 계산되므로, 두 개념을 먼저 이해하는 것이 중요합니다.</p><h2 id=추상도-abstractness><strong>추상도 (Abstractness)</strong>
 <a href=#%ec%b6%94%ec%83%81%eb%8f%84-abstractness class=h-anchor aria-hidden=true>#</a></h2><p>추상도는 모듈 내의 <strong>추상 아티팩트(abstract artifact)</strong> 와 <strong>구상 아티팩트(concrete artifact)</strong> 의 비율을 나타내며, 구현 대비 추상화 정도를 측정합니다. 추상 아티팩트에는 추상 클래스나 인터페이스가 포함되며, 구상 아티팩트는 일반 클래스(구현체)를 의미합니다. 추상도를 계산하는 공식은 다음과 같습니다:</p>$$
-A = \frac{M^a}{M^a + M^c}
-$$<p>여기서:</p><ul><li>\(M^a\): 모듈 내 추상 요소(인터페이스 또는 추상 클래스)의 수</li><li>\(M^c\): 모듈 내 구상 요소(일반 클래스)의 수</li></ul><p>추상도의 값은 0에서 1 사이에 위치하며, 1에 가까울수록 해당 모듈이 완전히 추상적임을 의미합니다. 예를 들어, 5,000 라인의 코드를 모두 <code>main()</code> 메서드에 구현한 애플리케이션은 구상 요소만 포함하고 있으므로 추상도는 0에 가깝습니다.</p><h2 id=불안정도-instability><strong>불안정도 (Instability)</strong>
+A = \frac{\sum m^a}{\sum m^c}
+$$<p>여기서:</p><ul><li>\(\sum m^a\): 모듈 내 추상 요소(인터페이스 또는 추상 클래스)의 총합</li><li>\(\sum m^c\): 모듈 내 구상 요소(일반 클래스)의 총합</li></ul><p>추상도의 값은 0에서 1 사이에 위치하며, 1에 가까울수록 해당 모듈이 완전히 추상적임을 의미합니다. 예를 들어, 5,000 라인의 코드를 모두 <code>main()</code> 메서드에 구현한 애플리케이션은 구상 요소만 포함하고 있으므로 추상도는 0에 가깝습니다.</p><h2 id=불안정도-instability><strong>불안정도 (Instability)</strong>
 <a href=#%eb%b6%88%ec%95%88%ec%a0%95%eb%8f%84-instability class=h-anchor aria-hidden=true>#</a></h2><p>불안정도는 코드의 변동 가능성(volatility)을 나타내며, 원심 커플링(efferent coupling)과 구심 커플링(afferent coupling)의 비율로 계산됩니다. 공식은 다음과 같습니다:</p>$$
 I = \frac{C^e}{C^a + C^e}
 $$<p>여기서:</p><ul><li>\(C^e\): 원심 커플링(다른 코드 아티팩트로 유출되는 의존성의 수)</li><li>\(C^a\): 구심 커플링(다른 코드 아티팩트로부터 유입되는 의존성의 수)</li></ul><p>불안정도의 값 역시 0에서 1 사이에 위치하며, 값이 1에 가까울수록 해당 모듈이 외부 의존성이 많아 변동 가능성이 높음을 의미합니다. 예를 들어, 여러 클래스를 호출하는 클래스는 호출된 메서드 중 하나라도 변경될 경우 해당 클래스가 영향을 받을 가능성이 높아 불안정도가 높다고 볼 수 있습니다.</p><h2 id=메인-시퀀스로부터의-거리-distance-from-the-main-sequence><strong>메인 시퀀스로부터의 거리 (Distance from the Main Sequence)</strong>
