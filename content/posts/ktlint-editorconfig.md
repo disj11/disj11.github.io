@@ -1,6 +1,6 @@
 ---
-title: "Ktlint 1.0: 기본 설정 변경 및 커스터마이징 가이드"
-description: "Ktlint 1.0부터 변경된 기본 코드 스타일 설정과 .editorconfig를 활용한 스타일 커스터마이징 방법을 알아봅니다. 특정 규칙 비활성화, IntelliJ 플러그인 사용법, 그리고 효율적인 코드 스타일 관리 팁을 제공합니다."
+title: "Ktlint: 기본 설정 변경 및 커스터마이징 가이드"
+description: ".editorconfig를 활용한 스타일 커스터마이징 방법을 알아봅니다. 특정 규칙 비활성화, IntelliJ 플러그인 사용법, 그리고 효율적인 코드 스타일 관리 팁을 제공합니다."
 date: 2024-02-22T20:46:04+09:00
 lastmod: 2024-12-29T09:36:43+09:00
 url: "/editorconfig/"
