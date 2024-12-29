@@ -1,9 +1,10 @@
 ---
 title: "Redis Del Command"
-description: "Redis DEL 명령어와 UNLINK 명령어의 차이와 lazyfree-lazy-user-del 옵션에 대한 설명"
+description: "Redis DEL 명령어와 UNLINK 명령어의 차이와, lazyfree-lazy-user-del 옵션에 대해 설명합니다."
 date: 2023-10-20T20:57:17+09:00
+lastmod: 2024-12-26T19:30:10+09:00
 url: "/redis-del-command/"
-tags: ["redis", "TIL"]
+tags: ["redis"]
 ---
 
 Redis는 인기 있는 인메모리 데이터 구조 저장소로, 키 삭제를 위한 여러 방법을 제공합니다. 이 글에서는 `DEL`과 `UNLINK` 명령어의 차이점, 그리고 `lazyfree-lazy-user-del` 설정 옵션에 대해 살펴보며, Redis 키 삭제 전략을 최적화하는 데 도움을 드리고자 합니다.
