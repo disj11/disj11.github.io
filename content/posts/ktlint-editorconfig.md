@@ -27,10 +27,12 @@ ktlint_standard_final-newline = disabled
 ```
 
 ### **IntelliJ에서 Ktlint 플러그인 활용하기**
-IntelliJ IDEA를 사용하는 경우, [Ktlint 플러그인](https://plugins.jetbrains.com/plugin/15057-ktlint)을 설치하면 규칙 세트 ID와 규칙 이름을 쉽게 확인할 수 있습니다. 플러그인을 설치한 후, **Settings > Tools > Ktlint**에서 모드를 *Manual*로 변경하면 코드 스타일이 맞지 않는 경우 관련 정보를 확인할 수 있습니다.
+IntelliJ IDEA를 사용하는 경우, [Ktlint 플러그인](https://plugins.jetbrains.com/plugin/15057-ktlint)을 설치하면 규칙 세트 ID와 규칙 이름을 쉽게 확인할 수 있습니다. 플러그인을 설치한 후, **Settings > Tools > Ktlint**에서 모드를 *Manual*로 변경하면 코드 스타일이 맞지 않는 경우 관련 정보를 확인할 수 있습니다:
+
+![](/images/ktlint-editorconfig.png)
 
 ### **규칙 비활성화 예시**
-아래 이미지는 IntelliJ에서 표시되는 특정 규칙의 예시입니다. 해당 규칙을 비활성화하려면 `.editorconfig` 파일에 다음과 같이 추가합니다:
+위의 이미지는 IntelliJ에서 표시되는 특정 규칙의 예시입니다. 해당 규칙을 비활성화하려면 `.editorconfig` 파일에 다음과 같이 추가합니다:
 
 ```
 [*.{kt,kts}]
