@@ -31,7 +31,7 @@ Worker 의 수를 10 -> 30 으로 올리니 17분 정도로 드라마틱하게 �
 이 Shuffle Partition 은 Spark의 성능에 가장 큰 영향을 미치는 Partition 이다.
 연산에 쓰이는 메모리가 부족할 때 Shuffle Spill (데이터를 직렬화 하고 스토리지에 저장, 데이터 처리 이후에 역직렬화 후 연산 재개) 이 발생한다.
 Shuffle Spill 이 일어나면, Task 가 지연되고 에러가 발생할 수 있다. 이 문제를 해결하기 위해서는 Core 당 메모리를 늘려야한다.</p><p>참고 사이트:</p><ul><li><a href=https://aws.amazon.com/ko/blogs/big-data/introducing-amazon-s3-shuffle-in-aws-glue/>https://aws.amazon.com/ko/blogs/big-data/introducing-amazon-s3-shuffle-in-aws-glue/</a></li><li><a href=https://tech.kakao.com/2021/10/08/spark-shuffle-partition/>https://tech.kakao.com/2021/10/08/spark-shuffle-partition/</a></li></ul></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>다른 게시물 읽기</span><hr></div><div class=pagination__buttons><span class="button previous"><a href=https://disj11.github.io/java-jit-compiler/><span class=button__icon>←</span>
-<span class=button__text>Java JIT Compiler</span>
+<span class=button__text>JIT Compiler: JVM 성능 최적화의 핵심 기술</span>
 </a></span><span class="button next"><a href=https://disj11.github.io/sqs-queue-types/><span class=button__text>SQS Queue Types</span>
 <span class=button__icon>→</span></a></span></div></div></article></div><footer class=footer><div class=footer__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
 </span><span class=logo__text>Life Log</span>
