@@ -4,6 +4,6 @@ JIT Compiler 란?
 &lt;a href="#jit-compiler-%eb%9e%80" class="h-anchor" aria-hidden="true">#&lt;/a>
 &lt;/h2>
 &lt;p>자바 코드의 실행을 위해서는 바이트 코드로 컴파일이 필요하다. 바이트 코드는 다시 JVM 의 인터프리터를 통해 기계어로 해석되는 과정을 거쳐 실행된다.
-이런 이유로 인터프리터를 통해 해석되는 과정없이 실행되는 언어에 비해 많이 느리다. 이러한 성능 차이를 해결하기 위해 JVM 에서는 JIT (Just In Time) Compiler 를 도입하였다.&lt;/p></description></item><item><title>확장성을 위해 먼저 알아야할 사항</title><link>https://disj11.github.io/what-you-need-to-know-first-for-scalability/</link><pubDate>Sun, 05 Feb 2023 12:15:15 +0900</pubDate><guid>https://disj11.github.io/what-you-need-to-know-first-for-scalability/</guid><description>
-확장성을 위해 먼저 알아야 할 사항들에는 무엇이 있을까?</description></item><item><title>Oauth2 에 대해서 알아보자</title><link>https://disj11.github.io/an-introduction-to-oauth2/</link><pubDate>Fri, 22 Oct 2021 10:08:30 +0900</pubDate><guid>https://disj11.github.io/an-introduction-to-oauth2/</guid><description>
+이런 이유로 인터프리터를 통해 해석되는 과정없이 실행되는 언어에 비해 많이 느리다. 이러한 성능 차이를 해결하기 위해 JVM 에서는 JIT (Just In Time) Compiler 를 도입하였다.&lt;/p></description></item><item><title>확장성과 성능 최적화: 시스템 부하와 효율적인 대처 전략</title><link>https://disj11.github.io/what-you-need-to-know-first-for-scalability/</link><pubDate>Sun, 05 Feb 2023 12:15:15 +0900</pubDate><guid>https://disj11.github.io/what-you-need-to-know-first-for-scalability/</guid><description>
+확장성이란 무엇인지부터 부하 매개변수와 성능 지표의 중요성, 그리고 꼬리 지연 시간과 효율적 자원 활용 전략까지, 시스템 확장성을 체계적으로 이해하고 최적화하는 방법을 알아봅니다.</description></item><item><title>Oauth2 에 대해서 알아보자</title><link>https://disj11.github.io/an-introduction-to-oauth2/</link><pubDate>Fri, 22 Oct 2021 10:08:30 +0900</pubDate><guid>https://disj11.github.io/an-introduction-to-oauth2/</guid><description>
 OAuth 2.0 의 클라이언트 구현에 도움이 될 만한 정보를 위주로 OAuth 2.0 에 대하여 알아보자.</description></item></channel></rss>
