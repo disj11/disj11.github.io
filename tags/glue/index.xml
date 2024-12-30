@@ -1,8 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Glue on</title><link>https://disj11.github.io/tags/glue/</link><description>Recent content in Glue on</description><generator>Hugo -- gohugo.io</generator><language>ko</language><lastBuildDate>Wed, 10 May 2023 18:58:24 +0900</lastBuildDate><atom:link href="https://disj11.github.io/tags/glue/index.xml" rel="self" type="application/rss+xml"/><item><title>Shuffle Operation in Glue</title><link>https://disj11.github.io/shuffle-operation-in-glue/</link><pubDate>Wed, 10 May 2023 18:58:24 +0900</pubDate><guid>https://disj11.github.io/shuffle-operation-in-glue/</guid><description>
-&lt;p>Glue workflow 사용중 3시간 정도 걸리는 Glue Job 이 발견되었다.
-Worker 의 수를 10 -&amp;gt; 30 으로 올리니 17분 정도로 드라마틱하게 단축되어 왜 이런 현상이 발생하였는지 찾아보았다.&lt;/p>
-&lt;p>Spark 에는 Shuffle Partition 이란 게 존재한다.
-&lt;code>join&lt;/code>, &lt;code>groupBy&lt;/code> 등의 연산을 수행할 때 이 Shuffle Partition 이 사용된다.
-이 Shuffle Partition 은 Spark의 성능에 가장 큰 영향을 미치는 Partition 이다.
-연산에 쓰이는 메모리가 부족할 때 Shuffle Spill (데이터를 직렬화 하고 스토리지에 저장, 데이터 처리 이후에 역직렬화 후 연산 재개) 이 발생한다.
-Shuffle Spill 이 일어나면, Task 가 지연되고 에러가 발생할 수 있다. 이 문제를 해결하기 위해서는 Core 당 메모리를 늘려야한다.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Glue on</title><link>https://disj11.github.io/tags/glue/</link><description>Recent content in Glue on</description><generator>Hugo -- gohugo.io</generator><language>ko</language><lastBuildDate>Wed, 10 May 2023 18:58:24 +0900</lastBuildDate><atom:link href="https://disj11.github.io/tags/glue/index.xml" rel="self" type="application/rss+xml"/><item><title>Spark Shuffle과 Spill 현상 이해하기</title><link>https://disj11.github.io/shuffle-operation-in-glue/</link><pubDate>Wed, 10 May 2023 18:58:24 +0900</pubDate><guid>https://disj11.github.io/shuffle-operation-in-glue/</guid><description>
+3시간 걸리던 Glue Job을 17분으로 단축한 경험을 통해 Spark의 Shuffle 메커니즘과 Spill 현상을 이해하고, 효과적인 성능 최적화 방안을 알아봅니다.</description></item></channel></rss>
