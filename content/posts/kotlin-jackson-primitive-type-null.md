@@ -1,6 +1,6 @@
 ---
-title: "Kotlin과 Jackson 함께 사용 시 주의할 점: Primitive Type 필드의 Null 처리"
-description: "Kotlin의 null safety와 Jackson의 기본 동작 방식 차이로 인해 발생할 수 있는 데이터 검증 문제를 살펴봅니다. primitive 타입 필드가 누락된 경우의 예기치 않은 동작을 실제 사례로 확인하고, 프로젝트 상황에 맞는 다양한 해결 방안을 알아봅니다."
+title: "Kotlin과 Jackson 사용 시 주의할 점: Primitive Type 필드의 Null 처리"
+description: "Kotlin과 Jackson을 사용할 때 primitive 타입의 필드가 누락된 경우, 예기치 않은 동작이 발생할 수 있습니다. 이 글에서는 실제 사례와 테스트를 통해 이 문제를 재현하고, 다양한 해결 방안을 비교 분석합니다."
 date: 2025-01-11T16:40:31+09:00
 url: "/kotlin-jackson-primitive-type-null/"
 tags: [kotlin]
@@ -8,7 +8,7 @@ tags: [kotlin]
 
 ## 개요
 
-Kotlin과 Jackson을 함께 사용할 때 primitive 타입의 필드가 누락된 경우, 예기치 않은 동작이 발생할 수 있습니다. 구체적으로:
+Kotlin과 Jackson을 사용할 때 primitive 타입의 필드가 누락된 경우, 예기치 않은 동작이 발생할 수 있습니다. 구체적으로:
 
 1. Kotlin의 non-null 타입으로 선언된 primitive 필드가 JSON에서 누락된 경우
 2. Jackson이 이를 기본값(0, false 등)으로 처리하는 현상
