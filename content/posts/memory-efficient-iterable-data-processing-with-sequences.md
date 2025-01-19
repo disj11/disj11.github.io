@@ -1,5 +1,5 @@
 ---
-title: "효율적인 Kotlin 컬렉션 처리: Iterable과 Sequence의 차이점과 활용법"
+title: "Kotlin Iterable과 Sequence의 차이점과 활용법"
 description: "Kotlin의 Iterable과 Sequence는 컬렉션을 처리하는 두 가지 주요 방식으로, 즉시 평가와 지연 평가라는 서로 다른 전략을 사용합니다. 이 글에서는 두 방식의 차이점, 성능 비교, 적합한 사용 사례를 중심으로 효율적인 Kotlin 코드를 작성하는 방법을 알아봅니다."
 date: 2023-01-10T23:59:43+09:00
 lastmod: 2024-12-29T09:30:43+09:00

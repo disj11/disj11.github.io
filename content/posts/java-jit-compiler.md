@@ -1,5 +1,5 @@
 ---
-title: "JIT Compiler: JVM 성능 최적화의 핵심 기술"
+title: "JIT Compiler"
 description: "JIT Compiler는 자바 코드 실행 속도를 획기적으로 향상시키는 JVM의 핵심 기술입니다. 이 글에서는 JIT Compiler의 작동 원리, Tiered Compilation, 임계값 설정 방법, 그리고 실제 성능 테스트를 통해 JIT의 효과를 자세히 살펴봅니다."
 date: 2023-05-10T23:56:05+09:00
 lastmod: 2024-12-29T19:45:00+09:00

@@ -1,5 +1,5 @@
 ---
-title: "Kotlin과 Jackson 사용 시 주의할 점: Primitive Type 필드의 Null 처리"
+title: "Kotlin과 Jackson 사용 시 주의할 점"
 description: "Kotlin과 Jackson을 사용할 때 primitive 타입의 필드가 누락된 경우, 예기치 않은 동작이 발생할 수 있습니다. 이 글에서는 실제 사례와 테스트를 통해 이 문제를 재현하고, 다양한 해결 방안을 비교 분석합니다."
 date: 2025-01-11T16:40:31+09:00
 url: "/kotlin-jackson-primitive-type-null/"

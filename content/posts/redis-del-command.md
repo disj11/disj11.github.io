@@ -1,5 +1,5 @@
 ---
-title: "Redis Del Command"
+title: "Redis DEL 과 UNLINK 의 차이"
 description: "Redis DEL 명령어와 UNLINK 명령어의 차이와, lazyfree-lazy-user-del 옵션에 대해 설명합니다."
 date: 2023-10-20T20:57:17+09:00
 lastmod: 2024-12-26T19:30:10+09:00
