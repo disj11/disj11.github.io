@@ -18,11 +18,11 @@ tags: [TIL]
 fun doSomething() {
     val adGroup = findById(adGroupId)
     log.info { "광고그룹 정보: ${adGroup}" } // 광고그룹 정보: AdGroup(adProductId=3) 출력
-    requireNotNull(adGroup.adProductId) // NullPointerException 발생
+    requireNotNull(adGroup.adProductId) // IllegalArgumentException 발생
 }
 ```
 
-위 로그에서는 `adProductId`가 `3`으로 출력되었으나, `requireNotNull(adGroup.adProductId)`에서 `NullPointerException`이 발생했습니다. 로그를 추가하여 확인한 결과 다음과 같은 현상이 나타났습니다:
+위 로그에서는 `adProductId`가 `3`으로 출력되었으나, `requireNotNull(adGroup.adProductId)`에서 `IllegalArgumentException`이 발생했습니다. 로그를 추가하여 확인한 결과 다음과 같은 현상이 나타났습니다:
 
 ```kotlin
 log.info { "adProductId: ${adGroup.adProductId}" }
@@ -57,10 +57,10 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
 
 문제는 Kotlin과 Java 간의 언어적 차이와 Hibernate의 리플렉션 기반 구현 방식에서 비롯된 것으로 보입니다. 특히, 동일한 이름을 가진 여러 Getter 메서드가 존재할 경우 Hibernate Proxy가 예기치 못한 방식으로 동작할 수 있다는 점이 확인되었습니다.
 
-1. **Kotlin과 Java의 차이**  
+1. **Kotlin과 Java의 차이**
    Java에서는 동일한 시그니처(메서드 이름과 매개변수 타입)를 가진 메서드를 허용하지 않지만, Kotlin에서는 반환 타입만 다른 메서드를 정의할 수 있습니다. 이는 Kotlin에서 허용되지만, Hibernate Proxy와 같은 리플렉션 기반 라이브러리에서는 혼란을 초래할 수 있습니다.
 
-2. **Hibernate Proxy 동작 방식**  
+2. **Hibernate Proxy 동작 방식**
    Hibernate Proxy는 리플렉션 데이터를 기반으로 메서드를 호출합니다. 이 과정에서 리플렉션 데이터의 메서드 배열(`publicMethods`) 순서에 따라 호출되는 Getter 메서드가 달라질 수 있습니다. 디버깅 결과, 아래와 같은 동작이 확인되었습니다:
     - 실패 시: `public java.lang.Long org.xx.xx.getAdProductId()` 호출 → `null`
     - 성공 시: `public long org.xx.xx.getAdProductId()` 호출 → `3`
@@ -75,20 +75,20 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
 
 ### 해결 방안
 
-1. **커스텀 Getter 메서드 이름 변경**  
+1. **커스텀 Getter 메서드 이름 변경**
    동일 이름의 Getter 메서드 충돌을 방지하기 위해 커스텀 메서드 이름을 변경합니다.
    ```kotlin
    fun fetchAdProductId(): Long = requireNotNull(this.adProcutId)
    ```
 
-2. **@Transient 애노테이션 추가**  
+2. **@Transient 애노테이션 추가**
    `@Transient` 애노테이션을 추가합니다.
    ```kotlin
    @Transient
    fun getAdProductId(): Long = requireNotNull(this.adProcutId)
    ```
 
-3. **Java Beans 규약 준수**  
+3. **Java Beans 규약 준수**
    JPA 엔티티 설계 시 Java Beans 규약을 준수하며, 동일 이름의 Getter 메서드를 피해야 합니다.
 
 ### 결론
