@@ -1,7 +1,7 @@
 <script
-        src="https://cdn.jsdelivr.net/npm/algoliasearch@4.14.2/dist/algoliasearch-lite.umd.js"
-        integrity="sha256-dImjLPUsG/6p3+i7gVKBiDM8EemJAhQ0VvkRK2pVsQY="
-        crossorigin="anonymous"
+    src="https://cdn.jsdelivr.net/npm/algoliasearch@4.14.2/dist/algoliasearch-lite.umd.js"
+    integrity="sha256-dImjLPUsG/6p3+i7gVKBiDM8EemJAhQ0VvkRK2pVsQY="
+    crossorigin="anonymous"
 ></script>
 <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
 <script>
@@ -16,14 +16,15 @@
     window.onload = () => {
         initAutoComplete();
         const searchClient = algoliasearch(
-            "XPOQNA4T7C",
-            "da59fb86972a7cc1eb6f3172adf593a8",
+            "UNAI0RLL8W",
+            "59b6ab5b05f94c572e2641c8e61aef71",
         );
-        const {autocomplete, getAlgoliaResults} = window["@algolia/autocomplete-js"];
+        const { autocomplete, getAlgoliaResults } =
+            window["@algolia/autocomplete-js"];
         autocomplete({
             container: "#autocomplete",
             placeholder: "Search for posts",
-            getSources({query}) {
+            getSources({ query }) {
                 return [
                     {
                         sourceId: "posts",
@@ -32,37 +33,52 @@
                                 searchClient,
                                 queries: [
                                     {
-                                        indexName: "lifelog",
+                                        indexName: "algolia",
                                         query,
                                         params: {
                                             hitsPerPage: 5,
-                                            attributesToSnippet: ['title:10', 'content:35'],
-                                            snippetEllipsisText: '…',
+                                            attributesToSnippet: [
+                                                "title:10",
+                                                "content:35",
+                                            ],
+                                            snippetEllipsisText: "…",
                                         },
                                     },
                                 ],
                             });
                         },
                         templates: {
-                            header({html}) {
+                            header({ html }) {
                                 return html`
-                                    <span class="aa-SourceHeaderTitle">Posts</span>
-                                    <div class="aa-SourceHeaderLine"/>
+                                    <span class="aa-SourceHeaderTitle"
+                                        >Posts</span
+                                    >
+                                    <div class="aa-SourceHeaderLine" />
                                 `;
                             },
-                            item({item, components, html}) {
+                            item({ item, components, html }) {
                                 return html`
-                                    <a class="aa-ItemLink" href="${item.href}?search=${query}">
+                                    <a
+                                        class="aa-ItemLink"
+                                        href="${item.href}?search=${query}"
+                                    >
                                         <div class="aa-ItemContent">
                                             <div class="aa-ItemContentBody">
-                                                <div class="aa-ItemContentTitle">
+                                                <div
+                                                    class="aa-ItemContentTitle"
+                                                >
                                                     ${components.Highlight({
                                                         hit: item,
-                                                        attribute: "title"
+                                                        attribute: "title",
                                                     })}
                                                 </div>
-                                                <div class="aa-ItemContentDescription">
-                                                    ${components.Snippet({hit: item, attribute: "content"})}
+                                                <div
+                                                    class="aa-ItemContentDescription"
+                                                >
+                                                    ${components.Snippet({
+                                                        hit: item,
+                                                        attribute: "content",
+                                                    })}
                                                 </div>
                                             </div>
                                         </div>
@@ -70,15 +86,13 @@
                                 `;
                             },
                             noResults() {
-                                return "No posts for this query."
-                            }
+                                return "No posts for this query.";
+                            },
                         },
                     },
                 ];
             },
         });
-    }
+    };
 </script>
-{{ if .Param "math" }}
-    {{ partialCached "math.html" . }}
-{{ end }}
+{{ if .Param "math" }} {{ partialCached "math.html" . }} {{ end }}
