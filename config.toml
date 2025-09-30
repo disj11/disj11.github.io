@@ -63,11 +63,11 @@ googleAnalytics = 'G-XD9VVSGMKV'
   notes = '/:sections/:filename/'
   books = '/:sections/:filename/'
 
-[outputFormats.Algolia]
+[outputFormats.Search]
   baseName = "algolia"
   isPlainText = true
   mediaType = "application/json"
   notAlternative = true
 
 [outputs]
-  home = ["HTML", "RSS", "Algolia"]
+  home = ["HTML", "RSS", "Search"]

@@ -1,98 +1,926 @@
-<script
-    src="https://cdn.jsdelivr.net/npm/algoliasearch@4.14.2/dist/algoliasearch-lite.umd.js"
-    integrity="sha256-dImjLPUsG/6p3+i7gVKBiDM8EemJAhQ0VvkRK2pVsQY="
-    crossorigin="anonymous"
-></script>
-<script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
+<div id="search-container" class="search-overlay">
+    <div class="search-modal">
+        <div class="search-header">
+            <div class="search-title-section">
+                <svg
+                    class="search-icon-header"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                >
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    />
+                    <path
+                        d="M21 21l-4.35-4.35"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+                <h3 class="search-title">검색</h3>
+            </div>
+            <button
+                onclick="closeSearch()"
+                class="search-close-btn"
+                aria-label="검색창 닫기"
+            >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                        d="M4.5 4.5l9 9M13.5 4.5l-9 9"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            </button>
+        </div>
+
+        <div class="search-input-container">
+            <div class="search-input-wrapper">
+                <svg
+                    class="search-input-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                >
+                    <path
+                        d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM20 20l-4.35-4.35"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="검색어를 입력하세요..."
+                    class="search-input"
+                    autocomplete="off"
+                />
+            </div>
+        </div>
+
+        <div id="search-results" class="search-results"></div>
+
+        <div class="search-footer">
+            <div class="search-hints">
+                <span class="search-hint-item">
+                    <kbd>↑</kbd><kbd>↓</kbd> 탐색
+                </span>
+                <span class="search-hint-item"> <kbd>Enter</kbd> 선택 </span>
+                <span class="search-hint-item"> <kbd>Esc</kbd> 닫기 </span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    function initAutoComplete() {
-        const autocomplate = document.createElement("div");
-        autocomplate.id = "autocomplete";
-        const li = document.createElement("li");
-        li.appendChild(autocomplate);
-        document.querySelector("nav.menu > ul")?.prepend(li);
+    let searchData = [];
+    let searchContainer, searchInput, searchResults;
+    let selectedIndex = -1;
+
+    // 검색 데이터 로드
+    async function loadSearchData() {
+        try {
+            const response = await fetch("/algolia.json");
+            searchData = await response.json();
+        } catch (error) {
+            console.error("검색 데이터 로드 실패:", error);
+        }
     }
 
-    window.onload = () => {
-        initAutoComplete();
-        const searchClient = algoliasearch(
-            "UNAI0RLL8W",
-            "59b6ab5b05f94c572e2641c8e61aef71",
-        );
-        const { autocomplete, getAlgoliaResults } =
-            window["@algolia/autocomplete-js"];
-        autocomplete({
-            container: "#autocomplete",
-            placeholder: "Search for posts",
-            getSources({ query }) {
-                return [
-                    {
-                        sourceId: "posts",
-                        getItems() {
-                            return getAlgoliaResults({
-                                searchClient,
-                                queries: [
-                                    {
-                                        indexName: "algolia",
-                                        query,
-                                        params: {
-                                            hitsPerPage: 5,
-                                            attributesToSnippet: [
-                                                "title:10",
-                                                "content:35",
-                                            ],
-                                            snippetEllipsisText: "…",
-                                        },
-                                    },
-                                ],
-                            });
-                        },
-                        templates: {
-                            header({ html }) {
-                                return html`
-                                    <span class="aa-SourceHeaderTitle"
-                                        >Posts</span
-                                    >
-                                    <div class="aa-SourceHeaderLine" />
-                                `;
-                            },
-                            item({ item, components, html }) {
-                                return html`
-                                    <a
-                                        class="aa-ItemLink"
-                                        href="${item.href}?search=${query}"
-                                    >
-                                        <div class="aa-ItemContent">
-                                            <div class="aa-ItemContentBody">
-                                                <div
-                                                    class="aa-ItemContentTitle"
-                                                >
-                                                    ${components.Highlight({
-                                                        hit: item,
-                                                        attribute: "title",
-                                                    })}
-                                                </div>
-                                                <div
-                                                    class="aa-ItemContentDescription"
-                                                >
-                                                    ${components.Snippet({
-                                                        hit: item,
-                                                        attribute: "content",
-                                                    })}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                `;
-                            },
-                            noResults() {
-                                return "No posts for this query.";
-                            },
-                        },
-                    },
-                ];
-            },
+    // 검색 함수
+    function performSearch(query) {
+        if (!query || query.length < 2) {
+            return [];
+        }
+
+        const lowerQuery = query.toLowerCase();
+        const results = [];
+
+        searchData.forEach((item) => {
+            let score = 0;
+            const title = item.title ? item.title.toLowerCase() : "";
+            const content = item.content ? item.content.toLowerCase() : "";
+
+            // 제목에서 검색어 발견 시 높은 점수
+            if (title.includes(lowerQuery)) {
+                score += 100;
+                // 정확한 매치일 경우 더 높은 점수
+                if (title === lowerQuery) {
+                    score += 200;
+                }
+            }
+
+            // 내용에서 검색어 발견 시 점수 추가
+            if (content.includes(lowerQuery)) {
+                score += 10;
+            }
+
+            // 태그에서 검색어 발견 시 점수 추가
+            if (
+                item.tags &&
+                item.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))
+            ) {
+                score += 50;
+            }
+
+            if (score > 0) {
+                results.push({
+                    ...item,
+                    score: score,
+                });
+            }
         });
-    };
+
+        // 점수순으로 정렬하고 상위 8개만 반환
+        return results.sort((a, b) => b.score - a.score).slice(0, 8);
+    }
+
+    // 검색 결과 표시
+    function displaySearchResults(results) {
+        selectedIndex = -1;
+
+        if (results.length === 0) {
+            searchResults.innerHTML = `
+                <div class="search-no-results">
+                    <div class="search-no-results-illustration">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="11" cy="11" r="3" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <h4>검색 결과가 없습니다</h4>
+                    <p>다른 키워드로 시도해보세요</p>
+                </div>
+            `;
+            return;
+        }
+
+        const html = results
+            .map((item, index) => {
+                // 내용을 적절한 길이로 자르기
+                let snippet = item.content || item.summary || "";
+                if (snippet.length > 120) {
+                    snippet = snippet.substring(0, 120) + "...";
+                }
+
+                const tags = item.tags
+                    ? item.tags
+                          .slice(0, 3)
+                          .map(
+                              (tag) => `<span class="search-tag">${tag}</span>`,
+                          )
+                          .join("")
+                    : "";
+
+                const date = item.date
+                    ? new Date(item.date).toLocaleDateString("ko-KR", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                      })
+                    : "";
+
+                return `
+                    <div class="search-result-item" data-index="${index}" data-href="${item.href}">
+                        <div class="search-result-content">
+                            <h4 class="search-result-title">${item.title}</h4>
+                            ${snippet ? `<p class="search-result-snippet">${snippet}</p>` : ""}
+                            <div class="search-result-meta">
+                                ${tags}
+                                ${date ? `<span class="search-result-date">${date}</span>` : ""}
+                            </div>
+                        </div>
+                        <div class="search-result-action">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+            })
+            .join("");
+
+        searchResults.innerHTML = html;
+
+        // 클릭 이벤트 추가
+        searchResults
+            .querySelectorAll(".search-result-item")
+            .forEach((item) => {
+                item.addEventListener("click", () => {
+                    window.location.href = item.dataset.href;
+                });
+            });
+    }
+
+    // 키보드 네비게이션
+    function handleKeyNavigation(e) {
+        const items = searchResults.querySelectorAll(".search-result-item");
+
+        if (items.length === 0) return;
+
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection(items);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, -1);
+            updateSelection(items);
+        } else if (e.key === "Enter" && selectedIndex >= 0) {
+            e.preventDefault();
+            window.location.href = items[selectedIndex].dataset.href;
+        }
+    }
+
+    function updateSelection(items) {
+        items.forEach((item, index) => {
+            if (index === selectedIndex) {
+                item.classList.add("selected");
+                item.scrollIntoView({ block: "nearest" });
+            } else {
+                item.classList.remove("selected");
+            }
+        });
+    }
+
+    // 검색창 열기
+    function openSearch() {
+        if (searchContainer) {
+            searchContainer.style.display = "flex";
+            setTimeout(() => {
+                searchContainer.classList.add("active");
+                searchInput.focus();
+            }, 10);
+            document.body.style.overflow = "hidden";
+        }
+    }
+
+    // 검색창 닫기
+    function closeSearch() {
+        if (searchContainer) {
+            searchContainer.classList.remove("active");
+            setTimeout(() => {
+                searchContainer.style.display = "none";
+                searchInput.value = "";
+                searchResults.innerHTML = "";
+                selectedIndex = -1;
+                document.body.style.overflow = "auto";
+            }, 200);
+        }
+    }
+
+    // 초기화
+    function initializeSearch() {
+        searchContainer = document.getElementById("search-container");
+        searchInput = document.getElementById("search-input");
+        searchResults = document.getElementById("search-results");
+
+        // 검색 입력 이벤트
+        if (searchInput) {
+            let timeoutId;
+            searchInput.addEventListener("input", (e) => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    const results = performSearch(e.target.value);
+                    displaySearchResults(results);
+                }, 200);
+            });
+
+            // 키보드 이벤트
+            searchInput.addEventListener("keydown", handleKeyNavigation);
+        }
+
+        // ESC 키로 검색창 닫기
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeSearch();
+            }
+        });
+
+        // 배경 클릭으로 검색창 닫기
+        if (searchContainer) {
+            searchContainer.addEventListener("click", (e) => {
+                if (e.target === searchContainer) {
+                    closeSearch();
+                }
+            });
+        }
+
+        // 초기 상태 메시지
+        if (searchResults) {
+            searchResults.innerHTML = `
+                <div class="search-empty-state">
+                    <div class="search-empty-illustration">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h4>검색으로 원하는 콘텐츠를 찾아보세요</h4>
+                    <p>제목, 내용, 태그로 검색할 수 있습니다</p>
+                </div>
+            `;
+        }
+    }
+
+    // 검색 버튼을 네비게이션에 추가
+    function addSearchButton() {
+        // 데스크톱 메뉴에 추가
+        const desktopNav = document.querySelector(
+            "nav.menu > ul.menu__inner--desktop",
+        );
+        if (desktopNav && !desktopNav.querySelector(".search-menu-item")) {
+            const li = document.createElement("li");
+            li.className = "search-menu-item";
+            li.innerHTML = `
+                <a href="#" onclick="openSearch(); return false;" class="search-trigger" aria-label="검색">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="search-text">검색</span>
+                </a>
+            `;
+            desktopNav.prepend(li);
+        }
+
+        // 모바일 메뉴에 추가
+        const mobileNav = document.querySelector(
+            "nav.menu > ul.menu__inner--mobile",
+        );
+        if (mobileNav && !mobileNav.querySelector(".search-menu-item")) {
+            const li = document.createElement("li");
+            li.className = "search-menu-item";
+            li.innerHTML = `
+                <a href="#" onclick="openSearch(); return false;" class="search-trigger" aria-label="검색">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="search-text">검색</span>
+                </a>
+            `;
+            mobileNav.prepend(li);
+        }
+
+        // 모바일에서 항상 보이는 검색 버튼을 헤더에 추가
+        const headerRight = document.querySelector(".header__right");
+        if (headerRight && !headerRight.querySelector(".mobile-search-btn")) {
+            const searchBtn = document.createElement("span");
+            searchBtn.className = "mobile-search-btn";
+            searchBtn.innerHTML = `
+                <a href="#" onclick="openSearch(); return false;" class="mobile-search-trigger" aria-label="검색">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            `;
+            // 햄버거 메뉴 바로 앞에 추가 (테마 토글보다 앞에)
+            const menuTrigger = headerRight.querySelector(".menu-trigger");
+            if (menuTrigger) {
+                headerRight.insertBefore(searchBtn, menuTrigger);
+            } else {
+                headerRight.appendChild(searchBtn);
+            }
+        }
+    }
+
+    // 모바일에서 키보드가 올라왔을 때 처리
+    function handleMobileKeyboard() {
+        if (window.innerWidth <= 684) {
+            const modal = document.querySelector(".search-modal");
+            const viewport = window.visualViewport;
+
+            if (viewport) {
+                viewport.addEventListener("resize", () => {
+                    if (modal && searchContainer.style.display === "flex") {
+                        if (viewport.height < window.innerHeight * 0.75) {
+                            modal.classList.add("keyboard-open");
+                        } else {
+                            modal.classList.remove("keyboard-open");
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    // 페이지 로드 완료 후 초기화
+    window.addEventListener("DOMContentLoaded", async () => {
+        await loadSearchData();
+        initializeSearch();
+        addSearchButton();
+        handleMobileKeyboard();
+    });
+
+    // 키보드 단축키 (Ctrl+K 또는 Cmd+K)
+    document.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+            e.preventDefault();
+            openSearch();
+        }
+    });
 </script>
+
+<style>
+    /* 검색 오버레이 */
+    .search-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .search-overlay.active {
+        opacity: 1;
+    }
+
+    /* 검색 모달 */
+    .search-modal {
+        background: var(--background);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 640px;
+        max-height: 80vh;
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.1),
+            0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transform: scale(0.95) translateY(-20px);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .search-overlay.active .search-modal {
+        transform: scale(1) translateY(0);
+    }
+
+    /* 검색 헤더 */
+    .search-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 24px 0;
+    }
+
+    .search-title-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .search-icon-header {
+        opacity: 0.8;
+        color: var(--color-secondary);
+    }
+
+    .search-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color);
+        letter-spacing: -0.02em;
+    }
+
+    .search-close-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-secondary);
+        padding: 8px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .search-close-btn:hover {
+        background: var(--background-secondary);
+        color: var(--color);
+        transform: scale(1.05);
+    }
+
+    /* 검색 입력 */
+    .search-input-container {
+        padding: 24px;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 16px 20px 16px 48px;
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        background: var(--background);
+        color: var(--color);
+        font-size: 16px;
+        font-family: inherit;
+        transition: all 0.2s ease;
+        outline: none;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus {
+        border-color: #3b82f6;
+        box-shadow:
+            0 0 0 3px rgba(59, 130, 246, 0.1),
+            0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        transform: translateY(-1px);
+    }
+
+    .search-input-icon {
+        position: absolute;
+        left: 16px;
+        color: var(--color-secondary);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* 검색 결과 */
+    .search-results {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 16px;
+        margin-bottom: 8px;
+    }
+
+    .search-result-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+    }
+
+    .search-result-item:hover,
+    .search-result-item.selected {
+        background: var(--background-secondary);
+        border-color: var(--border-color);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-result-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .search-result-title {
+        margin: 0 0 6px 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color);
+        line-height: 1.4;
+        letter-spacing: -0.01em;
+    }
+
+    .search-result-snippet {
+        margin: 0 0 12px 0;
+        font-size: 0.875rem;
+        color: var(--color-secondary);
+        line-height: 1.5;
+    }
+
+    .search-result-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .search-tag {
+        background: var(--background-secondary);
+        color: var(--color-secondary);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+    }
+
+    .search-result-item:hover .search-tag {
+        background: var(--background);
+        color: var(--color);
+    }
+
+    .search-result-date {
+        font-size: 0.75rem;
+        color: var(--color-secondary);
+        font-weight: 500;
+    }
+
+    .search-result-action {
+        color: var(--color-secondary);
+        margin-left: 16px;
+        opacity: 0;
+        transform: translateX(-4px);
+        transition: all 0.2s ease;
+    }
+
+    .search-result-item:hover .search-result-action,
+    .search-result-item.selected .search-result-action {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* 빈 상태 & 검색 결과 없음 */
+    .search-empty-state,
+    .search-no-results {
+        text-align: center;
+        padding: 48px 24px;
+        color: var(--color-secondary);
+    }
+
+    .search-empty-illustration,
+    .search-no-results-illustration {
+        margin-bottom: 24px;
+        opacity: 0.6;
+        display: flex;
+        justify-content: center;
+    }
+
+    .search-empty-state h4,
+    .search-no-results h4 {
+        margin: 0 0 8px 0;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--color);
+    }
+
+    .search-empty-state p,
+    .search-no-results p {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    /* 검색 푸터 */
+    .search-footer {
+        padding: 16px 24px;
+        border-top: 1px solid var(--border-color);
+        background: var(--background-secondary);
+    }
+
+    .search-hints {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        font-size: 0.75rem;
+        color: var(--color-secondary);
+    }
+
+    .search-hint-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .search-hints kbd {
+        background: var(--background);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.75rem;
+        font-family: inherit;
+        box-shadow: 0 1px 0 var(--border-color);
+        margin-right: 2px;
+    }
+
+    /* 검색 메뉴 버튼 - 가시성 개선 */
+    .search-trigger {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none !important;
+        color: inherit !important;
+        transition: all 0.2s ease;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: 500;
+        border: 1px solid var(--border-color);
+        background: var(--background-secondary);
+        opacity: 1 !important;
+    }
+
+    .search-trigger:hover {
+        background: var(--background);
+        border-color: var(--border-color);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-icon {
+        flex-shrink: 0;
+    }
+
+    .search-text {
+        font-size: 0.875rem;
+        letter-spacing: -0.01em;
+    }
+
+    /* 모바일 헤더 검색 버튼 */
+    .mobile-search-btn {
+        display: none;
+    }
+
+    .mobile-search-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 8px;
+        color: inherit;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        background: var(--background-secondary);
+        border: 1px solid var(--border-color);
+        margin-right: 8px;
+    }
+
+    .mobile-search-trigger:hover {
+        background: var(--background);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 모바일에서 헤더 정렬 */
+    @media (max-width: 684px) {
+        .header__right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+    }
+
+    /* 다크 테마 개선 */
+    body.dark-theme .search-tag {
+        background: #374151;
+        border-color: #4b5563;
+        color: #d1d5db;
+    }
+
+    body.dark-theme .search-result-item:hover .search-tag {
+        background: #4b5563;
+        color: #f3f4f6;
+    }
+
+    body.dark-theme .search-overlay {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    body.dark-theme .search-modal {
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.4),
+            0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 모바일 대응 */
+    @media (max-width: 684px) {
+        /* 모바일에서 헤더 검색 버튼 표시 */
+        .mobile-search-btn {
+            display: block;
+        }
+        .search-overlay {
+            padding: 20px 12px;
+            align-items: flex-start;
+            padding-top: 40px;
+        }
+
+        .search-modal {
+            border-radius: 16px 16px 0 0;
+            max-height: 90vh;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            max-width: none;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-overlay.active .search-modal {
+            transform: translateY(0);
+        }
+
+        .search-header {
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-input-container {
+            padding: 20px;
+        }
+
+        .search-input {
+            padding: 16px 16px 16px 44px;
+            font-size: 16px;
+            border-radius: 12px;
+        }
+
+        .search-result-item {
+            padding: 16px;
+            margin-bottom: 4px;
+        }
+
+        .search-results {
+            padding: 0 12px;
+            max-height: 50vh;
+        }
+
+        .search-hints {
+            display: none;
+        }
+
+        .search-trigger {
+            padding: 10px 12px;
+            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .search-text {
+            font-size: 0.8rem;
+        }
+
+        /* 모바일에서 검색창이 키보드에 가려지지 않도록 */
+        .search-modal.keyboard-open {
+            position: fixed;
+            top: 0;
+            bottom: auto;
+            max-height: 60vh;
+            border-radius: 0 0 16px 16px;
+            transform: translateY(0);
+        }
+    }
+
+    /* 스크롤바 개선 */
+    .search-results::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .search-results::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .search-results::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+    }
+
+    .search-results::-webkit-scrollbar-thumb:hover {
+        background: var(--color-secondary);
+    }
+
+    /* 포커스 표시 개선 */
+    .search-trigger:focus-visible {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+    }
+
+    .search-close-btn:focus-visible {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+    }
+</style>
+
 {{ if .Param "math" }} {{ partialCached "math.html" . }} {{ end }}
