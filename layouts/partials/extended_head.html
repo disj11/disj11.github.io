@@ -374,28 +374,6 @@
             `;
             mobileNav.prepend(li);
         }
-
-        // 모바일에서 항상 보이는 검색 버튼을 헤더에 추가
-        const headerRight = document.querySelector(".header__right");
-        if (headerRight && !headerRight.querySelector(".mobile-search-btn")) {
-            const searchBtn = document.createElement("span");
-            searchBtn.className = "mobile-search-btn";
-            searchBtn.innerHTML = `
-                <a href="#" onclick="openSearch(); return false;" class="mobile-search-trigger" aria-label="검색">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-            `;
-            // 햄버거 메뉴 바로 앞에 추가 (테마 토글보다 앞에)
-            const menuTrigger = headerRight.querySelector(".menu-trigger");
-            if (menuTrigger) {
-                headerRight.insertBefore(searchBtn, menuTrigger);
-            } else {
-                headerRight.appendChild(searchBtn);
-            }
-        }
     }
 
     // 모바일에서 키보드가 올라왔을 때 처리
@@ -756,40 +734,6 @@
         letter-spacing: -0.01em;
     }
 
-    /* 모바일 헤더 검색 버튼 */
-    .mobile-search-btn {
-        display: none;
-    }
-
-    .mobile-search-trigger {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px;
-        border-radius: 8px;
-        color: inherit;
-        text-decoration: none;
-        transition: all 0.2s ease;
-        background: var(--background-secondary);
-        border: 1px solid var(--border-color);
-        margin-right: 8px;
-    }
-
-    .mobile-search-trigger:hover {
-        background: var(--background);
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    /* 모바일에서 헤더 정렬 */
-    @media (max-width: 684px) {
-        .header__right {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-    }
-
     /* 다크 테마 개선 */
     body.dark-theme .search-tag {
         background: #374151;
@@ -814,10 +758,6 @@
 
     /* 모바일 대응 */
     @media (max-width: 684px) {
-        /* 모바일에서 헤더 검색 버튼 표시 */
-        .mobile-search-btn {
-            display: block;
-        }
         .search-overlay {
             padding: 20px 12px;
             align-items: flex-start;
