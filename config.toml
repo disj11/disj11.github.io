@@ -59,9 +59,9 @@ googleAnalytics = 'G-XD9VVSGMKV'
         url = "/notes"
 
 [permalinks]
-  posts = '/:filename/'
-  notes = '/:sections/:filename/'
-  books = '/:sections/:filename/'
+  posts = '/:contentbasename/'
+  notes = '/:sections/:contentbasename/'
+  books = '/:sections/:contentbasename/'
 
 [outputFormats.Search]
   baseName = "algolia"
