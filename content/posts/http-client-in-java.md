@@ -1,388 +1,233 @@
 ---
-title: "Http Client in Java"
-description: "Java 11 에서 채택된 Http Client API 에 대하여"
+title: "Java 11의 새로운 표준 HTTP Client 완벽 정복하기"
+description: "Java 11부터 표준으로 채택된 새로운 HTTP Client API(JEP 321)의 모든 것을 알아봅니다. 기존 HttpURLConnection의 한계를 극복하고, HTTP/2와 WebSocket을 지원하며, 동기 및 비동기 방식을 모두 제공하는 현대적인 API 사용법을 상세한 예제와 함께 설명합니다."
 date: 2021-11-02T18:11:57+09:00
-tags: ["java"]
+tags: ["java", "http", "java11", "concurrency"]
 ---
 
-## 개요
+## 들어가며: 왜 새로운 HTTP Client가 필요했을까요?
 
-이전까지 자바에서 사용하던 `HttpURLConnection` 는 지원 수준이 너무 낮아 서드 파티 라이브러리인 [Apache HttpClient](https://hc.apache.org/httpcomponents-client-5.1.x/), [Jetty](https://www.eclipse.org/jetty/documentation.php), 스프링의 [RestTemplate](https://www.baeldung.com/rest-template) 을 많이 사용하였다. 하지만 Java 11 에서 HTTP/2와 Web Socket 을 구현하는 HTTP Client API 의 표준화가 정식으로 도입되었다. 이번 포스팅에서는 Java 11 에서 채택된 HTTP Client API 표준화에 대해 알아본다.
+오랫동안 자바에서 HTTP 통신을 하기 위해서는 `HttpURLConnection`을 사용해야 했습니다. 하지만 이 API는 다음과 같은 여러 한계를 가지고 있었습니다.
 
-## 변경점 (JEP 321)
+-   **오래된 프로토콜 기반 설계**: FTP, Gopher 등 현재는 거의 사용되지 않는 프로토콜까지 고려하여 너무 추상적으로 설계되었습니다.
+-   **블로킹(Blocking) 방식**: 요청(Request)과 응답(Response)이 하나의 스레드를 완전히 점유하는 동기 방식으로만 동작하여 성능에 한계가 있었습니다.
+-   **불편한 API**: API 사용법이 직관적이지 않고 장황하여, 대부분의 개발자들은 Apache HttpClient, OkHttp, Spring RestTemplate과 같은 서드파티 라이브러리를 사용하는 것을 선호했습니다.
 
-1. Java 9 에서 도입되었던 HTTP API가 이제 공식적으로 Java SE API에 통합 되었다. 새로운 [HTTP APIs](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/package-summary.html) 는 `java.net.HTTP.*` 패키지에서 확인할 수 있다.
+이러한 문제를 해결하기 위해, Java 9에서 인큐베이터 모듈로 처음 소개되었던 새로운 HTTP Client API가 **Java 11에서 정식 표준(`java.net.http` 패키지)으로 채택**되었습니다. 이 새로운 API는 HTTP/2와 WebSocket을 기본적으로 지원하며, 동기 및 비동기 프로그래밍 모델을 모두 제공하는 현대적인 클라이언트입니다. 이 글에서는 새로운 HTTP Client API의 핵심 구성요소와 사용법을 자세히 살펴보겠습니다.
 
-2. 최신 버전의 HTTP 프로토콜은 stream multiplexing, header compression 와 push promises 등을 통해 전반벅인 성능이 향상되었다.
+## HTTP Client API의 핵심 구성요소
 
-3. Java 11 부터 API는 비동기로 동작합니다. 비동기는 `CompletableFuture` 를 사용하여 구현되었다.
+새로운 API는 크게 세 가지 핵심 클래스로 구성됩니다.
 
-4. 새로운 HTTP 클라이언트 API는 외부 종속성 없이 HTTP/2와 같은 최신 웹 기능을 지원한다.
+1.  **`HttpRequest`**: 보낼 요청에 대한 모든 정보(URI, 헤더, 본문 등)를 담고 있는 불변(immutable) 객체입니다.
+2.  **`HttpClient`**: 요청을 보내는 주체로, 요청 전반에 걸친 설정(프로토콜 버전, 프록시, 리다이렉션 정책 등)을 관리하는 컨테이너 역할을 합니다.
+3.  **`HttpResponse<T>`**: 요청을 보낸 후 서버로부터 받은 응답(상태 코드, 헤더, 본문 등)을 담고 있는 객체입니다.
 
-5. 새로운 API는 HTTP 1.1/2 WebSocket에 대한 기본 지원을 제공한다. 핵심 기능을 제공하는 클래스와 인터페이스는 다음과 같다.
+## 1. 요청 만들기 (HttpRequest)
 
-   * HttpClient class, java.net.http.HttpClient
-   * HttpRequest class, java.net.http.HttpRequest
-   * HttpResponse<T> interface, java.net.http.HttpResponse
-   * WebSocket interface, java.net.http.WebSocket
+`HttpRequest` 객체는 `HttpRequest.Builder`를 사용하여 생성합니다. 빌더 패턴을 사용하므로 메서드 체이닝을 통해 직관적으로 요청을 구성할 수 있습니다.
 
-## 이전 버전의 문제점
+### URI 및 HTTP 메서드 지정
 
-기존에 사용하던 HttpURLConnection API 는 다음과 같은 문제가 존재했다:
-
-* 더 이상 작동하지 않는 프로토콜을 사용하도록 디자인 되었다. (FTP, gopher, etc.)
-* HTTP/1.1 이전 버전이며 너무 추상적이다.
-* blocking mode 로만 동작한다. (하나의 스레드당 하나의 request/response)
-
-## HTTP Client API 개요
-
-`HttpURLConnection` 과 달리 HTTP Client 는 동기화 비동기 모두를 제공한다. API는 다음의 3가지 핵심 클래스로 이루어 진다.
-
-* `HttpRequest` - `HttpClient` 를 통해 보낼 요청
-* `HttpClient` - 여러 요청에 대한 공통 구성 정보를 담는 컨테이너 역할
-* `HttpResponse` - `HttpRequest` 호출의 결과
-
-다음 섹션에서 각각에 대해 더 자세히 알아보자.
-
-## HttpRequest
-
-이름에서 알 수 있듯 보내려는 요청을 나타내는 객체이다. `HttpRequest.Builder` 를 사용하여 새 인스턴스를 만들 수 있다. `Builder` 클래스는 `HttpRequest.newBuilder()` 를 통해 얻을 수 있다.
-
-### URI 설정
-
-요청을 생성할 때 가장 먼저 해야 할 일은 URL을 제공하는 것이다. 다음과 같이 두 가지 방법을 통해 URL 을 제공 할 수 있다.
+가장 기본적인 요청은 URI를 지정하고 HTTP 메서드를 호출하는 것입니다.
 
 ```java
-HttpRequest.newBuilder(new URI("https://postman-echo.com/get"))
- 
-HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-```
+import java.net.URI;
+import java.net.http.HttpRequest;
 
-### HTTP Method 지정
-
-`Builder` 에서 다음 메서드 중 하나를 호출하여 사용할 HTTP Method 를 정의 할 수 있다.
-
-* GET()
-* POST(BodyPublisher body)
-* PUT(BodyPublisher body)
-* DELETE()
-
-`BodyPublisher` 에 대해서는 이후에 다루기로 하고, 먼저 간단한 GET 요청 예제를 살펴보자.
-
-```java
 HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-  .GET()
-  .build();
+    .uri(new URI("https://postman-echo.com/get"))
+    .GET() // GET 요청
+    .build();
 ```
 
- 이 요청에는 요청에 필요한 모든 정보가 있다. 하지만 때때로 요청에 추가적인 파라미터가 필요할 수도 있다. 몇 가지 중요한 파라미터에는 다음과 같은 것들이 있다.
+### 헤더, 타임아웃, 프로토콜 버전 설정
 
-* HTTP protocol 의 버전
-* headers
-* timeout
-
-### HTTP protocol 버전
-
-API 는 기본적으로 HTTP/2 프로토콜을 사용하지만 사용하려는 프로토콜의 버전을 명시할 수 있다.
+추가적인 정보가 필요하다면 빌더에 관련 메서드를 호출하여 설정할 수 있습니다.
 
 ```java
+import java.time.Duration;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+
 HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-  .version(HttpClient.Version.HTTP_2)
-  .GET()
-  .build();
+    .uri(new URI("https://postman-echo.com/get"))
+    .version(HttpClient.Version.HTTP_2) // HTTP/2 사용 명시 (서버가 지원하지 않으면 HTTP/1.1로 자동 전환)
+    .header("Accept", "application/json") // 단일 헤더 추가
+    .headers("X-Custom-Header1", "Value1", "X-Custom-Header2", "Value2") // 여러 헤더 추가
+    .timeout(Duration.ofSeconds(10)) // 타임아웃 설정 (기본값: 무한대)
+    .GET()
+    .build();
 ```
 
-중요한 점은 HTTP/2 가 지원되지 않는 경우 클라이언트는 HTTP/1.1 로 대체한다는 점이다.
+### 요청 본문(Body) 설정하기
 
-### Header 설정
+`POST`나 `PUT` 요청 시에는 본문을 전송해야 합니다. `HttpRequest.BodyPublishers` 팩토리 클래스를 사용하면 다양한 타입의 데이터를 본문으로 쉽게 변환할 수 있습니다.
 
-header 에 추가적인 정보가 필요한 경우 builder 메서드를 사용할 수 있다. 여기에는 두 가지 방법이 있다.
+-   **문자열(String) 본문**: `BodyPublishers.ofString()`
+    ```java
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(new URI("https://postman-echo.com/post"))
+      .headers("Content-Type", "application/json")
+      .POST(HttpRequest.BodyPublishers.ofString("{\"name\":\"John Doe\"}"))
+      .build();
+    ```
 
-* `headers()` 메서드를 통해 모든 헤더를 키와 값의 쌍으로 제공
-* `header()` 메서드를 통해 하나의 키와 값을 제공
+-   **파일(File) 본문**: `BodyPublishers.ofFile()`
+    ```java
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(new URI("https://postman-echo.com/post"))
+      .headers("Content-Type", "text/plain;charset=UTF-8")
+      .POST(HttpRequest.BodyPublishers.ofFile(Paths.get("path/to/file.txt")))
+      .build();
+    ```
+
+-   **바이트 배열(Byte Array) 본문**: `BodyPublishers.ofByteArray()`
+    ```java
+    byte[] sampleData = "Sample request body".getBytes();
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(new URI("https://postman-echo.com/post"))
+      .POST(HttpRequest.BodyPublishers.ofByteArray(sampleData))
+      .build();
+    ```
+
+이 외에도 `ofInputStream`, `noBody` 등 다양한 `BodyPublisher`가 제공됩니다.
+
+## 2. 요청 보내기 (HttpClient)
+
+`HttpClient`는 `HttpRequest`를 서버로 전송하는 역할을 합니다. `HttpClient` 인스턴스는 한 번 생성하면 여러 요청에 재사용할 수 있습니다.
+
+### 동기(Synchronous) 요청: `send()`
+
+`send()` 메서드는 응답이 올 때까지 현재 스레드를 블로킹(blocking)하고, 작업이 완료되면 `HttpResponse` 객체를 반환합니다. 간단한 요청에 적합합니다.
 
 ```java
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-  .headers("key1", "value1", "key2", "value2")
-  .GET()
-  .build();
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
 
-HttpRequest request2 = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-  .header("key1", "value1")
-  .header("key2", "value2")
-  .GET()
-  .build();
-```
-
-### Timeout 설정
-
-Builder 인스턴스의 `timeout()` 메서드를 사용하여 응답 시간을 설정할 수 있다. 만약 응답 시간을 초과한다면 `HttpTimeoutException` 이 발생한다. 기본 값은 infinity 이다.
-
-```java
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-  .timeout(Duration.of(10, SECONDS))
-  .GET()
-  .build();
-```
-
-## Request Body 설정
-
-Request Method 가 `POST`, `PUT`, `DELETE` 인 경우 요청 본문을 설정할 수 있다. 새로운 API 는 요청 본문을 작성할 수 있도록 여러가지의 `BodyPublisher` 구현체를 제공한다.
-
-* StringProcessor ( `HttpRequest.BodyPublishers.ofString` 를 사용하여 생성함)
-* InputStreamProcessor (`HttpRequest.BodyPublishers.ofInputStream` 를 사용하여 생성함)
-* ByteArrayProcessor (`HttpRequest.BodyPublishers.ofByteArray` 를 사용하여 생성함)
-* FileProcessor (`HttpRequest.BodyPublishers.ofFile` 를 사용하여 생성함)
-
-request body 가 필요 없는 경우는 `HttpRequest.BodyPublishers.noBody()` 를 사용한다.
-
-```java
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/post"))
-  .POST(HttpRequest.BodyPublishers.noBody())
-  .build();
-```
-
-### StringBodyPublisher
-
-```java
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/post"))
-  .headers("Content-Type", "text/plain;charset=UTF-8")
-  .POST(HttpRequest.BodyPublishers.ofString("Sample request body"))
-  .build();
-```
-
-### InputStreamBodyPublisher
-
-```java
-byte[] sampleData = "Sample request body".getBytes();
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/post"))
-  .headers("Content-Type", "text/plain;charset=UTF-8")
-  .POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(sampleData)))
-  .build();
-```
-
-### ByteArrayProcessor
-
-```java
-byte[] sampleData = "Sample request body".getBytes();
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/post"))
-  .headers("Content-Type", "text/plain;charset=UTF-8")
-  .POST(HttpRequest.BodyPublishers.ofByteArray(sampleData))
-  .build();
-```
-
-### FileProcessor
-
-```java
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/post"))
-  .headers("Content-Type", "text/plain;charset=UTF-8")
-  .POST(HttpRequest.BodyPublishers.fromFile(
-    Paths.get("src/test/resources/sample.txt")))
-  .build();
-```
-
-## HttpClient
-
-모든 요청은 `HttpClient` 를 통해 전송한다. `HttpClient` 는 `HttpClient.newBuilder()` 메서드 또는 `HttpClient.newHttpClient()` 를 통해 얻을 수 있다.
-
-### Response Body 핸들링
-
-Publisher 와 비슷하게 Response Body handler 생성을 위한 메서드가 있다.
-
-```
-BodyHandlers.ofByteArray
-BodyHandlers.ofString
-BodyHandlers.ofFile
-BodyHandlers.discarding
-BodyHandlers.replacing
-BodyHandlers.ofLines
-BodyHandlers.fromLineSubscriber
-```
-
-`BodyHandlers` 팩토리 클래스의 사용에 주의한다. java 11 이전 버전에서는 다음과 같이 사용했다.
-
-```java
-HttpResponse<String> response = client.send(request, HttpResponse.BodyHandler.asString());
-```
-
-이제는 다음과 같이 사용할 수 있다.
-
-```java
-HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-```
-
-### Proxy 설정
-
-Builder 인스턴스에서 `proxy()` 메서드를 사용하여 간단하게 프록시를 추가할 수 있다. 다음은 시스템 기본 프록시를 사용하게 하는 예제이다.
-
-```java
-HttpResponse<String> response = HttpClient
-  .newBuilder()
-  .proxy(ProxySelector.getDefault())
-  .build()
-  .send(request, BodyHandlers.ofString());
-```
-
-### Redirect Polcy 설정
-
-접근하려는 페이지가 다른 주소로 이동하는 경우가 있다. 이 경우 일반적으로 변경된 URI 와 함께 HTTP 상태코드 3xx 를 받게 된다. 적절한 리다이렉션 정책을 설정하면 `HttpClient` 가 자동으로 요청을 새 URI 로 리다이렉션 한다. 리다이렉션 정책 설정은 Builder 인스턴스의 `followRedirects()` 메서드를 사용한다.
-
-```java
-HttpResponse<String> response = HttpClient.newBuilder()
-  .followRedirects(HttpClient.Redirect.ALWAYS)
-  .build()
-  .send(request, BodyHandlers.ofString());
-```
-
-리다이렉션 정책은 `HttpClient.Redirect` 에 정의 되어 있다.
-
-### Authenticator 설정
-
-`Authenticator` 는 연결을 위한 자격증명을 나타낸다. 예를 들어 연결 하려는 서버가 username, password 를 요구한다면 `PasswordAuthentication` 클래스를 사용할 수 있다.
-
-```java
-HttpResponse<String> response = HttpClient.newBuilder()
-  .authenticator(new Authenticator() {
-    @Override
-    protected PasswordAuthentication getPasswordAuthentication() {
-      return new PasswordAuthentication(
-        "username", 
-        "password".toCharArray());
-    }
-}).build()
-  .send(request, BodyHandlers.ofString());
-```
-
-### Send Requests - Sync vs. Async
-
-`HttpClient` 는 동기와 비동기 요청 모두 제공한다.
-
-* `send()` - 동기
-* `sendAsync()` - 비동기
-
-`send` 메서드는 응답이 올 때까지 기다리고, `HttpResponse` 객체를 리턴한다.
-
-```java
-HttpResponse<String> response = HttpClient.newBuilder()
-  .build()
-  .send(request, BodyHandlers.ofString());
-```
-
-응답이 올 때까지 기다리기 때문에 많은 양의 데이터를 처리해야 할 때 단점이 있다. 반면에 `sendAsync` 메서드는 비동기로 작동하며 `CompletableFeature<HttpResponse>` 를 리턴한다.
-
-```java
-CompletableFuture<HttpResponse<String>> response = HttpClient.newBuilder()
-  .build()
-  .sendAsync(request, HttpResponse.BodyHandlers.ofString());
-```
-
-다음과 같은 사용도 가능하다.
-
-```java
-List<URI> targets = Arrays.asList(
-  new URI("https://postman-echo.com/get?foo1=bar1"),
-  new URI("https://postman-echo.com/get?foo2=bar2"));
+// 1. HttpClient 생성 (재사용 가능)
 HttpClient client = HttpClient.newHttpClient();
-List<CompletableFuture<String>> futures = targets.stream()
-  .map(target -> client
-    .sendAsync(
-      HttpRequest.newBuilder(target).GET().build(),
-      HttpResponse.BodyHandlers.ofString())
-    .thenApply(response -> response.body()))
-  .collect(Collectors.toList());
-```
 
-### 비동기를 위한 Executor 설정
-
-비동기 호출 시 사용할 스레드를 제공하는 `Executor` 을 정의할 수도 있다. 이를 사용하여 요청 처리에 사용되는 스레드 수를 제한할 수 있다.
-
-```java
-ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-CompletableFuture<HttpResponse<String>> response1 = HttpClient.newBuilder()
-  .executor(executorService)
-  .build()
-  .sendAsync(request, HttpResponse.BodyHandlers.ofString());
-
-CompletableFuture<HttpResponse<String>> response2 = HttpClient.newBuilder()
-  .executor(executorService)
-  .build()
-  .sendAsync(request, HttpResponse.BodyHandlers.ofString());
-```
-
-`HttpClient` 는 기본적으로 `java.util.concurrent.Executors.newCachedThreadPool()` 를 사용한다.
-
-### CookieHandler 설정
-
-Builder 의 `cookieHandler` 메서드를 사용하여 클라이언트별 `CookieHandler` 를 손쉽게 설정할 수 있다. 예를 들어 모든 쿠키를 허용하지 않으려면 다음과 같이 사용할 수 있다.
-
-```java
-HttpClient.newBuilder()
-  .cookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_NONE))
-  .build();
-```
-
-만약 `CookieManager` 가 쿠키 저장을 허용했다면 `HttpClient` 에서 `CookieHandler` 를 통해 쿠키에 액세스 할 수 있다.
-
-```java
-((CookieManager) httpClient.cookieHanlder().get()).getCookieStore()
-```
-
-## HttpResponse
-
-`HttpResponse` 클래스는 서버의 응답을 나타낸다. 여러가지 유용한 메서드가 있지만 가장 중요한 것은 두 가지 이다.
-
-* `statusCode()` - HTTP 상태 코드를 반환한다.
-* `body()` - 응답에 대한 본문을 반환하며 반환 유형은 `send()` 메서드에 전달된 `BodyHandler` 에 따라 다르다.
-
-이 외에도 `uri()`, `headers()`, `trailers()`, `version()` 등과 같은 유용한 메서드가 있다.
-
-### Response 객체의 URI
-
-Response 객체의 `uri()` 메서드는 응답 된 URI 를 반환한다. 리다이렉션이 일어났을 수도 있기 때문에 request 객체의 URI 와 다른 경우도 있다.
-
-```java
-assertThat(request.uri().toString(), equalTo("http://stackoverflow.com"));
-assertThat(response.uri().toString(), equalTo("https://stackoverflow.com/"));
-```
-
-### Response Headers
-
-Response 객체의 `headers()` 메서드를 통해 응답 헤더를 확인할 수 있다. 응답 헤더는 `HttpHeaders` 이며 read-only 이다.	
-
-```java
-HttpResponse<String> response = HttpClient.newHttpClient()
-  .send(request, HttpResponse.BodyHandlers.ofString());
-HttpHeaders responseHeaders = response.headers();
-```
-
-### Response Version
-
-`version()` 메서드를 통해 서버와 통신하는 데 사용된 HTTP 프로토콜의 버전을 알 수 있다. 요청 시 HTTP/2 버전을 사용했더라도 HTTP/1.1 을 통해 응답이 올 수도 있음에 주의한다.
-
-```java
+// 2. HttpRequest 생성
 HttpRequest request = HttpRequest.newBuilder()
-  .uri(new URI("https://postman-echo.com/get"))
-  .version(HttpClient.Version.HTTP_2)
-  .GET()
-  .build();
-HttpResponse<String> response = HttpClient.newHttpClient()
-  .send(request, HttpResponse.BodyHandlers.ofString());
-assertThat(response.version(), equalTo(HttpClient.Version.HTTP_1_1));
+    .uri(new URI("https://postman-echo.com/get"))
+    .build();
+
+// 3. 동기 방식으로 요청 전송
+// BodyHandlers는 응답 본문을 어떻게 처리할지 결정합니다.
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+// 4. 응답 처리
+System.out.println("Status Code: " + response.statusCode());
+System.out.println("Response Body: " + response.body());
 ```
 
- ## 참조
+### 비동기(Asynchronous) 요청: `sendAsync()`
 
-[Exploring the New HTTP Client in Java](https://www.baeldung.com/java-9-http-client)
+`sendAsync()` 메서드는 요청을 보낸 후 즉시 `CompletableFuture<HttpResponse>`를 반환하고, 실제 HTTP 요청 및 응답 처리는 별도의 스레드에서 수행됩니다. 이를 통해 현재 스레드를 블로킹하지 않고 다른 작업을 계속할 수 있어 높은 처리량이 요구되는 애플리케이션에 매우 유용합니다.
 
+```java
+import java.util.concurrent.CompletableFuture;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(new URI("https://postman-echo.com/get"))
+    .build();
+
+// 비동기 방식으로 요청 전송
+CompletableFuture<HttpResponse<String>> futureResponse = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+// 응답이 오면 thenAccept 콜백이 실행됨
+futureResponse.thenAccept(response -> {
+    System.out.println("Status Code: " + response.statusCode());
+    System.out.println("Response Body: " + response.body());
+});
+
+// 다른 작업 수행...
+futureResponse.join(); // 비동기 작업이 완료될 때까지 대기 (예제이므로 추가)
+```
+
+여러 요청을 동시에 보내고 결과를 조합하는 것도 가능합니다.
+
+```java
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+List<URI> targets = List.of(
+    new URI("https://postman-echo.com/get?foo1=bar1"),
+    new URI("https://postman-echo.com/get?foo2=bar2")
+);
+HttpClient client = HttpClient.newHttpClient();
+
+List<CompletableFuture<String>> futures = targets.stream()
+    .map(target -> client.sendAsync(
+            HttpRequest.newBuilder(target).GET().build(),
+            HttpResponse.BodyHandlers.ofString())
+        .thenApply(HttpResponse::body))
+    .collect(Collectors.toList());
+
+// 모든 비동기 작업이 완료될 때까지 기다린 후 결과 처리
+CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+```
+
+### HttpClient 커스터마이징
+
+`HttpClient.newBuilder()`를 사용하면 리다이렉션 정책, 프록시, 인증자 등 다양한 설정을 커스터마이징할 수 있습니다.
+
+```java
+import java.net.ProxySelector;
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
+import java.net.http.HttpClient;
+
+HttpClient customClient = HttpClient.newBuilder()
+    .version(HttpClient.Version.HTTP_2)
+    .followRedirects(HttpClient.Redirect.NORMAL) // 리다이렉션 정책 설정
+    .proxy(ProxySelector.of(new InetSocketAddress("proxy.example.com", 80))) // 프록시 설정
+    .executor(Executors.newFixedThreadPool(4)) // 비동기 작업을 위한 스레드 풀 지정
+    .build();
+```
+
+## 3. 응답 다루기 (HttpResponse)
+
+`HttpResponse` 객체를 통해 서버의 응답 정보를 얻을 수 있습니다.
+
+-   `statusCode()`: `200`, `404`와 같은 HTTP 상태 코드를 반환합니다.
+-   `body()`: 응답 본문을 반환합니다. 이 반환 타입은 `send()` 또는 `sendAsync()`에 전달한 `HttpResponse.BodyHandlers`에 의해 결정됩니다. (예: `BodyHandlers.ofString()` -> `String`, `BodyHandlers.ofByteArray()` -> `byte[]`)
+-   `headers()`: 응답 헤더 정보를 `HttpHeaders` 객체로 반환합니다.
+-   `version()`: 실제 통신에 사용된 HTTP 프로토콜 버전을 반환합니다.
+
+```java
+import java.net.http.HttpResponse;
+import java.net.http.HttpHeaders;
+import java.util.Optional;
+
+// 이전에 client.send()로 얻은 response 객체가 있다고 가정
+HttpResponse<String> response = ...;
+
+int statusCode = response.statusCode();
+String body = response.body();
+HttpHeaders headers = response.headers();
+Optional<String> contentType = headers.firstValue("Content-Type");
+```
+
+## 마무리
+
+Java 11의 새로운 HTTP Client는 최신 웹 환경에 필수적인 HTTP/2와 논블로킹 I/O를 지원하는 강력하고 현대적인 API입니다. 더 이상 무거운 외부 라이브러리에 의존하지 않고도, 자바 표준 라이브러리만으로 효율적이고 안정적인 HTTP 통신을 구현할 수 있게 되었습니다. 특히 `CompletableFuture`와 결합된 비동기 API는 높은 동시성 처리가 필요한 애플리케이션의 성능을 극대화하는 데 큰 도움이 될 것입니다.
+
+---
+
+**참고 자료:**
+- [JEP 321: HTTP Client (Standard)](https://openjdk.java.net/jeps/321)
+- [Baeldung - Exploring the New HTTP Client in Java](https://www.baeldung.com/java-9-http-client)
