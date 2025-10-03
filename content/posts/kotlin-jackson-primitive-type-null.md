@@ -9,10 +9,10 @@ tags: ["kotlin", "jackson", "spring", "deserialization"]
 
 Kotlin의 가장 큰 장점 중 하나는 컴파일 시점에 null 안전성(Null Safety)을 보장하여 `NullPointerException`을 효과적으로 방지하는 것입니다. 하지만 JSON 라이브러리인 Jackson과 함께 사용할 때, 이 null 안전성이 우리가 기대하는 것과 다르게 동작하여 잠재적인 버그를 유발하는 경우가 있습니다.
 
-가장 대표적인 사례가 **JSON 역직렬화(Deserialization) 시 non-null 원시 타입(primitive type) 필드가 누락된 경우**입니다.
+가장 대표적인 사례가 **JSON 역직렬화(Deserialization) 시 non-null 원시 타입(primitive type) 필드가 누락된 경우** 입니다.
 
 -   `String`과 같은 **참조 타입** 필드가 누락되면: Jackson이 **예외를 발생**시킵니다. (예상대로 동작)
--   `Long`, `Int`와 같은 **원시 타입** 필드가 누락되면: Jackson이 예외 없이 **기본값(0)을 할당**합니다. (예상과 다른 동작)
+-   `Long`, `Int`와 같은 **원시 타입** 필드가 누락되면: Jackson이 예외 없이 **기본값(0)을 할당** 합니다. (예상과 다른 동작)
 
 이러한 비일관적인 동작은 개발자에게 혼란을 주고, 데이터가 누락되었음에도 요청이 성공한 것처럼 보여 심각한 버그로 이어질 수 있습니다. 이 글에서는 실제 테스트를 통해 이 문제를 재현하고, 근본 원인을 분석하며, 명확한 해결 방안을 제시하겠습니다.
 
@@ -68,7 +68,7 @@ class DemoController {
 
 1.  **참조 타입의 경우 (`String`)**: JSON에 `name` 필드가 없으면, Jackson은 생성자의 `name` 파라미터에 `null`을 전달하려고 시도합니다. 이때 `jackson-module-kotlin`이 이를 감지하고 "non-null 파라미터에 null을 할당할 수 없다"는 예외를 발생시킵니다.
 
-2.  **원시 타입의 경우 (`Long`)**: JSON에 `durationMs` 필드가 없으면, Jackson의 **기본 동작 방식**에 따라 `null` 대신 해당 원시 타입의 **기본값(primitive default value)**인 `0L`을 생성자의 `durationMs` 파라미터에 전달합니다. `null`이 전달된 것이 아니기 때문에, `jackson-module-kotlin`의 null 체크 로직은 동작하지 않고 역직렬화는 그대로 성공하게 됩니다.
+2.  **원시 타입의 경우 (`Long`)**: JSON에 `durationMs` 필드가 없으면, Jackson의 **기본 동작 방식** 에 따라 `null` 대신 해당 원시 타입의 **기본값(primitive default value)** 인 `0L`을 생성자의 `durationMs` 파라미터에 전달합니다. `null`이 전달된 것이 아니기 때문에, `jackson-module-kotlin`의 null 체크 로직은 동작하지 않고 역직렬화는 그대로 성공하게 됩니다.
 
 결론적으로, 이 현상은 Jackson 라이브러리 자체의 기본 동작 방식과 Kotlin의 null 안전성 메커니즘 간의 상호작용 때문에 발생하는 것입니다.
 

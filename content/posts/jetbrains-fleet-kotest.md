@@ -7,7 +7,7 @@ tags: ["kotlin", "kotest", "fleet", "testing"]
 
 ## 들어가며: Fleet과 Kotest, 아직은 어색한 사이
 
-JetBrains Fleet은 IntelliJ 기반의 차세대 경량 IDE로 많은 기대를 받고 있습니다. 하지만 아직 개발 초기 단계에 있어 기존 IntelliJ IDEA에서 당연하게 사용하던 기능 중 일부는 지원되지 않거나 별도의 설정이 필요합니다. 대표적인 예가 바로 **Kotest 플러그인의 부재**입니다.
+JetBrains Fleet은 IntelliJ 기반의 차세대 경량 IDE로 많은 기대를 받고 있습니다. 하지만 아직 개발 초기 단계에 있어 기존 IntelliJ IDEA에서 당연하게 사용하던 기능 중 일부는 지원되지 않거나 별도의 설정이 필요합니다. 대표적인 예가 바로 **Kotest 플러그인의 부재** 입니다.
 
 IntelliJ에서는 Kotest 플러그인 덕분에 테스트 클래스나 메서드 옆의 '재생' 버튼을 눌러 손쉽게 테스트를 실행할 수 있었습니다. 하지만 Fleet에서는 이 기능이 기본적으로 작동하지 않아, Kotest 사용자들이 테스트 실행에 불편함을 겪고 있습니다. 
 
@@ -59,7 +59,7 @@ Fleet은 `.fleet/run.json` 파일을 통해 사용자 정의 실행 구성을 �
 각 설정 항목이 어떤 의미를 가지는지 자세히 살펴보겠습니다.
 
 -   `"type": "gradle"`
-    이 실행 구성이 **Gradle**을 사용하여 실행됨을 Fleet에 알립니다.
+    이 실행 구성이 **Gradle** 을 사용하여 실행됨을 Fleet에 알립니다.
 
 -   `"name": "Run Current Kotest File"`
     Fleet의 실행 메뉴(Run & Debug 패널)에 표시될 이름입니다. 원하는 이름으로 자유롭게 변경할 수 있습니다.
@@ -70,7 +70,7 @@ Fleet은 `.fleet/run.json` 파일을 통해 사용자 정의 실행 구성을 �
 -   `"args": [ "--tests", "$FILE_NAME_NO_EXT$" ]`
     **이 설정의 핵심 부분입니다.** `test` 태스크에 전달할 인자를 정의합니다.
     -   `--tests`: Gradle에게 특정 테스트만 실행하도록 지시하는 플래그입니다.
-    -   `$FILE_NAME_NO_EXT$`: Fleet이 제공하는 **동적 변수**로, 현재 에디터에 열려 있는 파일의 전체 경로 이름(패키지 포함, 확장자 제외)으로 자동 치환됩니다. 예를 들어, `src/test/kotlin/com/demo/MyTest.kt` 파일을 열고 이 구성을 실행하면, 이 변수는 `com.demo.MyTest`라는 문자열로 바뀝니다.
+    -   `$FILE_NAME_NO_EXT$`: Fleet이 제공하는 **동적 변수** 로, 현재 에디터에 열려 있는 파일의 전체 경로 이름(패키지 포함, 확장자 제외)으로 자동 치환됩니다. 예를 들어, `src/test/kotlin/com/demo/MyTest.kt` 파일을 열고 이 구성을 실행하면, 이 변수는 `com.demo.MyTest`라는 문자열로 바뀝니다.
 
 -   `"workingDir": "$PROJECT_DIR$"`
     명령어가 실행될 작업 디렉터리를 지정합니다. `$PROJECT_DIR$` 변수는 프로젝트의 루트 폴더를 가리킵니다.

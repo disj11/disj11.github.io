@@ -13,7 +13,7 @@ tags: ["java", "http", "java11", "concurrency"]
 -   **블로킹(Blocking) 방식**: 요청(Request)과 응답(Response)이 하나의 스레드를 완전히 점유하는 동기 방식으로만 동작하여 성능에 한계가 있었습니다.
 -   **불편한 API**: API 사용법이 직관적이지 않고 장황하여, 대부분의 개발자들은 Apache HttpClient, OkHttp, Spring RestTemplate과 같은 서드파티 라이브러리를 사용하는 것을 선호했습니다.
 
-이러한 문제를 해결하기 위해, Java 9에서 인큐베이터 모듈로 처음 소개되었던 새로운 HTTP Client API가 **Java 11에서 정식 표준(`java.net.http` 패키지)으로 채택**되었습니다. 이 새로운 API는 HTTP/2와 WebSocket을 기본적으로 지원하며, 동기 및 비동기 프로그래밍 모델을 모두 제공하는 현대적인 클라이언트입니다. 이 글에서는 새로운 HTTP Client API의 핵심 구성요소와 사용법을 자세히 살펴보겠습니다.
+이러한 문제를 해결하기 위해, Java 9에서 인큐베이터 모듈로 처음 소개되었던 새로운 HTTP Client API가 **Java 11에서 정식 표준(`java.net.http` 패키지)으로 채택** 되었습니다. 이 새로운 API는 HTTP/2와 WebSocket을 기본적으로 지원하며, 동기 및 비동기 프로그래밍 모델을 모두 제공하는 현대적인 클라이언트입니다. 이 글에서는 새로운 HTTP Client API의 핵심 구성요소와 사용법을 자세히 살펴보겠습니다.
 
 ## HTTP Client API의 핵심 구성요소
 

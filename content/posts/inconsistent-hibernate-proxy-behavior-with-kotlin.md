@@ -10,7 +10,7 @@ tags: ["kotlin", "hibernate", "jpa", "bug"]
 서비스 운영 중 간헐적으로 `NullPointerException`이 발생하는, 추적하기 매우 까다로운 문제를 마주했습니다. 문제의 현상은 다음과 같았습니다.
 
 -   분명히 `null`이 아닌 값을 가진 것으로 로그에 기록된 객체의 특정 필드에 접근할 때 `NullPointerException`이 발생했습니다.
--   더욱 이상한 점은, 동일한 코드를 재배포할 때마다 오류가 발생했다가, 다음 배포에서는 발생하지 않는 등 **예측 불가능한 동작**을 보였습니다.
+-   더욱 이상한 점은, 동일한 코드를 재배포할 때마다 오류가 발생했다가, 다음 배포에서는 발생하지 않는 등 **예측 불가능한 동작** 을 보였습니다.
 
 ### 코드 및 로그 분석
 
@@ -69,7 +69,7 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
 
 ## 근본 원인 분석: Kotlin 프로퍼티와 Hibernate Proxy의 충돌
 
-이 문제의 근본 원인은 **Kotlin의 프로퍼티 접근 방식**과 **리플렉션(Reflection)에 의존하는 Hibernate Proxy의 동작 방식**이 충돌했기 때문입니다.
+이 문제의 근본 원인은 **Kotlin의 프로퍼티 접근 방식** 과 **리플렉션(Reflection)에 의존하는 Hibernate Proxy의 동작 방식** 이 충돌했기 때문입니다.
 
 1.  **Kotlin 프로퍼티와 중복된 Getter 생성**
     -   Kotlin에서 `var adProductId: Long?`라는 프로퍼티를 선언하면, 컴파일 시 자동으로 `public final Long getAdProductId()`라는 시그니처를 가진 Getter 메서드가 생성됩니다.
@@ -77,8 +77,8 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
     -   결과적으로, 하나의 클래스 안에 이름은 같지만 반환 타입이 다른(`Long` vs `long`) 두 개의 `getAdProductId` 메서드가 공존하게 됩니다. (Java에서는 허용되지 않지만, JVM 레벨에서는 유효한 바이트코드입니다.)
 
 2.  **Hibernate Proxy와 리플렉션의 불확실성**
-    -   Hibernate는 지연 로딩을 위해 원본 엔티티를 상속받는 Proxy 클래스를 동적으로 생성합니다. 이 Proxy 객체의 메서드가 호출되면, Hibernate는 **리플렉션**을 사용하여 원본 객체의 실제 메서드를 찾아 호출합니다.
-    -   문제는 `Class.getMethods()`와 같은 리플렉션 API가 반환하는 **메서드 배열의 순서를 보장하지 않는다**는 점입니다. JVM 구현이나 실행 시점의 미묘한 차이에 따라 메서드 목록의 순서가 달라질 수 있습니다.
+    -   Hibernate는 지연 로딩을 위해 원본 엔티티를 상속받는 Proxy 클래스를 동적으로 생성합니다. 이 Proxy 객체의 메서드가 호출되면, Hibernate는 **리플렉션** 을 사용하여 원본 객체의 실제 메서드를 찾아 호출합니다.
+    -   문제는 `Class.getMethods()`와 같은 리플렉션 API가 반환하는 **메서드 배열의 순서를 보장하지 않는다** 는 점입니다. JVM 구현이나 실행 시점의 미묘한 차이에 따라 메서드 목록의 순서가 달라질 수 있습니다.
 
 3.  **충돌의 순간**
     -   `adGroup.adProductId` 코드가 실행되면, 내부적으로 Proxy 객체의 `getAdProductId()` 메서드가 호출됩니다.
@@ -88,7 +88,7 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
 
 이러한 리플렉션 순서의 불확실성 때문에 동일한 코드임에도 불구하고 실행할 때마다 다른 결과가 나타났던 것입니다.
 
-팀 동료가 [Hibernate 포럼에 문의](https://discourse.hibernate.org/t/title-inconsistent-proxy-behavior-with-kotlin-property-access-and-custom-method/10746)한 결과, Hibernate 팀에서도 이러한 방식의 사용을 권장하지 않는다는 답변을 받았습니다. JPA 명세는 엔티티의 속성 접근자가 **Java Beans 규약**을 따를 것을 요구하며, Hibernate는 이를 준수하는 것을 강력히 권장하고 있습니다.
+팀 동료가 [Hibernate 포럼에 문의](https://discourse.hibernate.org/t/title-inconsistent-proxy-behavior-with-kotlin-property-access-and-custom-method/10746)한 결과, Hibernate 팀에서도 이러한 방식의 사용을 권장하지 않는다는 답변을 받았습니다. JPA 명세는 엔티티의 속성 접근자가 **Java Beans 규약** 을 따를 것을 요구하며, Hibernate는 이를 준수하는 것을 강력히 권장하고 있습니다.
 
 ## 해결 방안
 
