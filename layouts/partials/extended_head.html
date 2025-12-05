@@ -1,3 +1,9 @@
+<script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3821593139076388"
+    crossorigin="anonymous"
+></script>
+
 <div id="search-container" class="search-overlay">
     <div class="search-modal">
         <div class="search-header">
@@ -868,25 +874,28 @@
 <script type="module">
     const renderMermaid = async () => {
         // One-time setup: find unprocessed code blocks and replace them with mermaid containers.
-        document.querySelectorAll("code.language-mermaid:not(.mermaid-processed)").forEach(codeBlock => {
-            const preElement = codeBlock.parentElement;
-            const container = document.createElement("div");
-            container.classList.add("mermaid-container");
-            // Store the original diagram source in a data attribute for re-rendering.
-            container.dataset.mermaidContent = codeBlock.textContent;
-            // Mark the original code block as processed so we don't do this again.
-            codeBlock.classList.add("mermaid-processed");
-            // Replace the <pre> element with our new container.
-            preElement.parentNode.replaceChild(container, preElement);
-        });
+        document
+            .querySelectorAll("code.language-mermaid:not(.mermaid-processed)")
+            .forEach((codeBlock) => {
+                const preElement = codeBlock.parentElement;
+                const container = document.createElement("div");
+                container.classList.add("mermaid-container");
+                // Store the original diagram source in a data attribute for re-rendering.
+                container.dataset.mermaidContent = codeBlock.textContent;
+                // Mark the original code block as processed so we don't do this again.
+                codeBlock.classList.add("mermaid-processed");
+                // Replace the <pre> element with our new container.
+                preElement.parentNode.replaceChild(container, preElement);
+            });
 
         // Find all mermaid containers on the page to render.
-        const mermaidContainers = document.querySelectorAll(".mermaid-container");
+        const mermaidContainers =
+            document.querySelectorAll(".mermaid-container");
         if (mermaidContainers.length === 0) return;
 
         // Before rendering, restore the original diagram source from the data attribute
         // and remove the 'data-processed' attribute to allow re-rendering.
-        mermaidContainers.forEach(container => {
+        mermaidContainers.forEach((container) => {
             // Use textContent to avoid HTML parsing issues with mermaid source.
             container.textContent = container.dataset.mermaidContent;
             container.removeAttribute("data-processed");
@@ -898,7 +907,10 @@
         const mermaid = mermaidModule.default;
 
         const isDarkMode = document.body.classList.contains("dark-theme");
-        mermaid.initialize({ startOnLoad: false, theme: isDarkMode ? "dark" : "neutral" });
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: isDarkMode ? "dark" : "neutral",
+        });
 
         // Render the diagrams.
         await mermaid.run({
