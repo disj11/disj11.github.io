@@ -1,6 +1,6 @@
 ---
-title: "Kafka S3 Sink Connector: rotate.interval.ms와 rotate.schedule.interval.ms 완벽 분석"
-description: "Kafka S3 Sink Connector의 두 가지 핵심 시간 기반 파일 로테이션 속성, rotate.interval.ms와 rotate.schedule.interval.ms의 동작 방식과 차이점을 심층 비교합니다. 레코드 타임스탬프 기반과 시스템 시간 기반 로테이션의 특징, 데이터 연속성 요구사항, 그리고 Exactly-Once Semantics(EOS) 보장 여부를 중심으로 최적의 설정 전략을 알아봅니다."
+title: "Kafka S3 Sink Connector의 시간 기반 파일 로테이션"
+description: "Kafka S3 Sink Connector의 rotate.interval.ms와 rotate.schedule.interval.ms가 어떤 기준으로 파일을 닫고 업로드하는지 비교합니다. 레코드 타임스탬프 기반 로테이션과 시스템 시간 기반 로테이션의 차이를 정리합니다."
 date: 2024-01-10T16:42:15+09:00
 lastmod: 2024-12-29T10:00:00+09:00
 tags: ["kafka", "kafka-connect", "s3", "data-pipeline"]
@@ -8,15 +8,15 @@ tags: ["kafka", "kafka-connect", "s3", "data-pipeline"]
 
 ## 들어가며: S3 파일은 언제 업로드될까?
 
-Apache Kafka® S3 Sink Connector는 Kafka 토픽의 데이터를 S3 버킷으로 안정적으로 적재하는 데 널리 사용되는 도구입니다. 커넥터는 레코드를 버퍼링하다가 특정 조건이 충족되면 하나의 파일(오브젝트)로 묶어 S3에 업로드하는데, 이 과정을 **파일 로테이션(File Rotation)** 이라고 합니다.
+Apache Kafka® S3 Sink Connector는 Kafka 토픽의 데이터를 S3 버킷으로 적재할 때 많이 쓰는 도구입니다. 커넥터는 레코드를 버퍼링하다가 특정 조건이 충족되면 하나의 파일(오브젝트)로 묶어 S3에 업로드합니다. 이 과정을 **파일 로테이션(File Rotation)** 이라고 합니다.
 
 파일 로테이션을 결정하는 조건에는 레코드 개수(`flush.size`), 파일 크기(`file.size`) 등 여러 가지가 있지만, 가장 흔하게 사용되면서도 혼동하기 쉬운 것이 바로 **시간 기반 로테이션** 입니다. S3 Sink Connector는 시간 기반 로테이션을 위해 `rotate.interval.ms`와 `rotate.schedule.interval.ms`라는 두 가지 주요 속성을 제공합니다.
 
-이 두 속성은 비슷해 보이지만 동작 방식과 보장 수준에 결정적인 차이가 있어, 잘못 선택할 경우 데이터 유실이나 지연을 유발할 수 있습니다. 이 글에서는 두 속성의 차이점을 명확히 분석하고, 어떤 상황에 무엇을 사용해야 하는지 알아보겠습니다.
+두 속성은 이름이 비슷하지만 동작 기준과 보장 수준이 다릅니다. 잘못 선택하면 데이터 적재 지연이나 중복으로 이어질 수 있습니다. 이 글에서는 두 속성의 차이를 정리합니다.
 
 ## 핵심 차이점 비교
 
-먼저 두 속성의 가장 중요한 차이점을 표로 정리했습니다.
+먼저 두 속성의 차이를 표로 정리합니다.
 
 | 구분 | `rotate.interval.ms` | `rotate.schedule.interval.ms` |
 | :--- | :--- | :--- |
@@ -35,8 +35,8 @@ Apache Kafka® S3 Sink Connector는 Kafka 토픽의 데이터를 S3 버킷으로
 
 ### `rotate.interval.ms`의 장점과 단점
 
--   **장점**: 레코드의 이벤트 발생 시간을 기준으로 파일을 나눌 수 있어, 시간대별 데이터 분석에 매우 유용합니다. 또한, 로테이션 결정이 데이터 자체에 의해 이루어지므로 **결정론적(deterministic)** 이며, 이는 **Exactly-Once Semantics(EOS)를 구현하는 핵심 조건** 이 됩니다.
--   **단점**: 이 방식은 **새로운 레코드가 들어와야만** 로테이션 여부를 판단할 수 있습니다. 만약 Kafka 토픽으로 데이터 유입이 드물거나 중단되면, 마지막 파일이 닫히지 않고 커넥터에 계속 열린 상태로 남아있게 됩니다. 이는 S3로의 데이터 적재가 심각하게 지연되는 결과로 이어질 수 있습니다.
+-   **장점**: 레코드의 이벤트 발생 시간을 기준으로 파일을 나눌 수 있어, 시간대별 데이터 분석에 유용합니다. 또한 로테이션 결정이 데이터 자체에 의해 이루어지므로 **결정론적(deterministic)** 이며, 이는 **Exactly-Once Semantics(EOS)를 구현하는 조건** 중 하나가 됩니다.
+-   **단점**: 이 방식은 **새로운 레코드가 들어와야만** 로테이션 여부를 판단할 수 있습니다. Kafka 토픽으로 데이터 유입이 드물거나 중단되면, 마지막 파일이 닫히지 않고 커넥터에 계속 열린 상태로 남습니다. 이 경우 S3 적재가 지연될 수 있습니다.
 
 **예시 (`rotate.interval.ms` = 3000ms):**
 
@@ -58,7 +58,7 @@ Apache Kafka® S3 Sink Connector는 Kafka 토픽의 데이터를 S3 버킷으로
 
 ### `rotate.schedule.interval.ms`의 장점과 단점
 
--   **장점**: 데이터 스트림이 간헐적이거나 중단되더라도, **주기적으로 데이터가 S3에 업로드되는 것을 보장** 합니다. 데이터 적재 지연을 방지하는 데 매우 효과적입니다.
+-   **장점**: 데이터 스트림이 간헐적이거나 중단되더라도, **주기적으로 데이터가 S3에 업로드되는 것을 보장** 합니다. 데이터 적재 지연을 줄이는 데 도움이 됩니다.
 -   **단점**: 로테이션 시점이 커넥터의 실행 시간에 따라 달라지므로 **비결정론적(non-deterministic)** 입니다. 만약 커넥터가 재시작되면 스케줄이 초기화되어, 재시작 전후에 동일한 레코드셋에 대해 파일이 다르게 나뉠 수 있습니다. 이 때문에 **Exactly-Once Semantics(EOS)를 보장할 수 없으며**, 데이터 중복이 발생할 수 있습니다.
 
 ## Exactly-Once Semantics (EOS)와 로테이션 전략
@@ -74,7 +74,7 @@ Confluent 공식 문서에서도 EOS를 위해서는 `rotate.interval.ms` 사용
 
 ## 결론 및 권장 사항
 
-두 로테이션 전략의 선택은 여러분의 데이터 파이프라인 요구사항에 따라 달라집니다.
+두 로테이션 전략은 데이터 파이프라인 요구사항에 따라 선택합니다.
 
 -   **`rotate.interval.ms`를 선택해야 하는 경우:**
     -   **Exactly-Once Semantics(EOS)가 반드시 필요한 경우**
@@ -86,10 +86,13 @@ Confluent 공식 문서에서도 EOS를 위해서는 `rotate.interval.ms` 사용
     -   EOS가 필수는 아니며, 최소 한 번 이상 처리(At-Least-Once)로 충분한 경우
     -   **데이터 적재 지연을 방지** 하는 것이 가장 중요한 목표인 경우
 
-실제 운영 환경에서는 두 속성을 함께 사용하여, `rotate.interval.ms`를 기본 로테이션 전략으로 사용하되, `rotate.schedule.interval.ms`를 일종의 안전장치(fallback)로 설정하여 데이터 유입이 끊기더라도 일정 시간이 지나면 파일이 반드시 업로드되도록 구성하는 전략도 유용할 수 있습니다. (단, 이 경우 EOS는 보장되지 않습니다.)
+운영 환경에서는 `rotate.interval.ms`를 기본 전략으로 쓰고, `rotate.schedule.interval.ms`를 안전장치(fallback)처럼 함께 설정하기도 합니다. 이렇게 하면 데이터 유입이 끊겨도 일정 시간이 지나면 파일이 업로드됩니다. 다만 이 경우 EOS는 보장되지 않습니다.
 
 ---
 
 **참고 자료:**
 - [Confluent Docs - S3 Sink Connector Partitioning](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#partitioning-records-into-s3-objects)
 - [Confluent Docs - S3 Sink Connector EOS](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#exactly-once-delivery)
+
+---
+*이 글은 AI의 도움을 받아 교정 및 정리되었습니다.*

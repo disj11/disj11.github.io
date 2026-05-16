@@ -1,11 +1,11 @@
 ---
-title: "Java 11의 새로운 표준 HTTP Client 완벽 정복하기"
-description: "Java 11부터 표준으로 채택된 새로운 HTTP Client API(JEP 321)의 모든 것을 알아봅니다. 기존 HttpURLConnection의 한계를 극복하고, HTTP/2와 WebSocket을 지원하며, 동기 및 비동기 방식을 모두 제공하는 현대적인 API 사용법을 상세한 예제와 함께 설명합니다."
+title: "Java 11 표준 HTTP Client 사용법"
+description: "Java 11에서 표준으로 채택된 HTTP Client API(JEP 321)의 기본 구성요소와 동기/비동기 요청 처리 방법을 예제와 함께 정리합니다."
 date: 2021-11-02T18:11:57+09:00
 tags: ["java", "http", "java11", "concurrency"]
 ---
 
-## 들어가며: 왜 새로운 HTTP Client가 필요했을까요?
+## 들어가며: 왜 새로운 HTTP Client가 필요했나?
 
 오랫동안 자바에서 HTTP 통신을 하기 위해서는 `HttpURLConnection`을 사용해야 했습니다. 하지만 이 API는 다음과 같은 여러 한계를 가지고 있었습니다.
 
@@ -13,11 +13,11 @@ tags: ["java", "http", "java11", "concurrency"]
 -   **블로킹(Blocking) 방식**: 요청(Request)과 응답(Response)이 하나의 스레드를 완전히 점유하는 동기 방식으로만 동작하여 성능에 한계가 있었습니다.
 -   **불편한 API**: API 사용법이 직관적이지 않고 장황하여, 대부분의 개발자들은 Apache HttpClient, OkHttp, Spring RestTemplate과 같은 서드파티 라이브러리를 사용하는 것을 선호했습니다.
 
-이러한 문제를 해결하기 위해, Java 9에서 인큐베이터 모듈로 처음 소개되었던 새로운 HTTP Client API가 **Java 11에서 정식 표준(`java.net.http` 패키지)으로 채택** 되었습니다. 이 새로운 API는 HTTP/2와 WebSocket을 기본적으로 지원하며, 동기 및 비동기 프로그래밍 모델을 모두 제공하는 현대적인 클라이언트입니다. 이 글에서는 새로운 HTTP Client API의 핵심 구성요소와 사용법을 자세히 살펴보겠습니다.
+이런 문제를 줄이기 위해 Java 9에서 인큐베이터 모듈로 소개된 HTTP Client API가 **Java 11에서 정식 표준(`java.net.http` 패키지)으로 채택** 되었습니다. 이 API는 HTTP/2와 WebSocket을 지원하고, 동기와 비동기 모델을 모두 제공합니다. 이 글에서는 표준 HTTP Client의 구성요소와 기본 사용법을 정리합니다.
 
-## HTTP Client API의 핵심 구성요소
+## HTTP Client API의 구성요소
 
-새로운 API는 크게 세 가지 핵심 클래스로 구성됩니다.
+HTTP Client API는 크게 세 가지 클래스로 구성됩니다.
 
 1.  **`HttpRequest`**: 보낼 요청에 대한 모든 정보(URI, 헤더, 본문 등)를 담고 있는 불변(immutable) 객체입니다.
 2.  **`HttpClient`**: 요청을 보내는 주체로, 요청 전반에 걸친 설정(프로토콜 버전, 프록시, 리다이렉션 정책 등)을 관리하는 컨테이너 역할을 합니다.
@@ -62,7 +62,7 @@ HttpRequest request = HttpRequest.newBuilder()
 
 ### 요청 본문(Body) 설정하기
 
-`POST`나 `PUT` 요청 시에는 본문을 전송해야 합니다. `HttpRequest.BodyPublishers` 팩토리 클래스를 사용하면 다양한 타입의 데이터를 본문으로 쉽게 변환할 수 있습니다.
+`POST`나 `PUT` 요청 시에는 본문을 전송해야 합니다. `HttpRequest.BodyPublishers` 팩토리 클래스를 사용하면 여러 타입의 데이터를 요청 본문으로 만들 수 있습니다.
 
 -   **문자열(String) 본문**: `BodyPublishers.ofString()`
     ```java
@@ -126,7 +126,7 @@ System.out.println("Response Body: " + response.body());
 
 ### 비동기(Asynchronous) 요청: `sendAsync()`
 
-`sendAsync()` 메서드는 요청을 보낸 후 즉시 `CompletableFuture<HttpResponse>`를 반환하고, 실제 HTTP 요청 및 응답 처리는 별도의 스레드에서 수행됩니다. 이를 통해 현재 스레드를 블로킹하지 않고 다른 작업을 계속할 수 있어 높은 처리량이 요구되는 애플리케이션에 매우 유용합니다.
+`sendAsync()` 메서드는 요청을 보낸 뒤 즉시 `CompletableFuture<HttpResponse>`를 반환하고, 실제 HTTP 요청 및 응답 처리는 별도 스레드에서 수행됩니다. 현재 스레드를 블로킹하지 않고 다른 작업을 계속할 수 있어, 동시 요청이 많은 애플리케이션에서 유용합니다.
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -224,10 +224,13 @@ Optional<String> contentType = headers.firstValue("Content-Type");
 
 ## 마무리
 
-Java 11의 새로운 HTTP Client는 최신 웹 환경에 필수적인 HTTP/2와 논블로킹 I/O를 지원하는 강력하고 현대적인 API입니다. 더 이상 무거운 외부 라이브러리에 의존하지 않고도, 자바 표준 라이브러리만으로 효율적이고 안정적인 HTTP 통신을 구현할 수 있게 되었습니다. 특히 `CompletableFuture`와 결합된 비동기 API는 높은 동시성 처리가 필요한 애플리케이션의 성능을 극대화하는 데 큰 도움이 될 것입니다.
+Java 11의 HTTP Client는 HTTP/2와 비동기 요청 처리를 표준 라이브러리 안에서 제공합니다. 단순한 HTTP 호출이라면 외부 라이브러리 없이도 충분히 구현할 수 있고, `CompletableFuture`와 함께 쓰면 여러 요청을 병렬로 처리하는 코드도 비교적 자연스럽게 작성할 수 있습니다.
 
 ---
 
 **참고 자료:**
 - [JEP 321: HTTP Client (Standard)](https://openjdk.java.net/jeps/321)
 - [Baeldung - Exploring the New HTTP Client in Java](https://www.baeldung.com/java-9-http-client)
+
+---
+*이 글은 AI의 도움을 받아 교정 및 정리되었습니다.*

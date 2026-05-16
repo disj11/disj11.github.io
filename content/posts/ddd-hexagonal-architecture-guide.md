@@ -41,9 +41,9 @@ tags: ["ddd", "architecture", "hexagonal-architecture", "domain-driven-design", 
 
 ```mermaid
 flowchart TB
-    P["💻 Presentation Layer<br/>(Controller, View)"] 
-    B["⚙️ Business Layer<br/>(Service, Domain)"]
-    D["🗄️ Persistence Layer<br/>(Repository, DB)"]
+    P["Presentation Layer<br/>(Controller, View)"] 
+    B["Business Layer<br/>(Service, Domain)"]
+    D["Persistence Layer<br/>(Repository, DB)"]
     
     P --> B --> D
     
@@ -85,8 +85,8 @@ class Order(
 flowchart LR
     subgraph Inbound[" "]
         direction TB
-        WEB["🌐 Web"]
-        CLI["⌨️ CLI"]
+        WEB["Web"]
+        CLI["CLI"]
     end
     
     subgraph Core["Application Core"]
@@ -98,8 +98,8 @@ flowchart LR
     
     subgraph Outbound[" "]
         direction TB
-        DB[("🗄️ DB")]
-        EXT["🔗 API"]
+        DB[("DB")]
+        EXT["API"]
     end
     
     WEB --> AS
@@ -123,7 +123,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph IN["🟢 Inbound"]
+    subgraph IN["Inbound"]
         direction TB
         REST["REST Controller"]
         GRPC["gRPC Handler"]
@@ -136,7 +136,7 @@ flowchart LR
         DOM["Domain Model"]
     end
     
-    subgraph OUT["🔵 Outbound"]
+    subgraph OUT["Outbound"]
         direction TB
         JPA[("JPA Repository")]
         API["External API"]
@@ -156,7 +156,7 @@ flowchart LR
 ### 코드로 보는 Port & Adapter
 
 ```kotlin
-// 📌 Outbound Port (인터페이스) - application 계층에 위치
+// Outbound Port (인터페이스) - application 계층에 위치
 interface OrderRepository {
     fun save(order: Order): Order
     fun findById(id: OrderId): Order?
@@ -166,7 +166,7 @@ interface PaymentGateway {
     fun process(payment: Payment): PaymentResult
 }
 
-// 📌 Adapter (구현체) - infrastructure 계층에 위치
+// Adapter (구현체) - infrastructure 계층에 위치
 @Repository
 class JpaOrderRepository(
     private val jpaRepository: JpaOrderJpaRepository
@@ -193,7 +193,7 @@ class TossPaymentAdapter(
     }
 }
 
-// 📌 Application Service - Port에만 의존
+// Application Service - Port에만 의존
 @Service
 class OrderService(
     private val orderRepository: OrderRepository,  // Port에 의존
@@ -215,7 +215,7 @@ class OrderService(
 JPA를 사용할 때 흔히 하는 실수는 Port 인터페이스가 `JpaRepository`를 직접 상속하게 만드는 것입니다:
 
 ```kotlin
-// ❌ 문제: Port가 JPA에 종속됨
+// 문제: Port가 JPA에 종속됨
 interface OrderRepository : JpaRepository<Order, Long>  // JPA 기술이 도메인에 침투!
 ```
 
@@ -346,17 +346,17 @@ class OrderRepositoryAdapter(
 
 ```mermaid
 flowchart TB
-    subgraph INFRA["🟠 Infrastructure Layer"]
+    subgraph INFRA["Infrastructure Layer"]
         CTL["Controller"]
         ADP["Adapter"]
     end
     
-    subgraph APPL["🔵 Application Layer"]
+    subgraph APPL["Application Layer"]
         SVC["Application Service"]
         PORT{{"Port"}}
     end
     
-    subgraph DOMAIN["🟢 Domain Layer"]
+    subgraph DOMAIN["Domain Layer"]
         DOM["Domain Model"]
     end
     
@@ -400,7 +400,7 @@ class Order(
 **식별자가 없고**, **불변** 이며, **속성 값의 조합** 으로 동등성을 판단하는 객체
 
 ```kotlin
-// ✅ Value Object - 불변, equals는 값으로 비교
+// Value Object - 불변, equals는 값으로 비교
 data class Money(
     val amount: BigDecimal,
     val currency: Currency
@@ -484,7 +484,7 @@ interface OrderRepository {
     fun findByOrdererId(ordererId: MemberId): List<Order>
 }
 
-// ❌ 잘못된 예: 하위 엔티티에 대한 Repository
+// 잘못된 예: 하위 엔티티에 대한 Repository
 interface OrderItemRepository  // Aggregate 경계 위반!
 ```
 
@@ -552,7 +552,7 @@ class Order(
 큰 Aggregate는 **동시성 문제**와 **성능 저하**를 유발합니다.
 
 ```kotlin
-// ❌ 너무 큰 Aggregate
+// 너무 큰 Aggregate
 class Order(
     val items: List<OrderItem>,
     val payments: List<Payment>,      // 별도 Aggregate로 분리
@@ -560,7 +560,7 @@ class Order(
     val reviews: List<Review>         // 별도 Aggregate로 분리
 )
 
-// ✅ 적절한 크기
+// 적절한 크기
 class Order(val items: List<OrderItem>)
 class Payment(val orderId: OrderId)    // ID로만 참조
 class Shipment(val orderId: OrderId)   // ID로만 참조
@@ -571,12 +571,12 @@ class Shipment(val orderId: OrderId)   // ID로만 참조
 다른 Aggregate는 **객체 참조가 아닌 ID로** 참조합니다.
 
 ```kotlin
-// ❌ 잘못된 방식 - 객체 직접 참조
+// 잘못된 방식 - 객체 직접 참조
 class Order(
     val customer: Customer  // 다른 Aggregate를 직접 참조
 )
 
-// ✅ 올바른 방식 - ID로 참조
+// 올바른 방식 - ID로 참조
 class Order(
     val customerId: CustomerId  // ID로만 참조
 )
@@ -614,10 +614,10 @@ class InventoryEventHandler(
 flowchart TD
     START["두 엔티티 A와 B가 있다"] --> Q1{"A 없이 B가<br/>존재할 수 있는가?<br/>(생명주기가 독립적인가?)"}
     
-    Q1 -->|예| SEPARATE["✅ 다른 Aggregate<br/>ID로만 참조"]
+    Q1 -->|예| SEPARATE["다른 Aggregate<br/>ID로만 참조"]
     Q1 -->|아니오| Q2{"불변식을 함께<br/>검증해야 하는가?"}
     
-    Q2 -->|예| SAME["✅ 같은 Aggregate<br/>A = Aggregate Root<br/>B = A의 하위 엔티티"]
+    Q2 -->|예| SAME["같은 Aggregate<br/>A = Aggregate Root<br/>B = A의 하위 엔티티"]
     Q2 -->|아니오| SEPARATE
     
     style SEPARATE fill:#e3f2fd,stroke:#1976d2
@@ -638,7 +638,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    CUST(("👤 고객"))
+    CUST(("고객"))
     
     subgraph CTX1["회원 Context"]
         M["Member<br/>• email<br/>• password<br/>• grade"]
@@ -810,7 +810,7 @@ com.example.order/                     # Bounded Context
 ### 의존성 규칙
 
 ```kotlin
-// ✅ 올바른 의존성 방향
+// 올바른 의존성 방향
 // infrastructure → application → domain
 
 // domain: 외부 의존성 없음

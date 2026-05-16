@@ -1,6 +1,6 @@
 ---
-title: "Java DateTimeFormatter 완벽 가이드: 날짜와 시간 포매팅의 모든 것"
-description: "Java 8에 도입된 java.time.format.DateTimeFormatter의 사용법을 알아봅니다. 기존 SimpleDateFormat의 문제점을 해결하고, 스레드에 안전하며 강력한 날짜/시간 포매팅 및 파싱 기능을 제공하는 방법을 예제와 함께 설명합니다."
+title: "Java DateTimeFormatter로 날짜와 시간 포매팅하기"
+description: "Java 8의 java.time.format.DateTimeFormatter를 사용해 날짜와 시간을 포매팅하고 파싱하는 방법을 정리합니다. SimpleDateFormat과 달리 스레드에 안전하다는 점도 함께 다룹니다."
 date: 2021-09-29T19:33:31+09:00
 tags: ["java", "datetime", "java8"]
 ---
@@ -9,11 +9,11 @@ tags: ["java", "datetime", "java8"]
 
 Java 8 이전에는 날짜와 시간을 포매팅하기 위해 주로 `java.text.SimpleDateFormat` 클래스를 사용했습니다. 하지만 `SimpleDateFormat`은 **스레드에 안전하지 않고(not thread-safe)**, 객체가 **변경 가능(mutable)**하여 멀티스레드 환경에서 예기치 않은 문제를 일으킬 수 있었습니다.
 
-이러한 문제들을 해결하기 위해 Java 8에서는 `java.time` 패키지와 함께 스레드에 안전하고 불변(immutable)인 **`java.time.format.DateTimeFormatter`** 클래스를 도입했습니다. 이 글에서는 `DateTimeFormatter`를 사용하여 날짜와 시간을 원하는 형식의 문자열로 변환하거나, 문자열을 날짜 객체로 파싱하는 다양한 방법을 알아보겠습니다.
+이 문제를 해결하기 위해 Java 8에서는 `java.time` 패키지와 함께 스레드에 안전하고 불변(immutable)인 **`java.time.format.DateTimeFormatter`** 클래스를 도입했습니다. 이 글에서는 `DateTimeFormatter`로 날짜와 시간을 문자열로 변환하거나, 문자열을 날짜 객체로 파싱하는 방법을 정리합니다.
 
 ## 1. 미리 정의된 표준 포맷 사용하기
 
-`DateTimeFormatter` 클래스는 ISO 표준 및 RFC 표준을 따르는 여러 가지 기본 포맷터를 상수로 제공합니다. 이를 통해 별도의 패턴 지정 없이도 표준 형식의 날짜/시간 문자열을 쉽게 생성할 수 있습니다.
+`DateTimeFormatter` 클래스는 ISO 표준 및 RFC 표준을 따르는 여러 기본 포맷터를 상수로 제공합니다. 별도 패턴을 지정하지 않아도 표준 형식의 날짜/시간 문자열을 만들 수 있습니다.
 
 예를 들어, `ISO_LOCAL_DATE`를 사용하면 'YYYY-MM-DD' 형식의 문자열을 얻을 수 있습니다.
 
@@ -149,14 +149,17 @@ System.out.println(parsedZonedDateTime);
 
 앞서 언급했듯이, `SimpleDateFormat`의 가장 큰 문제점 중 하나는 스레드에 안전하지 않다는 것입니다. 여러 스레드가 동일한 `SimpleDateFormat` 인스턴스에 동시에 접근하면 날짜가 잘못 파싱되거나 예외가 발생할 수 있습니다.
 
-반면, **`DateTimeFormatter`는 불변(immutable) 객체**이므로 여러 스레드에서 동시에 사용해도 아무런 문제가 없습니다. 따라서 `DateTimeFormatter` 인스턴스는 한 번 생성하여 static 변수로 공유하거나 여러 스레드에 안전하게 전달할 수 있어, 성능과 안정성 면에서 `SimpleDateFormat`보다 훨씬 뛰어납니다.
+반면 **`DateTimeFormatter`는 불변(immutable) 객체**이므로 여러 스레드에서 동시에 사용해도 안전합니다. 한 번 생성한 인스턴스를 static 변수로 공유하거나 여러 스레드에 전달해도 됩니다.
 
 ## 마무리
 
-이번 포스트에서는 `DateTimeFormatter`의 기본적인 사용법부터 사용자 정의 패턴, 파싱, 그리고 스레드 안전성까지 알아보았습니다. Java 8 이상을 사용한다면, 더 안전하고 강력하며 사용하기 편리한 `DateTimeFormatter`를 사용하는 것이 좋습니다. `SimpleDateFormat`은 레거시 코드와의 호환성을 제외하고는 더 이상 사용할 이유가 없습니다.
+`DateTimeFormatter`는 표준 포맷, 사용자 정의 패턴, 지역화된 포맷, 파싱까지 대부분의 날짜/시간 포매팅 요구를 처리할 수 있습니다. Java 8 이상이라면 새 코드에서는 `SimpleDateFormat`보다 `DateTimeFormatter`를 우선 사용하는 편이 안전합니다.
 
 ---
 
 **참고 자료:**
 - [Baeldung - A Guide to java.time.format.DateTimeFormatter](https://www.baeldung.com/java-datetimeformatter)
 - [Oracle Java 11 Documentation - DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html)
+
+---
+*이 글은 AI의 도움을 받아 교정 및 정리되었습니다.*

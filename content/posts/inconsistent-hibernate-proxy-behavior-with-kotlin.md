@@ -1,13 +1,13 @@
 ---
 title: "Kotlin과 Hibernate Proxy: 예측 불가능한 NullPointerException 분석"
-description: "Kotlin 엔티티와 Hibernate 지연 로딩(Lazy Loading)을 함께 사용할 때, 간헐적으로 발생하는 NullPointerException의 원인을 심층 분석합니다. 프로퍼티와 동일한 이름의 커스텀 Getter가 Hibernate Proxy의 리플렉션 동작과 충돌하여 생기는 문제를 재현하고, 근본적인 해결 방안을 제시합니다."
+description: "Kotlin 엔티티에서 프로퍼티와 같은 이름의 커스텀 Getter를 정의했을 때 Hibernate Proxy의 리플렉션 동작과 충돌하며 NullPointerException이 발생한 사례를 정리합니다."
 date: 2024-12-29T21:36:18+09:00
 tags: ["kotlin", "hibernate", "jpa", "bug"]
 ---
 
 ## 문제: 원인을 알 수 없는 NullPointerException
 
-서비스 운영 중 간헐적으로 `NullPointerException`이 발생하는, 추적하기 매우 까다로운 문제를 마주했습니다. 문제의 현상은 다음과 같았습니다.
+서비스 운영 중 간헐적으로 `NullPointerException`이 발생했습니다. 재현이 쉽지 않아 추적하기 까다로운 문제였습니다. 현상은 다음과 같았습니다.
 
 -   분명히 `null`이 아닌 값을 가진 것으로 로그에 기록된 객체의 특정 필드에 접근할 때 `NullPointerException`이 발생했습니다.
 -   더욱 이상한 점은, 동일한 코드를 재배포할 때마다 오류가 발생했다가, 다음 배포에서는 발생하지 않는 등 **예측 불가능한 동작** 을 보였습니다.
@@ -36,7 +36,7 @@ fun doSomething() {
 log.info { "adProductId: ${adGroup.adProductId}" }
 ```
 
-이번에는 로그에 `adProductId: null`이 출력되었습니다. 이 시점에서 문제의 원인이 `AdGroup` 엔티티 클래스의 구조에 있을 것이라 추측했고, 다음과 같은 커스텀 Getter 메서드를 발견했습니다.
+이번에는 로그에 `adProductId: null`이 출력되었습니다. 이 시점에서 `AdGroup` 엔티티 클래스 구조를 의심했고, 다음과 같은 커스텀 Getter 메서드를 발견했습니다.
 
 ```kotlin
 @Entity
@@ -65,7 +65,7 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
 -   **실패 케이스**: `null || 3`
 -   **성공 케이스**: `3 || 3`
 
-이 테스트를 통해, `adGroup.adProductId` (프로퍼티 접근)가 어떤 때는 `null`을, 어떤 때는 `3`을 반환하는 비정상적인 동작을 명확히 확인했습니다.
+이 테스트로 `adGroup.adProductId` (프로퍼티 접근)가 어떤 때는 `null`을, 어떤 때는 `3`을 반환한다는 점을 확인했습니다.
 
 ## 근본 원인 분석: Kotlin 프로퍼티와 Hibernate Proxy의 충돌
 
@@ -86,9 +86,9 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
         -   **실패 시나리오**: 만약 프로퍼티의 Getter(`public Long getAdProductId()`)가 먼저 호출되면, 아직 초기화되지 않은 Proxy 객체의 필드 값을 그대로 반환하여 `null`이 됩니다.
         -   **성공 시나리오**: 만약 커스텀 Getter(`public long getAdProductId()`)가 먼저 호출되면, 이 메서드는 내부적으로 실제 엔티티의 필드에 접근하여 `3`을 반환합니다.
 
-이러한 리플렉션 순서의 불확실성 때문에 동일한 코드임에도 불구하고 실행할 때마다 다른 결과가 나타났던 것입니다.
+이 리플렉션 순서의 불확실성 때문에 동일한 코드에서도 실행 시점마다 다른 결과가 나타났습니다.
 
-팀 동료가 [Hibernate 포럼에 문의](https://discourse.hibernate.org/t/title-inconsistent-proxy-behavior-with-kotlin-property-access-and-custom-method/10746)한 결과, Hibernate 팀에서도 이러한 방식의 사용을 권장하지 않는다는 답변을 받았습니다. JPA 명세는 엔티티의 속성 접근자가 **Java Beans 규약** 을 따를 것을 요구하며, Hibernate는 이를 준수하는 것을 강력히 권장하고 있습니다.
+팀 동료가 [Hibernate 포럼에 문의](https://discourse.hibernate.org/t/title-inconsistent-proxy-behavior-with-kotlin-property-access-and-custom-method/10746)한 결과, Hibernate 팀에서도 이러한 방식의 사용을 권장하지 않는다는 답변을 받았습니다. JPA 명세는 엔티티의 속성 접근자가 **Java Beans 규약** 을 따를 것을 요구하며, Hibernate도 이를 전제로 동작합니다.
 
 ## 해결 방안
 
@@ -113,4 +113,7 @@ println("${adGroup.adProductId} || ${adGroup.getAdProductId()}")
 
 ## 결론
 
-이번 사례는 Kotlin의 편리한 기능이 리플렉션 기반의 프레임워크(Hibernate)와 만났을 때 발생할 수 있는 미묘하고 복잡한 문제를 잘 보여줍니다. 프레임워크의 내부 동작 원리에 대한 깊은 이해 없이 관례를 벗어난 코드를 작성하는 것이 얼마나 위험할 수 있는지를 깨닫게 된 경험이었습니다. JPA 엔티티를 작성할 때는 프레임워크가 기대하는 규약을 충실히 따르는 것이 예측 가능하고 안정적인 애플리케이션을 만드는 지름길임을 다시 한번 확인할 수 있었습니다.
+이번 사례는 Kotlin 코드가 리플렉션 기반 프레임워크(Hibernate)와 만날 때, 언어 차원에서는 가능해 보이는 구조가 런타임에서는 문제가 될 수 있음을 보여줍니다. JPA 엔티티에서는 프레임워크가 기대하는 Java Beans 규약을 벗어나지 않는 편이 안전합니다.
+
+---
+*이 글은 AI의 도움을 받아 교정 및 정리되었습니다.*

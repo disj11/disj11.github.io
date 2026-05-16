@@ -25,8 +25,8 @@ tags: ["spring-boot", "jackson", "troubleshooting", "annotation"]
 
 Spring Boot 4 프로젝트에서 Jackson 어노테이션을 쓰다 보면 이런 상황을 만날 수 있습니다.
 
-- ✅ `@JsonFormat`, `@JsonProperty`, `@JsonTypeInfo`, `@JsonManagedReference` 등은 정상 동작
-- ❌ `@JsonNaming`은 동작하지 않음
+- `@JsonFormat`, `@JsonProperty`, `@JsonTypeInfo`, `@JsonManagedReference` 등은 정상 동작
+- `@JsonNaming`은 동작하지 않음
 
 겉으로는 같은 Jackson 어노테이션처럼 보이는데, 왜 어떤 것은 동작하고 어떤 것은 무시될까요?
 
@@ -47,12 +47,12 @@ Spring Boot 3까지는 Jackson 2.x를 사용했지만, **Spring Boot 4부터는 
 Jackson 3에서 다음 패키지들은 `tools.jackson`으로 변경되었습니다:
 
 ```kotlin
-// ❌ Jackson 2.x (Spring Boot 4에서 동작하지 않음)
+// Jackson 2.x (Spring Boot 4에서 동작하지 않음)
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 
-// ✅ Jackson 3.x (올바른 사용)
+// Jackson 3.x (올바른 사용)
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.databind.annotation.JsonNaming
 import tools.jackson.databind.PropertyNamingStrategies
@@ -63,7 +63,7 @@ import tools.jackson.databind.PropertyNamingStrategies
 **`com.fasterxml.jackson.annotation` 패키지는 Jackson 2.x와 3.x가 함께 쓰기 때문에 그대로 유지됩니다.**
 
 ```kotlin
-// ✅ Jackson 2.x와 3.x 모두에서 동작
+// Jackson 2.x와 3.x 모두에서 동작
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -100,9 +100,9 @@ Spring Boot 4는 Jackson 3.x를 사용하지만, 프로젝트의 클래스패스
 ```gradle
 // 예시: 의존성 트리 확인 결과
 +--- org.springframework.boot:spring-boot-starter-web:4.0.0
-|    \--- tools.jackson.databind:jackson-databind:3.0.0  // ✅ Jackson 3.x
+|    \--- tools.jackson.databind:jackson-databind:3.0.0  // Jackson 3.x
 +--- org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j
-     \--- com.fasterxml.jackson.databind:jackson-databind:2.20.1  // ⚠️ Jackson 2.x
+     \--- com.fasterxml.jackson.databind:jackson-databind:2.20.1  // Jackson 2.x
 ```
 
 여기서 문제가 시작됩니다.
@@ -128,7 +128,7 @@ Spring Boot 4는 Jackson 3.x를 사용하지만, 프로젝트의 클래스패스
 #### `@JsonNaming` 사용 시
 
 ```kotlin
-// ❌ 동작하지 않음 (컴파일은 되지만 런타임에 동작하지 않음)
+// 동작하지 않음 (컴파일은 되지만 런타임에 동작하지 않음)
 import com.fasterxml.jackson.databind.annotation.JsonNaming  // Jackson 2.x 패키지
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 
@@ -138,7 +138,7 @@ data class CommonTrackingParameter(
     val inventoryKey: String,  // JSON: inventoryKey (변환 안됨)
 )
 
-// ✅ 올바른 사용
+// 올바른 사용
 import tools.jackson.databind.annotation.JsonNaming  // Jackson 3.x 패키지
 import tools.jackson.databind.PropertyNamingStrategies
 
@@ -152,7 +152,7 @@ data class CommonTrackingParameter(
 #### 다른 어노테이션들은 그대로 사용
 
 ```kotlin
-// ✅ com.fasterxml.jackson.annotation 패키지는 변경하지 않음
+// com.fasterxml.jackson.annotation 패키지는 변경하지 않음
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -280,11 +280,11 @@ tasks.named("check") {
 코드 리뷰 시 다음 패턴을 확인하세요:
 
 ```kotlin
-// ❌ 잘못된 import (컴파일은 되지만 런타임에 동작하지 않음)
+// 잘못된 import (컴파일은 되지만 런타임에 동작하지 않음)
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 
-// ✅ 올바른 import
+// 올바른 import
 import tools.jackson.databind.annotation.JsonNaming
 import tools.jackson.databind.PropertyNamingStrategies
 ```
@@ -361,23 +361,20 @@ data class CommonTrackingParameter(
 
 Spring Boot 4 (Jackson 3) 사용 시 기억해야 할 세 가지 규칙입니다:
 
-1. **`com.fasterxml.jackson.annotation`**: 변경하지 않음 ✅
-   - Jackson 2.x와 3.x 간 공유
+1. **`com.fasterxml.jackson.annotation`**: 변경하지 않음 - Jackson 2.x와 3.x 간 공유
    - 대부분의 어노테이션이 여기에 있음
    - 예: `@JsonFormat`, `@JsonProperty`, `@JsonTypeInfo`
 
-2. **`com.fasterxml.jackson.databind.annotation`**: `tools.jackson.databind.annotation`으로 변경 ✅
-   - `jackson-databind` 모듈의 일부
+2. **`com.fasterxml.jackson.databind.annotation`**: `tools.jackson.databind.annotation`으로 변경 - `jackson-databind` 모듈의 일부
    - `@JsonNaming`, `@JsonSerialize`, `@JsonDeserialize` 등이 여기에 있음
    - **반드시 패키지 변경 필요**
 
-3. **`com.fasterxml.jackson.*` (기타)**: `tools.jackson.*`으로 변경 ✅
-   - `ObjectMapper` → `tools.jackson.databind.ObjectMapper`
+3. **`com.fasterxml.jackson.*` (기타)**: `tools.jackson.*`으로 변경 - `ObjectMapper` → `tools.jackson.databind.ObjectMapper`
    - 기타 핵심 클래스들
 
 ### 빠른 참조: 어노테이션별 패키지 정리
 
-#### ✅ 변경 불필요 (com.fasterxml.jackson.annotation)
+#### 변경 불필요 (com.fasterxml.jackson.annotation)
 
 다음 어노테이션들은 Jackson 2.x와 3.x 모두 **동일한 패키지**를 사용합니다:
 
@@ -389,34 +386,34 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonManagedReference
 ```
 
-#### ⚠️ 변경 필요 (databind.annotation)
+#### 변경 필요 (databind.annotation)
 
 다음 어노테이션들은 **패키지 변경이 필수**입니다:
 
 **`@JsonNaming`**
 ```kotlin
-// ❌ Jackson 2.x (Spring Boot 4에서 동작 안 함)
+// Jackson 2.x (Spring Boot 4에서 동작 안 함)
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 
-// ✅ Jackson 3.x (올바른 import)
+// Jackson 3.x (올바른 import)
 import tools.jackson.databind.annotation.JsonNaming
 ```
 
 **`@JsonSerialize`**
 ```kotlin
-// ❌ Jackson 2.x
+// Jackson 2.x
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-// ✅ Jackson 3.x
+// Jackson 3.x
 import tools.jackson.databind.annotation.JsonSerialize
 ```
 
 **`@JsonDeserialize`**
 ```kotlin
-// ❌ Jackson 2.x
+// Jackson 2.x
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
-// ✅ Jackson 3.x
+// Jackson 3.x
 import tools.jackson.databind.annotation.JsonDeserialize
 ```
 
@@ -425,8 +422,8 @@ import tools.jackson.databind.annotation.JsonDeserialize
 이 문제가 헷갈리는 이유는 대략 이렇습니다.
 
 **1. 같은 Jackson인데 어노테이션마다 동작이 다름**
-- `@JsonFormat`, `@JsonProperty` → `com.fasterxml.jackson.annotation` 패키지 → ✅ 정상 동작
-- `@JsonNaming` → `com.fasterxml.jackson.databind.annotation` 패키지 → ❌ 동작 안 함
+- `@JsonFormat`, `@JsonProperty` → `com.fasterxml.jackson.annotation` 패키지 → 정상 동작
+- `@JsonNaming` → `com.fasterxml.jackson.databind.annotation` 패키지 → 동작 안 함
 - 겉으로는 모두 Jackson 어노테이션처럼 보이므로 패키지 차이를 놓치기 쉬움
 
 **2. IDE가 잘못된 import를 자동완성으로 제안**

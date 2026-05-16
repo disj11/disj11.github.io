@@ -35,7 +35,7 @@ GET /products?fields=id,name
 
 기존 API라면 `description`, `reviews`, `sellerInfo` 같은 필드가 모두 포함되었겠지만, 이 요청에서는 필요한 값만 내려옵니다.
 
-### 📖 같은 개념을 부르는 여러 이름
+### 같은 개념을 부르는 여러 이름
 
 기술 스택이나 회사마다 이름은 조금씩 다르지만, 아이디어는 같습니다. 클라이언트가 응답에 포함할 필드를 지정합니다.
 
@@ -82,13 +82,13 @@ GraphQL은 클라이언트가 필요한 데이터 구조를 쿼리 언어로 정
 
 그렇다면 언제 Sparse Fieldsets를 선택하는 편이 좋을까요?
 
-### ✅ 이런 상황이라면 좋은 선택입니다
+### 이런 상황이라면 좋은 선택입니다
 
 1.  **이미 운영 중인 REST API가 있는 경우**: 시스템을 크게 갈아엎지 않고 응답 크기와 조회 비용만 줄이고 싶을 때 적용하기 좋습니다.
 2.  **클라이언트마다 필요한 데이터가 다른 경우**: 모바일 리스트 화면에서는 썸네일과 제목만, 웹 상세 화면에서는 전체 정보가 필요한 것처럼, 동일한 리소스에 대해 클라이언트마다 필요한 정보의 양이 다를 때 유연하게 대처할 수 있습니다.
 3.  **Public API를 만드는 경우**: [Google](https://google.aip.dev/161), [Netflix](https://netflixtechblog.com/practical-api-design-at-netflix-part-1-using-protobuf-fieldmask-310fd639cd80), [LinkedIn](https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/projections) 등에서도 비슷한 패턴을 사용합니다.
 
-### ❌ 다른 대안을 고려해야 하는 경우
+### 다른 대안을 고려해야 하는 경우
 
 1.  **새 프로젝트를 시작하며 복잡한 관계형 데이터를 다루는 경우**: 처음부터 설계한다면 GraphQL이 더 나은 개발 경험을 제공할 수 있습니다.
 2.  **단순한 내부 관리 도구(Admin)인 경우**: 트래픽이 적고 성능이 중요하지 않다면, 굳이 이런 최적화를 적용해 개발 복잡도를 높일 필요가 없습니다.
@@ -125,7 +125,7 @@ Content-Type: application/json
 
 이 문제를 피하려면 **지연 로딩(Lazy Loading)** 을 함께 써야 합니다. 요청된 필드일 때만 실제 데이터를 조회하도록 만들면, 네트워크 비용뿐 아니라 서버의 DB 조회 비용도 줄일 수 있습니다. 아래 구현 섹션에서는 `Supplier`를 사용해 이 부분을 처리합니다.
 
-> ⚠️ **주의**: 프로덕션 환경에서는 와일드카드(`*`) 사용을 지양하세요. 모든 필드를 요청하는 것은 오버페칭을 유발할 뿐만 아니라, 향후 필드가 추가되었을 때 예상치 못한 데이터 노출이나 성능 저하로 이어질 수 있습니다.
+> **주의**: 프로덕션 환경에서는 와일드카드(`*`) 사용을 지양하세요. 모든 필드를 요청하는 것은 오버페칭을 유발할 뿐만 아니라, 향후 필드가 추가되었을 때 예상치 못한 데이터 노출이나 성능 저하로 이어질 수 있습니다.
 
 ---
 
@@ -204,7 +204,7 @@ data class ProductResponse(
 )
 ```
 
-> ⚠️ **포인트**: DTO는 **서비스 레이어**에서 생성됩니다. 이때 `reviews`처럼 별도 조회가 필요한 필드는 실제 DB 조회 로직을 `Supplier` 안에 넣어둡니다. 이 시점에서는 **아직 리뷰 조회가 실행되지 않습니다.**
+> **포인트**: DTO는 **서비스 레이어**에서 생성됩니다. 이때 `reviews`처럼 별도 조회가 필요한 필드는 실제 DB 조회 로직을 `Supplier` 안에 넣어둡니다. 이 시점에서는 **아직 리뷰 조회가 실행되지 않습니다.**
 
 ```kotlin
 // 서비스 레이어 - DTO 생성 시점
@@ -219,7 +219,7 @@ class ProductService(
         return ProductResponse(
             id = JsonWrapper(product.id),
             name = JsonWrapper(product.name),
-            // ⚠️ 여기서 리뷰를 조회하지 않음! Supplier 안에 로직만 담아둠
+            // 여기서 리뷰를 조회하지 않음! Supplier 안에 로직만 담아둠
             reviews = JsonWrapper(memoize { 
                 reviewRepository.findByProductId(id).map { it.toDto() }
             })
@@ -246,7 +246,7 @@ class ProductController(private val productService: ProductService) {
 - Serializer가 `reviews` 필드도 요청되었음을 확인
 - `Supplier.get()` 호출 → 이때 비로소 리뷰 조회 실행
 
-### 3단계: 마법이 일어나는 `SparseFieldsetsSerializer`
+### 3단계: `SparseFieldsetsSerializer` 구현
 
 이제 Jackson Serializer가 실제로 필드를 걸러내는 로직을 수행합니다.
 
@@ -281,7 +281,7 @@ class SparseFieldsetsSerializer : JsonSerializer<JsonWrapper<*>>() {
 }
 ```
 
-> **💡 동작 원리**: 요청되지 않은 필드는 `isEmpty()`가 `true`를 반환하고, DTO의 `@JsonInclude(NON_EMPTY)` 설정과 결합되어 JSON 출력에서 완전히 제외됩니다.
+> **동작 원리**: 요청되지 않은 필드는 `isEmpty()`가 `true`를 반환하고, DTO의 `@JsonInclude(NON_EMPTY)` 설정과 결합되어 JSON 출력에서 완전히 제외됩니다.
 
 ### 4단계: Update/PATCH에 적용하기 (update_mask)
 
