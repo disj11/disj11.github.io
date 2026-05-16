@@ -1,8 +1,8 @@
 ---
-title: "DDD와 헥사고날 아키텍처 실전 가이드"
+title: "DDD와 헥사고날 아키텍처 적용 가이드"
 date: 2026-01-08T20:16:14+09:00
 url: "/ddd-hexagonal-architecture-guide/"
-description: "복잡한 비즈니스 로직을 가진 애플리케이션 설계를 위한 Domain-Driven Design과 Hexagonal Architecture 실전 가이드입니다. Aggregate 설계 원칙, Bounded Context, 패키지 구조 등을 다룹니다."
+description: "복잡한 비즈니스 로직을 가진 애플리케이션에서 Domain-Driven Design과 Hexagonal Architecture를 어떻게 나눠 적용할지 정리합니다. Aggregate 설계 원칙, Bounded Context, 패키지 구조를 함께 다룹니다."
 tags: ["ddd", "architecture", "hexagonal-architecture", "domain-driven-design", "kotlin"]
 ---
 
@@ -23,15 +23,15 @@ tags: ["ddd", "architecture", "hexagonal-architecture", "domain-driven-design", 
 
 ### 왜 아키텍처가 중요한가?
 
-소프트웨어 아키텍처는 시스템의 **변경 용이성** 을 결정합니다. 좋은 아키텍처는:
+소프트웨어 아키텍처는 시스템이 얼마나 쉽게 바뀔 수 있는지를 좌우합니다. 좋은 아키텍처는 보통 이런 특징을 가집니다.
 
-- 비즈니스 로직을 기술적 결정(프레임워크, DB, 외부 서비스)으로부터 **보호** 합니다
-- 각 컴포넌트가 **하나의 책임** 만 가지도록 합니다
-- 테스트를 **쉽게** 만듭니다
+- 비즈니스 로직을 프레임워크, DB, 외부 서비스 같은 기술적 결정으로부터 분리합니다
+- 각 컴포넌트가 하나의 책임에 집중하게 합니다
+- 테스트하기 쉬운 구조를 만듭니다
 
 ### DDD + Hexagonal Architecture
 
-**Domain-Driven Design(DDD)** 은 복잡한 비즈니스 도메인을 모델링하는 방법론이고, **Hexagonal Architecture** 는 이 도메인 모델을 외부 세계로부터 보호하는 아키텍처 패턴입니다. 둘은 서로 보완적이며, 함께 사용할 때 가장 큰 효과를 발휘합니다.
+**Domain-Driven Design(DDD)** 은 복잡한 비즈니스 도메인을 모델링하는 방법론이고, **Hexagonal Architecture** 는 도메인 모델을 외부 세계로부터 분리하는 아키텍처 패턴입니다. 둘은 같은 문제를 다른 각도에서 다룹니다. 함께 쓰면 도메인 모델을 중심에 두고 기술 세부사항을 바깥으로 밀어낼 수 있습니다.
 
 ---
 
@@ -77,9 +77,9 @@ class Order(
 
 ## Hexagonal Architecture (Ports & Adapters)
 
-### 핵심 아이디어
+### 기본 아이디어
 
-> "애플리케이션 핵심 로직을 외부 세계로부터 **격리**한다"
+> "애플리케이션의 중심 로직을 외부 기술과 분리한다"
 
 ```mermaid
 flowchart LR
@@ -337,8 +337,8 @@ class OrderRepositoryAdapter(
 | 분리 수준 | 적합한 경우 |
 |----------|------------|
 | **JpaRepository 직접 상속** | 소규모 프로젝트, CRUD 중심, JPA 교체 계획 없음 |
-| **Port/Adapter만 분리** | 중규모, 테스트 중요, 기술 교체 가능성 있음 |
-| **Entity까지 분리** | 대규모, 복잡한 비즈니스 로직, 도메인 모델 순수성 중요 |
+| **Port/Adapter만 분리** | 중규모, 테스트가 중요하고 기술 교체 가능성이 있을 때 |
+| **Entity까지 분리** | 대규모, 비즈니스 규칙이 복잡하고 도메인 모델 순수성을 지켜야 할 때 |
 
 > **권장**: 처음에는 단순하게 시작하고, 복잡도가 증가하면 점진적으로 분리하세요.
 
@@ -370,7 +370,7 @@ flowchart TB
     style INFRA fill:#fff3e0,stroke:#f57c00
 ```
 
-> **핵심**: 화살표 방향이 항상 **안쪽(Domain)** 을 향한다
+> 기준은 단순합니다. 화살표 방향은 항상 **안쪽(Domain)** 을 향해야 합니다.
 
 ---
 
@@ -490,7 +490,7 @@ interface OrderItemRepository  // Aggregate 경계 위반!
 
 #### 6. Domain Event
 
-도메인에서 발생한 **중요한 사건**을 나타내는 객체
+도메인에서 발생한 의미 있는 사건을 나타내는 객체
 
 ```kotlin
 // 이벤트 정의
@@ -584,7 +584,7 @@ class Order(
 
 ### 원칙 5: Eventual Consistency
 
-Aggregate 간에는 **도메인 이벤트**를 통해 비동기로 일관성을 유지합니다.
+Aggregate 간에는 **도메인 이벤트**를 사용해 비동기로 일관성을 맞춥니다.
 
 ```kotlin
 // Order Aggregate
@@ -868,7 +868,7 @@ class JpaOrderRepository : OrderRepository {  // Adapter (구현체)
 - [ ] Context 간 통합은 이벤트 또는 ACL을 통하는가?
 - [ ] 공유 커널 사용을 최소화했는가?
 
-### 핵심 원칙 요약
+### 원칙 요약
 
 | 원칙 | 설명 |
 |------|------|
