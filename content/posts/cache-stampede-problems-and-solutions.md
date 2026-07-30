@@ -57,11 +57,11 @@ permittedNumberOfCallsInHalfOpenState: 5
 
 각 항목의 의미는 다음과 같습니다.
 
-- `slidingWindowType: COUNT_BASED` — 최근 호출 결과를 개수 기준으로 집계한다. `TIME_BASED`는 최근 N초 기준으로 집계한다.
-- `slidingWindowSize: 100` — 최근 100건의 결과를 보관한다.
-- `minimumNumberOfCalls: 20` — 최소 20건이 쌓여야 실패율이나 slow call 비율을 계산한다.
-- `waitDurationInOpenState: 10s` — OPEN 상태에서 최소 10초를 기다린 뒤 HALF_OPEN으로 전환될 수 있다.
-- `permittedNumberOfCallsInHalfOpenState: 5` — HALF_OPEN 상태에서 제한적으로 통과시킬 호출 수다.
+- `slidingWindowType: COUNT_BASED`: 최근 호출 결과를 개수 기준으로 집계한다. `TIME_BASED`는 최근 N초 기준으로 집계한다.
+- `slidingWindowSize: 100`: 최근 100건의 결과를 보관한다.
+- `minimumNumberOfCalls: 20`: 최소 20건이 쌓여야 실패율이나 slow call 비율을 계산한다.
+- `waitDurationInOpenState: 10s`: OPEN 상태에서 최소 10초를 기다린 뒤 HALF_OPEN으로 전환될 수 있다.
+- `permittedNumberOfCallsInHalfOpenState: 5`: HALF_OPEN 상태에서 제한적으로 통과시킬 호출 수다.
 
 여기서 한 가지 주의할 점이 있습니다. Resilience4j의 기본 설정에서는 `automaticTransitionFromOpenToHalfOpenEnabled`가 `false`입니다. 이 경우 10초가 지났다고 백그라운드에서 자동으로 HALF_OPEN이 되는 것이 아니라, **10초가 지난 뒤 들어온 호출이 상태 전환을 유발**합니다. 자동 전환을 켜면 별도 모니터링 스레드가 시간이 지난 서킷을 HALF_OPEN으로 전환합니다.
 

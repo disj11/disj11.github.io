@@ -9,8 +9,8 @@ tags: ["spring", "openfeign", "kotlin", "observability", "performance", "system-
 ## 1. 어떤 문제를 풀려고 했나
 
 우리 팀은 운영자가 어드민에서 섹션(쿠폰 목록, 배너, 전시 상품 등)을 조합해 이벤트 페이지를 만드는
-플랫폼을 운영합니다. 사용자가 이벤트 페이지를 열면 서버는 섹션 구성에 따라 여러 외부 시스템 —
-쿠폰, 광고, 전시, 회원 등 — 을 호출해 화면을 조립합니다.
+플랫폼을 운영합니다. 사용자가 이벤트 페이지를 열면 서버는 섹션 구성에 따라 여러 외부
+시스템(쿠폰, 광고, 전시, 회원 등)을 호출해 화면을 조립합니다.
 
 문제는 이 **증폭(fan-out)의 크기가 이벤트마다 다르고, 오픈 전에는 알기 어렵다**는 점입니다.
 요청 1건이 다운스트림 호출 몇 건이 되는지는 섹션을 몇 개 넣었는지, 섹션 안에 아이템을 몇 개
@@ -22,7 +22,7 @@ tags: ["spring", "openfeign", "kotlin", "observability", "performance", "system-
 
 ## 2. 기존 접근법이 안 되는 이유
 
-### 정적 분석 — 엣지는 찾아도 배수는 못 구한다
+### 정적 분석: 엣지는 찾아도 배수는 못 구한다
 
 코드를 훑어 HTTP 클라이언트 호출을 찾으면 "어떤 다운스트림을 호출할 수 있는가"는 알 수 있습니다.
 하지만 "요청 1건당 몇 번"은 원리적으로 알 수 없습니다.
@@ -39,13 +39,13 @@ cache.get(couponId) { couponClient.getCoupon(couponId) }
 마이크로서비스 아키텍처 복원 도구들을 비교한 연구([arXiv:2412.08352](https://arxiv.org/abs/2412.08352))에서도
 대부분의 도구가 엣지 존재 여부조차 정확히 못 맞혔고, 호출 횟수는 평가 대상도 아니었습니다.
 
-### 런타임 관측 — 트래픽이 흐른 뒤에만 존재한다
+### 런타임 관측: 트래픽이 흐른 뒤에만 존재한다
 
 분산 트레이싱이나 메트릭으로 fan-out을 구하는 것은 업계 표준이고 정확합니다. 하지만 이 데이터는
 **실제 트래픽이 흐른 뒤에야** 쌓입니다. 새로 만든 이벤트에는 트래픽이 없으므로, "오픈 전에 알고
 싶다"는 요구에는 답할 수 없습니다.
 
-### 남은 선택지 — 리허설 1회를 실측하기
+### 남은 선택지: 리허설 1회를 실측하기
 
 그래서 세 번째 길을 택했습니다. **오픈 전 이벤트를 실서비스와 동일한 코드 경로로 1회 렌더링하고,
 그 1회 동안 나간 다운스트림 호출을 정확히 세는 것**입니다. 실제 코드가 실행되므로 루프 배수·캐시·
@@ -71,7 +71,7 @@ flowchart LR
 2. HTTP(Feign)든 사내 RPC SDK든 **모든 종류의 다운스트림**을 잡아야 한다
 3. 계측이 일반 사용자 트래픽에 **영향을 주면 안 된다**
 
-## 3. 요청 단위 귀속 — 전역 메트릭 diff는 왜 안 되나
+## 3. 요청 단위 귀속: 전역 메트릭 diff는 왜 안 되나
 
 가장 먼저 떠오르는 방법은 Micrometer 카운터를 실행 전후로 snapshot해서 diff하는 것입니다.
 간단하지만 치명적인 약점이 있습니다. **같은 JVM에서 동시에 실행되는 다른 요청, 캐시의 background
@@ -103,7 +103,7 @@ sequenceDiagram
     participant B as 워커 스레드 B (섹션 2)
 
     M->>M: ① MDC.put(previewId)
-    M->>M: ② withContext(MDCContext()) — 이 시점의 MDC 스냅샷
+    M->>M: ② withContext(MDCContext()): 이 시점의 MDC 스냅샷
     par 섹션 병렬 렌더 (async)
         M->>A: MDCContext 상속 → 워커 스레드에 MDC 복원
         A->>A: Feign Client.execute()<br/>MDC.get(previewId) → 기록
@@ -129,7 +129,7 @@ suspend fun <T> withPreviewId(previewId: String, block: suspend () -> T): T {
 }
 ```
 
-기록 저장소는 실행 ID별 세션 방식으로 만들었습니다. 핵심은 두 가지 방어 장치입니다 —
+기록 저장소는 실행 ID별 세션 방식으로 만들었습니다. 핵심은 두 가지 방어 장치입니다:
 `start()`로 세션을 연 ID만 기록을 받고(다른 경로에 MDC가 남아 흘러들어와도 무시), 종료 처리가
 누락된 세션은 TTL로 청소합니다.
 
@@ -144,7 +144,7 @@ class CallRecordCollector {
 }
 ```
 
-## 4. HTTP 호출 계측 — Feign Capability
+## 4. HTTP 호출 계측: Feign Capability
 
 ### Capability란
 
@@ -195,12 +195,12 @@ class RecordingCapability(private val collector: CallRecordCollector) : Capabili
 | Feign `RequestInterceptor` | ○ | ○ | ✗ (요청만 관여) | 아쉬움 |
 | **Feign `Client` 래핑** | **○** | **○** | **○** | **채택** |
 
-## 5. 비-HTTP RPC 계측 — BeanPostProcessor 프록시
+## 5. 비-HTTP RPC 계측: BeanPostProcessor 프록시
 
 문제는 모든 다운스트림이 Feign을 쓰지 않는다는 것입니다. 사내 RPC SDK가 제공하는 클라이언트
 객체(벤더 코드)를 그대로 주입받아 쓰는 경우, Capability 같은 확장점이 없습니다.
 
-### 첫 번째 후보: 어댑터 메서드 AOP — 기각
+### 첫 번째 후보: 어댑터 메서드 AOP(기각)
 
 각 어댑터(RPC 클라이언트를 감싸는 우리 쪽 클래스)의 메서드에 `@Around` 어스펙트를 걸면 될 것
 같지만, 정확도가 무너지는 경우가 두 가지 있습니다.
@@ -209,14 +209,14 @@ class RecordingCapability(private val collector: CallRecordCollector) : Capabili
 @CircuitBreaker(name = "recommend-api", fallbackMethod = "fallback")
 fun getRecommendations(userId: String, itemIds: List<Long>): Result {
     if (itemIds.isEmpty() || userId.isGuest()) {
-        return Result.empty()        // (a) 조기 반환 — 원격 호출 없음
+        return Result.empty()        // (a) 조기 반환: 원격 호출 없음
     }
     return rpcClient.recommend(...)  // 실제 원격 호출은 여기서만
 }
 ```
 
 (a) 처럼 **가드에 걸려 원격 호출 없이 반환하는 경로**, 그리고 서킷브레이커가 열려 **fallback만
-실행되는 경우** — 둘 다 실제 호출이 없는데 어댑터 메서드는 "호출된 것"으로 집계됩니다. 게다가
+실행되는 경우**: 둘 다 실제 호출이 없는데 어댑터 메서드는 "호출된 것"으로 집계됩니다. 게다가
 가드 안쪽만 별도 메서드로 뽑아 어노테이션을 붙이는 우회는 Spring AOP의 자기 호출(self-invocation)
 한계에 걸립니다.
 
@@ -295,17 +295,17 @@ private class RecordingInterceptor(
 
 - **의미론이 Feign 계측과 일치합니다.** 어댑터의 가드·fallback을 지나 실제로 원격 객체의 메서드가
   불릴 때만 기록됩니다. resilience 어노테이션(AOP)은 어댑터 바깥에서 동작하므로 순서 충돌도 없습니다.
-- **벤더 코드 무수정.** SDK가 인터페이스면 JDK 프록시, 콘크리트 클래스면 CGLIB — Spring
+- **벤더 코드 무수정.** SDK가 인터페이스면 JDK 프록시, 콘크리트 클래스면 CGLIB. Spring
   `ProxyFactory`가 알아서 선택합니다. 프록시 생성이 불가능한 클래스(final 등)를 만나면 경고만
   남기고 원본을 반환해, 계측 기능이 애플리케이션 기동을 인질로 잡지 않게 했습니다.
 - **오버헤드는 프록시 홉 1회 + MDC 조회 1회.** 네트워크 지연(ms) 대비 무시 가능한 수준입니다.
 
-디테일 두 가지를 덧붙이면 — `ObjectProvider`로 collector를 지연 주입한 것은 BeanPostProcessor가
+디테일 두 가지를 덧붙이면, `ObjectProvider`로 collector를 지연 주입한 것은 BeanPostProcessor가
 컨테이너에서 매우 이른 시점에 만들어지기 때문이고("bean is not eligible for post-processing" 경고
 회피), `Object` 메서드를 걸러낸 것은 로그 출력이나 컬렉션 연산이 부른 `toString()` 따위가
 원격 호출로 집계되는 것을 막기 위해서입니다.
 
-## 6. 한 걸음 더 — 어느 섹션이 문제인지까지
+## 6. 한 걸음 더: 어느 섹션이 문제인지까지
 
 전체 fan-out을 알면 다음 질문은 "그래서 어느 섹션 때문인데?"입니다. 답은 MDC 키 하나를 더 얹는
 것으로 해결됩니다. 섹션을 병렬 렌더링하는 `async` 블록에서, **미리보기 실행 중일 때만** 섹션 ID를
@@ -326,7 +326,7 @@ private fun <T> attributingSection(sectionId: Long, block: () -> T): T {
 
 섹션들은 서로 다른 스레드에서 병렬로 돌지만, MDC는 스레드 로컬이므로 섹션 간 오염이 없습니다.
 
-## 7. 측정값을 판단으로 — 캐시 diff와 Little's law
+## 7. 측정값을 판단으로: 캐시 diff와 Little's law
 
 숫자를 나열하는 리포트와 "위험하다/괜찮다"를 말해주는 리포트는 쓸모가 다릅니다. 실측값을 판단으로
 바꾸기 위해 두 가지를 더했습니다.
@@ -349,9 +349,9 @@ Caffeine의 `stats()`를 실행 전후로 snapshot해 diff를 리포트에 포�
 ```
 
 예를 들어 미리보기에서 "요청 1건당 쿠폰 시스템 12콜, 평균 35ms"가 측정됐고 오픈 시 유입을
-50 RPS로 예상한다면 — 예상 동시 호출 수는 12 × 50 × 0.035 ≈ **21**입니다. bulkhead가 30이라면
+50 RPS로 예상한다면, 예상 동시 호출 수는 12 × 50 × 0.035 ≈ **21**입니다. bulkhead가 30이라면
 사용률 70%로 통과, 20이라면 105%로 경고입니다. 평균 응답시간도 미리보기 실행에서 이미 실측되어
-있으므로 추가 입력은 예상 RPS 하나뿐입니다. "쿠폰 시스템 예상 사용률 105% — 오픈 시 섹션이 비어
+있으므로 추가 입력은 예상 RPS 하나뿐입니다. "쿠폰 시스템 예상 사용률 105%: 오픈 시 섹션이 비어
 보일 수 있음"처럼, 숫자가 아니라 판단을 돌려주는 것이 목표였습니다.
 
 ## 8. 정직한 한계
@@ -371,7 +371,7 @@ Caffeine의 `stats()`를 실행 전후로 snapshot해 diff를 리포트에 포�
 | 문제 | 선택한 기술 | 선택한 이유 |
 |---|---|---|
 | 실행 단위 귀속 | MDC + `MDCContext` | 시그니처 오염 없이 코루틴 경계 전파, 없으면 no-op |
-| HTTP 호출 계측 | Feign `Capability` (`Client` 래핑) | 재시도 포함·fallback 제외 — "실제 나간 호출"과 의미 일치 |
+| HTTP 호출 계측 | Feign `Capability` (`Client` 래핑) | 재시도 포함·fallback 제외, "실제 나간 호출"과 의미 일치 |
 | RPC 호출 계측 | `BeanPostProcessor` + 프록시 | 벤더 코드 무수정, 가드·fallback 을 자연히 제외 |
 | 섹션 귀속 | MDC 키 중첩 | 측정을 "어느 구성요소 때문인지"라는 답으로 연결 |
 | 용량 판단 | 캐시 stats diff + Little's law | 실측만으로 bulkhead 대비 경고까지 자동화 |

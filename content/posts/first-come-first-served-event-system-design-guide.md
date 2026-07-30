@@ -11,7 +11,7 @@ tags: ["system-design", "aws", "nginx", "resilience4j", "bulkhead", "circuit-bre
 
 ---
 
-## 1. 로드 밸런서 용량 사전 예약 — LCU / Capacity Unit Reservation
+## 1. 로드 밸런서 용량 사전 예약: LCU / Capacity Unit Reservation
 
 ### 개념
 
@@ -134,7 +134,7 @@ aws elbv2 modify-target-group-attributes \
 
 ---
 
-## 4. 외부 API 장애 전파 — 격벽(Bulkhead) 부재
+## 4. 외부 API 장애 전파: 격벽(Bulkhead) 부재
 
 ### 문제
 
@@ -180,7 +180,7 @@ Resilience4j는 두 가지 Bulkhead 구현을 제공한다.
 
 이 문서의 예시는 `SemaphoreBulkhead` 기준이다. Tomcat 스레드를 더 철저히 보호하려면 `ThreadPoolBulkhead`가 낫지만, 스레드 풀 크기와 큐 설정 등 관리 포인트가 늘어난다.
 
-#### maxConcurrentCalls 산정 — Little's Law
+#### maxConcurrentCalls 산정: Little's Law
 
 ```
 인스턴스당 concurrent = (전체 RPS ÷ 인스턴스 수) × 평균 응답시간(초)
@@ -196,7 +196,7 @@ maxConcurrentCalls = 외부 시스템 수용 TPS × 평균 응답시간(초) / �
 
 > `maxConcurrentCalls` 산정 시에는 실패 요청도 timeout까지 slot을 점유하므로, 성공 응답시간과 실패(timeout) 응답시간의 **가중 평균** 을 사용해야 한다. 예를 들어 성공 비율 90%(50ms), 실패 비율 10%(1,000ms)라면 가중 평균 = 0.9 × 50 + 0.1 × 1,000 = 145ms.
 
-#### maxWaitDuration — 선착순 이벤트에서는 0ms 권장
+#### maxWaitDuration: 선착순 이벤트에서는 0ms 권장
 
 `SemaphoreBulkhead`의 `maxWaitDuration`을 0보다 크게 설정하면, slot이 꽉 찬 상태에서 들어오는 **모든 초과 요청의 스레드가 permit을 얻을 때까지 블로킹** 된다.
 
@@ -315,7 +315,7 @@ Tomcat 스레드 할당 → Bulkhead 체크 → downstream 호출
 
 ---
 
-## 9. 에러 처리 전략 — 과부하 vs 장애 구분
+## 9. 에러 처리 전략: 과부하 vs 장애 구분
 
 ### 문제
 
